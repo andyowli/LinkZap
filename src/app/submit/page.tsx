@@ -156,6 +156,53 @@ const Submit = () => {
                 };
             }
 
+            // unordered list
+            if (block.type === 'bulletList') {
+                return block.content.map((item: any) => ({
+                    _type: 'block',
+                    _key: randomKey(),
+                    style: 'normal',
+                    listItem: 'bullet',
+                    markDefs: [],
+                    children: item.content
+                        ? item.content.flatMap((child: any) =>
+                            child.content
+                                ? child.content.map((grand: any) => ({
+                                    _type: 'span',
+                                    _key: randomKey(),
+                                    text: grand.text || '',
+                                    marks: [],
+                                }))
+                                : []
+                        )
+                        : [],
+                }));
+            }
+
+
+            // ordered list
+            if (block.type === 'orderedList') {
+                return block.content.map((item: any) => ({
+                    _type: 'block',
+                    _key: randomKey(),
+                    style: 'normal',
+                    listItem: 'number',
+                    markDefs: [],
+                    children: item.content
+                        ? item.content.flatMap((child: any) =>
+                            child.content
+                                ? child.content.map((grand: any) => ({
+                                    _type: 'span',
+                                    _key: randomKey(),
+                                    text: grand.text || '',
+                                    marks: [],
+                                }))
+                                : []
+                        )
+                        : [],
+                }));
+            }
+
             return null;
         }).filter(Boolean);
     }

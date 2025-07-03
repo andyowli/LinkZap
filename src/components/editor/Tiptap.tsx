@@ -15,7 +15,6 @@ const Tiptap = ({
     onChange: (richText: JSONContent) => void;
 }) => {
     const [content, setContent] = useState('');
-    // console.log(content)
 
     const editor = useEditor({
         extensions: [

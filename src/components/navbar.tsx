@@ -6,12 +6,9 @@ import { MobileNav } from "./mobile-nav";
 import { SignOutButton, useUser } from "@clerk/nextjs";  
 import { ArrowRight } from "lucide-react";
 
-
-interface NavbarProps {
-    onProductClick?: () => void; // 添加 onProductClick 属性
-}
-export const Navbar = ({ onProductClick }: NavbarProps) => {
+export const Navbar = () => {
     const { user } = useUser();
+
 
     return (
         <header className="fixed top-0 left-0 right-0 h-16 bg-background border-b z-10">
@@ -28,7 +25,6 @@ export const Navbar = ({ onProductClick }: NavbarProps) => {
                     <Link 
                         href="/product" 
                         className="text-muted-foreground hover:text-foreground transition-colors" 
-                        onClick={onProductClick} // 直接调用 onProductClick
                     >
                         Product
                     </Link>
@@ -48,10 +44,6 @@ export const Navbar = ({ onProductClick }: NavbarProps) => {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                    {/* <Button size="sm" className="rounded-full hidden md:inline-flex bg-[#409eff] hover:bg-[#409eff]/90 text-white" asChild>
-                        <Link href="/sign-in">Sign in</Link>
-                    </Button> */}
-
                     {user ? (
                         <>
                             <Button  className="hidden md:inline-flex bg-[#409eff] hover:bg-[#409eff]/90 text-white">
