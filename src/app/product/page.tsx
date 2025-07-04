@@ -9,6 +9,7 @@ import { SanityDocument } from "next-sanity";
 import { JSX, useEffect, useRef, useState } from "react";
 import { Loading } from "@/components/loading";
 import { usePathname, useSearchParams } from "next/navigation";
+import { EmptyData } from "@/components/empty-data";
 
 const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
   _id,
@@ -30,7 +31,6 @@ const ProductPage = () => {
   const [posts, setPosts] = useState<SanityDocument[]>([]);
   const [sidebar, setSidebar] = useState<SanityDocument[]>([]);
 
-  // const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const pathname = usePathname();
@@ -51,12 +51,22 @@ const ProductPage = () => {
       lastCategory.current = selectedCategory;
     }
     async function fetchData() {
-      const [postsRes, sidebarRes] = await Promise.all([
-        client.fetch<SanityDocument[]>(POSTS_QUERY,{},options),
-        client.fetch<SanityDocument[]>(POST_SIDEBAR,{},options)
-      ]);
-      setPosts(postsRes);
-      setSidebar(sidebarRes);
+      try {
+        const [postsRes, sidebarRes] = await Promise.all([
+          client.fetch<SanityDocument[]>(POSTS_QUERY,{},options),
+          client.fetch<SanityDocument[]>(POST_SIDEBAR,{},options)
+        ]);
+        setPosts(postsRes);
+        setSidebar(sidebarRes);
+      } catch (error) {
+        if(error) {
+          setPosts([]); 
+          setSidebar([]);
+
+          return <EmptyData />
+        }
+      }
+      
       setLoading(false);
 
       lastPathname.current = pathname;
@@ -102,11 +112,11 @@ const ProductPage = () => {
 
       <div className="pt-24">
         <div className="flex items-center justify-center flex-col mb-8">
-          <h1 className="max-w-5xl font-bold text-balance text-3xl sm:text-4xl md:text-5xl">
+          <h1 className="font-bold text-balance text-2xl sm:text-3xl md:text-4xl">
             Your Ultimate
             <span className="text-blue-500"> Directory of Directories</span>
           </h1>
-          <p className="max-w-4xl text-balance text-muted-foreground sm:text-xl">Iscover the best catalog and easily launch your products</p>
+          <p className="max-w-3xl text-balance text-muted-foreground sm:text-xl">Iscover the best catalog and easily launch your products</p>
         </div>
         
         <div className="pb-16 px-4">
@@ -153,6 +163,7 @@ const ProductPage = () => {
                           </CardHeader>
 
                           <CardContent>
+                            <h4 className="text-blue-400 mb-2.5">{post.title}</h4>
                             <p className="text-sm text-gray-600 line-clamp-2">{post.content}</p>
                           </CardContent>
                         </Card>

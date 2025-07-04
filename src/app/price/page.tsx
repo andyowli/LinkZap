@@ -78,13 +78,13 @@ export default function PricePage() {
               <Card
                 key={index}
                 className={`flex flex-col h-full ${
-                  plan.popular ? "border-primary shadow-lg scale-105 relative z-10" : ""
+                  plan.popular ? "border-blue-400 shadow-lg scale-105 relative z-10" : ""
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-0 right-0 flex justify-center">
                     <span className="text-primary-foreground text-sm font-medium px-3 py-1 rounded-full bg-[#409eff]">
-                        POPULAR
+                      POPULAR
                     </span>
                   </div>
                 )}
@@ -124,7 +124,7 @@ export default function PricePage() {
       {/* FAQ Section */}
       <section className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto max-w-4xl">
-          <h2 className="text-2xl font-bold mb-8 text-center">frequently asked questions</h2>
+          <h1 className="text-2xl font-bold mb-8 text-center">frequently asked questions</h1>
           <div className="space-y-6">
             <div className="bg-background p-6 rounded-lg shadow-sm">
               <h3 className="text-lg font-medium mb-2">What are the benefits of the Basic plan?</h3>

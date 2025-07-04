@@ -1,3 +1,5 @@
+"use client"
+
 import { RotateCw } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -11,7 +13,11 @@ export const EmptyData = () => {
                 <p className="text-[#6B7280]">There is no content on this page. Please try again later.</p>
             </div>
 
-            <Button variant="outline">
+            <Button 
+                variant="outline"
+                className="cursor-pointer"
+                onClick={() => window.location.reload()}
+            >
                 <RotateCw className="text-[#0A0A0A]"/>
                 Refresh the page
             </Button>

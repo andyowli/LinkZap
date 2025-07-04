@@ -6,7 +6,6 @@ import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Progress } from "./ui/progress";
-import { on } from "events";
 export default function UploadImage({ onUpload }: { onUpload?: (file: File) => void }) {
     const [uploadedImages, setUploadedImages] = useState<{ name: string; url: string }[]>([]);
     const [progress, setProgress] = useState(0);
@@ -20,15 +19,6 @@ export default function UploadImage({ onUpload }: { onUpload?: (file: File) => v
             "image/webp": [".webp"]
         },
         onDrop: async(acceptFiles,fileRejections) => {
-            // if(acceptFiles && acceptFiles.length > 0) {
-            //     const formData = new FormData();
-            //     formData.append("file", acceptFiles[0]);
-            //     const objectUrl = URL.createObjectURL(acceptFiles[0]);
-
-            //     // const res = await UploadImage({ image: formData });
-            //     console.log("File uploaded successfully", acceptFiles[0]);
-            // }
-
             if (acceptFiles && acceptFiles.length > 0) {
                 setUploading(true);
                 setProgress(0);
@@ -59,7 +49,7 @@ export default function UploadImage({ onUpload }: { onUpload?: (file: File) => v
             <Card 
                 {...getRootProps({
                     onClick: (e) => {
-                        // 让 input 被点击，支持点击上传
+                        // Enable input to be clicked and support click upload
                         e.stopPropagation();
                         const input = document.querySelector<HTMLInputElement>('input[type="file"]');
                         input?.click();

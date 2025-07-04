@@ -51,34 +51,28 @@ export function MobileNav() {
             Pricing
           </Link>
           <div className="pt-4 mt-4 border-t">
-            {/* <Button className="w-full rounded-full" asChild>
-              <Link href="/login" onClick={() => setOpen(false)}>
-                Sign in
-              </Link>
-            </Button> */}
-
-          {user ? (
-              <>
-                <Button className="w-full mb-4 bg-[#409eff] hover:bg-[#409eff]/90 text-white">
-                  Submit
-                  <ArrowRight />
-                </Button>
-                <SignOutButton>
-                  <Button variant="secondary" className="w-full">Sign out</Button>
-                </SignOutButton>
-              </>
-            ) : (
-              <>
-                <Button size="sm" className="w-full mb-4 rounded-full bg-[#409eff] hover:bg-[#409eff]/90 text-white" asChild>
-                  <Link href="/sign-in">Sign in</Link>
-                </Button>
-                
-                <Button size="sm" className="w-full rounded-full bg-[#409eff] hover:bg-[#409eff]/90 text-white" asChild>
-                  <Link href="/sign-up">Sign up</Link>
-                </Button>
-              </>
-            )}
-
+            {user ? (
+                <>
+                  <Button className="w-full mb-4 bg-[#409eff] hover:bg-[#409eff]/90 text-white">
+                    Submit
+                    <ArrowRight />
+                  </Button>
+                  <SignOutButton>
+                    <Button variant="secondary" className="w-full">Sign out</Button>
+                  </SignOutButton>
+                </>
+              ) : (
+                <>
+                  <Button size="sm" className="w-full mb-4 rounded-full bg-[#409eff] hover:bg-[#409eff]/90 text-white" asChild>
+                    <Link href="/sign-in">Sign in</Link>
+                  </Button>
+                  
+                  <Button size="sm" className="w-full rounded-full bg-[#409eff] hover:bg-[#409eff]/90 text-white" asChild>
+                    <Link href="/sign-up">Sign up</Link>
+                  </Button>
+                </>
+              )
+            }
           </div>
         </nav>
       </SheetContent>
