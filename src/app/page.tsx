@@ -61,7 +61,7 @@ export default function Home() {
       <section className="pt-32 pb-16 px-4">
         <div className="container mx-auto text-center">
           <h1 className="h-11 text-4xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-            Selected resources , empower creativity
+            Selected resources , empower creativity001
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Discover and connect high-quality tools and resources to help independent creators achieve a leap in creativity and productivity
