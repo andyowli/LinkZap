@@ -74,12 +74,12 @@ const Page = async({ params }: PageProps) => {
                         </CardContent>
                     </Card>
 
-                     <Card className="w-full md:w-3/4 gap-1 mb-4"> 
+                    <Card className="w-full md:w-3/4 gap-1 mb-4"> 
                         <CardHeader>
-                             <CardTitle>website</CardTitle>
+                            <CardTitle>website</CardTitle>
                         </CardHeader>
 
-                         <CardContent> 
+                        <CardContent> 
                             <Button variant="link" className="justify-start px-0" >
                                 <Link href={page.website} target="_blank">{page.website}</Link>
                             </Button>
