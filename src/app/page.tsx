@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { client } from "@/sanity/client";
 import { Search } from "lucide-react";
+import { SanityDocument } from "next-sanity";
 import Link from "next/link";
 
 type Post = {
@@ -28,7 +29,7 @@ const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
 const options = { next: { revalidate: 30 } };
 
 export default async function Home() {
-  const PSOT_CARD = await client.fetch(POSTS_QUERY,{}, options);
+  const PSOT_CARD = await client.fetch<SanityDocument>(POSTS_QUERY,{}, options);
 
 
   return (
@@ -64,7 +65,7 @@ export default async function Home() {
 
       {/* Featured Resources */}
       <section className="py-6 px-4">
-        <div className="container mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold mb-8">Editors Picks</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PSOT_CARD.map((post:Post) => (
@@ -75,7 +76,7 @@ export default async function Home() {
                   <img 
                     src={post.imgurl}
                     alt={post.title}
-                    className="w-full h-full"
+                    className="w-full h-full rounded-t-xl"
                   />
                 </div>
 

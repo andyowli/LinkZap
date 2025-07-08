@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu } from "lucide-react";
+import { ArrowRight, CreditCard, FileText, LayoutList, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { SignOutButton, useUser } from "@clerk/nextjs";
@@ -18,7 +18,6 @@ export function MobileNav() {
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="md:hidden">
           <Menu className="h-6 w-6" />
-          <span className="sr-only">打开菜单</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="w-[300px] sm:w-[350px]">
@@ -31,23 +30,26 @@ export function MobileNav() {
         <nav className="flex flex-col space-y-4 px-4 -mt-2">
           <Link
             href="/product"
-            className="px-2 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
+            className="flex gap-2 px-2 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
             onClick={() => setOpen(false)}
           >
+            <LayoutList className="h-5 w-5"/>
             Product
           </Link>
           <Link
             href="/recommended"
-            className="px-2 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
+            className="flex gap-2 px-2 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
             onClick={() => setOpen(false)}
           >
+            <FileText className="h-5 w-5"/>
             Blog
           </Link>
           <Link
             href="/price"
-            className="px-2 py-2 text-foreground hover:bg-muted rounded-md transition-colors"
+            className="flex gap-2 px-2 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
             onClick={() => setOpen(false)}
           >
+            <CreditCard className="h-5 w-5"/>
             Pricing
           </Link>
           <div className="pt-4 mt-4 border-t">

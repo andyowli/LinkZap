@@ -1,3 +1,4 @@
+import { EmptyData } from "@/components/empty-data";
 import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,10 +31,7 @@ const Page = async({ params }: PageProps) => {
         return (
             <div>
                 <Navbar />
-                <div className="p-8">
-                    <h1 className="text-2xl">未找到相关内容</h1>
-                    <p>没有找到 slug 为 "{slug}" 的页面。</p>
-                </div>
+                <EmptyData />
             </div>
         );
     }
@@ -43,7 +41,7 @@ const Page = async({ params }: PageProps) => {
         <div>
             <Navbar />
 
-            <div className="flex flex-col md:flex-row gap-6 md:gap-10 container mx-auto px-4">
+            <div className="container mx-auto max-w-[85rem] flex flex-col md:flex-row justify-between mt-16">
                 <div className="p-8 w-full md:w-3/5">
                     <div className="text-lg">
                         <PortableText value={page.content} />

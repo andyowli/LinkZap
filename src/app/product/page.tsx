@@ -110,7 +110,7 @@ const ProductPage = () => {
     <main className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
 
-      <div className="pt-24">
+      <div className="pt-24 container mx-auto max-w-7xl">
         <div className="flex items-center justify-center flex-col mb-8">
           <h1 className="font-bold text-balance text-2xl sm:text-3xl md:text-4xl">
             Your Ultimate
