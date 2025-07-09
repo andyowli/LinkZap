@@ -65,9 +65,7 @@ const Submit = () => {
     const [description,setDescription] = useState('');
     console.log("Data:", description);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
+    const handleSubmit = async (data: React.FormEvent<HTMLFormElement>) => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('slug', slug);
@@ -101,7 +99,29 @@ const Submit = () => {
 
     function tiptapToPortableText(tiptapJson: any) {
         if (!tiptapJson || !tiptapJson.content) return [];
-        return tiptapJson.content.map((block: any) => {
+        let markDefs: any[] = [];
+        let markKey = 0;
+
+        function getMarks(marks: any[]) {
+            if (!marks) return [];
+            return marks.map((mark: any) => {
+                if (mark.type === 'bold') return 'strong';
+                if (mark.type === 'italic') return 'em';
+                if (mark.type === 'link') {
+                    // 生成唯一 key
+                    const key = `link${markKey++}`;
+                    markDefs.push({
+                        _key: key,
+                        _type: 'link',
+                        href: mark.attrs.href,
+                    });
+                    return key;
+                }
+                return null;
+            }).filter(Boolean);
+        }
+
+        return tiptapJson.content.flatMap((block: any) => {
             // paragraph
             if (block.type === 'paragraph') {
                 return {
@@ -110,13 +130,13 @@ const Submit = () => {
                     style: 'normal',
                     markDefs: [],
                     children: block.content
-                    ? block.content.map((child: any) => ({
-                        _type: 'span',
-                        _key: randomKey(),
-                        text: child.text || '',
-                        marks: [],
+                        ? block.content.map((child: any) => ({
+                            _type: 'span',
+                            _key: randomKey(),
+                            text: child.text || '',
+                            marks: getMarks(child.marks),
                         }))
-                    : [],
+                        : [],
                 };
             }
 
@@ -132,7 +152,7 @@ const Submit = () => {
                             _type: 'span',
                             _key: randomKey(),
                             text: child.text || '',
-                            marks: [],
+                            marks: getMarks(child.marks),
                         }))
                         : [],
                 };
@@ -140,6 +160,7 @@ const Submit = () => {
 
             // codeBlock
             if (block.type === 'codeBlock') {
+                const codeText = block.content?.map((c: any) => c.text).join('\n') || '';
                 return {
                     _type: 'block',
                     _key: randomKey(),
@@ -149,20 +170,22 @@ const Submit = () => {
                         {
                             _type: 'span',
                             _key: randomKey(),
-                            text: block.content?.[0]?.text || '',
-                            marks: [],
+                            text: codeText,
+                            marks: ['code'],
                         },
                     ],
                 };
             }
 
-            // unordered list
-            if (block.type === 'bulletList') {
+            // list
+            if (block.type === 'bulletList' || block.type === 'orderedList') {
+                const listItem = block.type === 'bulletList' ? 'bullet' : 'number';
                 return block.content.map((item: any) => ({
                     _type: 'block',
                     _key: randomKey(),
                     style: 'normal',
-                    listItem: 'bullet',
+                    listItem,
+                    level: 1,
                     markDefs: [],
                     children: item.content
                         ? item.content.flatMap((child: any) =>
@@ -171,7 +194,7 @@ const Submit = () => {
                                     _type: 'span',
                                     _key: randomKey(),
                                     text: grand.text || '',
-                                    marks: [],
+                                    marks: getMarks(grand.marks),
                                 }))
                                 : []
                         )
@@ -179,32 +202,12 @@ const Submit = () => {
                 }));
             }
 
-
-            // ordered list
-            if (block.type === 'orderedList') {
-                return block.content.map((item: any) => ({
-                    _type: 'block',
-                    _key: randomKey(),
-                    style: 'normal',
-                    listItem: 'number',
-                    markDefs: [],
-                    children: item.content
-                        ? item.content.flatMap((child: any) =>
-                            child.content
-                                ? child.content.map((grand: any) => ({
-                                    _type: 'span',
-                                    _key: randomKey(),
-                                    text: grand.text || '',
-                                    marks: [],
-                                }))
-                                : []
-                        )
-                        : [],
-                }));
-            }
-
-            return null;
-        }).filter(Boolean);
+            return [];
+        }).filter((block: any) => block && block.children && block.children.length > 0)
+        .map((block: any) => ({
+            ...block,
+            markDefs: markDefs, // 全局 markDefs
+        }));
     }
 
 
@@ -243,13 +246,10 @@ const Submit = () => {
         image: z
         .instanceof(File),
 
-
-
-
         description: z
         .string()
         .min(5, { message: "Description is not long enough" })
-        .max(100, { message: "Description is too long" }),
+        .max(5000, { message: "Description is too long" }),
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -270,10 +270,10 @@ const Submit = () => {
         <div>
             <Navbar />
 
-            <Card className="mt-28 container mx-auto py-0">
+            <Card className="mt-28 container mx-auto py-0 relative">
                 <div className="p-7">
                     <Form {...form}>
-                        <form className="space-y-8" onSubmit={handleSubmit}>
+                        <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <FormField
                                     control={form.control}
@@ -285,10 +285,10 @@ const Submit = () => {
                                             <Input
                                                 placeholder="Enter title"
                                                 {...field}
-                                                onChange={(e) => {
-                                                    field.onChange(e);
-                                                    setTitle(e.target.value)
-                                                }}
+                                                // onChange={(e) => {
+                                                //     field.onChange(e);
+                                                //     setTitle(e.target.value)
+                                                // }}
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -306,10 +306,10 @@ const Submit = () => {
                                             <Input
                                                 placeholder="slug"
                                                 {...field}
-                                                onChange={(e) => {
-                                                    field.onChange(e);
-                                                    setSlug(e.target.value)
-                                                }}
+                                                // onChange={(e) => {
+                                                //     field.onChange(e);
+                                                //     setSlug(e.target.value)
+                                                // }}
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -327,10 +327,10 @@ const Submit = () => {
                                             <Input
                                                 placeholder="website"
                                                 {...field}
-                                                onChange={(e) => {
-                                                    field.onChange(e);
-                                                    setWebsite(e.target.value)
-                                                }}
+                                                // onChange={(e) => {
+                                                //     field.onChange(e);
+                                                //     setWebsite(e.target.value)
+                                                // }}
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -396,12 +396,12 @@ const Submit = () => {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
                                 <FormField
                                     control={form.control}
                                     name="image"
                                     render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="self-start">
                                         <FormLabel>Image</FormLabel>
                                         <FormControl>
                                             <UploadImage onUpload={setFile} />
@@ -418,9 +418,10 @@ const Submit = () => {
                                     <FormItem>
                                         <FormControl>
                                             <Tiptap  onChange={(value) => {
-                                                field.onChange(value);
                                                 const portableText = tiptapToPortableText(value);
-                                                setDescription(JSON.stringify(portableText));
+                                                const portableTextStr = JSON.stringify(portableText);
+                                                field.onChange(portableTextStr); // 这里传字符串
+                                                setDescription(portableTextStr);
                                             }} />
                                         </FormControl>
                                         <FormMessage />
@@ -429,16 +430,14 @@ const Submit = () => {
                                 />
                             </div>
 
-                            <button>提交</button>
+                            <div className="bg-[#f1f5f9] p-4 flex justify-between items-center rounded-b-lg absolute left-0 right-0 bottom-0">
+                                <Button type="submit" className="cursor-pointer rounded-full hidden md:inline-flex bg-[#409eff] hover:bg-[#409eff]/90 text-white">提交编辑</Button>
+                                <p className="text-[#64748b]">
+                                    Don't worry, please check if each item is filled in correctly before submitting
+                                </p>
+                            </div>
                         </form>
                     </Form>
-                </div>
-
-                <div className="bg-[#f1f5f9] p-4 flex justify-between items-center rounded-b-lg">
-                    <Button className="cursor-pointer rounded-full hidden md:inline-flex bg-[#409eff] hover:bg-[#409eff]/90 text-white">提交编辑</Button>
-                    <p className="text-[#64748b]">
-                        Don't worry, please check if each item is filled in correctly before submitting
-                    </p>
                 </div>
             </Card>
         </div>

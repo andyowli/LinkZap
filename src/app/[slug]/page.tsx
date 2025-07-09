@@ -41,19 +41,19 @@ const Page = async({ params }: PageProps) => {
         <div>
             <Navbar />
 
-            <div className="container mx-auto max-w-[85rem] flex flex-col md:flex-row justify-between mt-16">
-                <div className="p-8 w-full md:w-3/5">
+            <div className="container mx-auto max-w-[85rem] flex flex-col md:flex-row justify-between mt-24">
+                <Card className="p-5 w-full md:w-3/5">
                     <div className="text-lg">
                         <PortableText value={page.content} />
                     </div>
-                </div>
+                </Card>
                 
-                <div className="mt-8 md:mt-12 space-y-6 md:space-y-10 w-full md:w-2/5 lg:w-1/3">
+                <div className="space-y-6 md:space-y-10 w-full md:w-2/5 lg:w-1/3">
                     <Card className="w-full md:w-3/4 py-0">
                         <img 
                             src={page.imgurl} 
                             alt={page.title} 
-                            className="w-full h-60 rounded-sm object-cover" 
+                            className="w-full h-60 rounded-sm object-cover rounded-t-xl" 
                         />
                     </Card>
 
