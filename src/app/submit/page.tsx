@@ -56,20 +56,24 @@ const Submit = () => {
     const [open, setOpen] = React.useState(false)
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
 
-    const [title,setTitle] = useState('');
-    const [slug,setSlug] = useState('');
-    const [website,setWebsite] = useState('');
+    // const [title,setTitle] = useState('');
+    // const [slug,setSlug] = useState('');
+    // const [website,setWebsite] = useState('');
     const [file,setFile] = useState<File | null>(null);
 
     console.log("File:", file);
-    const [description,setDescription] = useState('');
-    console.log("Data:", description);
+    // const [description,setDescription] = useState('');
+    // console.log("Data:", description);
 
-    const handleSubmit = async (data: React.FormEvent<HTMLFormElement>) => {
+    // const handleSubmit = async (data: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (data: z.infer<typeof formSchema>) => {
         const formData = new FormData();
-        formData.append('title', title);
-        formData.append('slug', slug);
-        formData.append('website', website);
+        // formData.append('title', title);
+        // formData.append('slug', slug);
+        // formData.append('website', website);
+        formData.append('title', data.title);
+        formData.append('slug', data.slug);
+        formData.append('website', data.website);
 
         if (selectedValues.length > 0) {
             selectedValues.forEach(value => {
@@ -77,10 +81,11 @@ const Submit = () => {
             });
         } 
 
-        if (file) {
-            formData.append('file', file);
+        if (data.image instanceof File) {
+            formData.append('file', data.image);
         }
-        formData.append('description', description);
+        // formData.append('description', description);
+        formData.append('description', data.description);
         
 
         try {
@@ -161,6 +166,20 @@ const Submit = () => {
             // codeBlock
             if (block.type === 'codeBlock') {
                 const codeText = block.content?.map((c: any) => c.text).join('\n') || '';
+                
+                // const lines = block.content?.map((c: { text: any; }) => c.text).filter((line: string) => line.trim() !== '') || [];
+    
+                // // 找到最小缩进量
+                // const indentLengths = lines.map((line: string) => {
+                //     const match = line.match(/^(\s*)/);
+                //     return match ? match[0].length : 0;
+                // }).filter((length: number) => length > 0);
+
+                // const minIndent = indentLengths.length > 0 ? Math.min(...indentLengths) : 0;
+
+                // // 去除最小缩进量
+                // const codeText = lines.map((line: string | any[]) => line.slice(minIndent)).join('\n');
+
                 return {
                     _type: 'block',
                     _key: randomKey(),
@@ -240,7 +259,7 @@ const Submit = () => {
 
         tag: z
         .string()
-        .min(5, { message: "Tag is not long enough" })
+        // .min(2, { message: "Tag is not long enough" })
         .max(50, { message: "Tag is too long" }),
 
         image: z
@@ -404,7 +423,7 @@ const Submit = () => {
                                     <FormItem className="self-start">
                                         <FormLabel>Image</FormLabel>
                                         <FormControl>
-                                            <UploadImage onUpload={setFile} />
+                                            <UploadImage onUpload={field.onChange} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -421,7 +440,7 @@ const Submit = () => {
                                                 const portableText = tiptapToPortableText(value);
                                                 const portableTextStr = JSON.stringify(portableText);
                                                 field.onChange(portableTextStr); // 这里传字符串
-                                                setDescription(portableTextStr);
+                                                // setDescription(portableTextStr);
                                             }} />
                                         </FormControl>
                                         <FormMessage />
