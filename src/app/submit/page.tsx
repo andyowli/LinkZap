@@ -213,22 +213,6 @@ const Submit = () => {
         }));
     }
 
-
-    // const handleSelect = (currentValue: string) => {
-    //     let newSelectedValues = [...selectedValues];
-    //     // Determine whether the frameworks array contains the clicked current value
-    //     if (selectedValues.includes(currentValue)) {
-    //         // Delete clicking on frame value and other values 
-    //         setSelectedValues(selectedValues.filter(v => v !== currentValue))
-    //     } else {
-    //         setSelectedValues([...selectedValues, currentValue])
-    //     }
-
-    //     form.setValue('tag', newSelectedValues.join(', '));
-
-    //     setOpen(false);
-    // }
-
     const formSchema = z.object({
         title: z
         .string({ message: "Title cannot be empty" })
@@ -278,18 +262,15 @@ const Submit = () => {
 
     const handleSelect = (currentValue: string) => {
         setSelectedValues(prev => {
-            // 创建新数组副本
+            // Create a new array copy
             const newSelectedValues = [...prev];
             
-            // 更新选择状态
+            // Update selection status
             if (prev.includes(currentValue)) {
                 newSelectedValues.splice(prev.indexOf(currentValue), 1);
             } else {
                 newSelectedValues.push(currentValue);
             }
-            
-            // 使用最新值设置表单
-            // form.setValue('tag', newSelectedValues.join(', '));
             
             return newSelectedValues;
         });
