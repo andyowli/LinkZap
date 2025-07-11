@@ -34,7 +34,7 @@ const Tiptap = ({
         content:  "",
         editorProps:{
             attributes:{
-                class:"min-h-[150px] border rounded-md bg-back-300 p-4"
+                class:"min-h-[210px] border rounded-md p-4 shadow-sm"
             }
         },
         onUpdate({ editor }) {

@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/navbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -56,16 +56,6 @@ const Submit = () => {
     const [open, setOpen] = React.useState(false)
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
 
-    // const [title,setTitle] = useState('');
-    // const [slug,setSlug] = useState('');
-    // const [website,setWebsite] = useState('');
-    const [file,setFile] = useState<File | null>(null);
-
-    console.log("File:", file);
-    // const [description,setDescription] = useState('');
-    // console.log("Data:", description);
-
-    // const handleSubmit = async (data: React.FormEvent<HTMLFormElement>) => {
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
         const formData = new FormData();
         // formData.append('title', title);
@@ -113,7 +103,7 @@ const Submit = () => {
                 if (mark.type === 'bold') return 'strong';
                 if (mark.type === 'italic') return 'em';
                 if (mark.type === 'link') {
-                    // 生成唯一 key
+                    // Generate a unique key
                     const key = `link${markKey++}`;
                     markDefs.push({
                         _key: key,
@@ -142,6 +132,13 @@ const Submit = () => {
                             marks: getMarks(child.marks),
                         }))
                         : [],
+                    // 添加段落分隔符
+                    markDecorations: [
+                        {
+                            _type: 'break', // 自定义换行标记
+                            _key: randomKey()
+                        }
+                    ]
                 };
             }
 
@@ -166,19 +163,6 @@ const Submit = () => {
             // codeBlock
             if (block.type === 'codeBlock') {
                 const codeText = block.content?.map((c: any) => c.text).join('\n') || '';
-                
-                // const lines = block.content?.map((c: { text: any; }) => c.text).filter((line: string) => line.trim() !== '') || [];
-    
-                // // 找到最小缩进量
-                // const indentLengths = lines.map((line: string) => {
-                //     const match = line.match(/^(\s*)/);
-                //     return match ? match[0].length : 0;
-                // }).filter((length: number) => length > 0);
-
-                // const minIndent = indentLengths.length > 0 ? Math.min(...indentLengths) : 0;
-
-                // // 去除最小缩进量
-                // const codeText = lines.map((line: string | any[]) => line.slice(minIndent)).join('\n');
 
                 return {
                     _type: 'block',
@@ -230,15 +214,20 @@ const Submit = () => {
     }
 
 
-    const handleSelect = (currentValue: string) => {
-        // Determine whether the frameworks array contains the clicked current value
-        if (selectedValues.includes(currentValue)) {
-            // Delete clicking on frame value and other values 
-            setSelectedValues(selectedValues.filter(v => v !== currentValue))
-        } else {
-            setSelectedValues([...selectedValues, currentValue])
-        }
-    }
+    // const handleSelect = (currentValue: string) => {
+    //     let newSelectedValues = [...selectedValues];
+    //     // Determine whether the frameworks array contains the clicked current value
+    //     if (selectedValues.includes(currentValue)) {
+    //         // Delete clicking on frame value and other values 
+    //         setSelectedValues(selectedValues.filter(v => v !== currentValue))
+    //     } else {
+    //         setSelectedValues([...selectedValues, currentValue])
+    //     }
+
+    //     form.setValue('tag', newSelectedValues.join(', '));
+
+    //     setOpen(false);
+    // }
 
     const formSchema = z.object({
         title: z
@@ -249,26 +238,25 @@ const Submit = () => {
 
         slug: z
         .string()
-        .min(5, { message: "Slug is not long enough" })
+        .nonempty({ message: "Slug cannot be empty" })
         .max(50, { message: "Slug is too long" }),
 
         website: z
         .string()
-        .min(5, { message: "Website is not long enough" })
+        .nonempty({ message: "Website cannot be empty" })
+        .url({ message: "Please enter a valid URL" })
         .max(50, { message: "Website is too long" }),
 
         tag: z
         .string()
-        // .min(2, { message: "Tag is not long enough" })
-        .max(50, { message: "Tag is too long" }),
+        .nonempty({ message: "Tag cannot be empty" }),
 
         image: z
         .instanceof(File),
 
         description: z
         .string()
-        .min(5, { message: "Description is not long enough" })
-        .max(5000, { message: "Description is too long" }),
+        .nonempty({ message: "Description cannot be empty" })
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -284,12 +272,38 @@ const Submit = () => {
         }
     })
 
+    useEffect(() => {
+        form.setValue('tag', selectedValues.join(', '));
+    }, [selectedValues, form]);
+
+    const handleSelect = (currentValue: string) => {
+        setSelectedValues(prev => {
+            // 创建新数组副本
+            const newSelectedValues = [...prev];
+            
+            // 更新选择状态
+            if (prev.includes(currentValue)) {
+                newSelectedValues.splice(prev.indexOf(currentValue), 1);
+            } else {
+                newSelectedValues.push(currentValue);
+            }
+            
+            // 使用最新值设置表单
+            // form.setValue('tag', newSelectedValues.join(', '));
+            
+            return newSelectedValues;
+        });
+        
+        setOpen(false); 
+    }
+
+
 
     return (
         <div>
             <Navbar />
 
-            <Card className="mt-28 container mx-auto py-0 relative">
+            <Card className="mt-28 mb-6 container mx-auto py-0 relative">
                 <div className="p-7">
                     <Form {...form}>
                         <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -298,19 +312,15 @@ const Submit = () => {
                                     control={form.control}
                                     name="title"
                                     render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="h-22 relative">
                                         <FormLabel>Title</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="Enter title"
                                                 {...field}
-                                                // onChange={(e) => {
-                                                //     field.onChange(e);
-                                                //     setTitle(e.target.value)
-                                                // }}
                                             />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="absolute left-0 bottom-[-2rem]"/>
                                     </FormItem>
                                     )}
                                 />
@@ -319,19 +329,15 @@ const Submit = () => {
                                     control={form.control}
                                     name="slug"
                                     render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="h-22 relative">
                                         <FormLabel>Slug</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="slug"
                                                 {...field}
-                                                // onChange={(e) => {
-                                                //     field.onChange(e);
-                                                //     setSlug(e.target.value)
-                                                // }}
                                             />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="absolute left-0 bottom-[-2rem]"/>
                                     </FormItem>
                                     )}
                                 />
@@ -340,19 +346,19 @@ const Submit = () => {
                                     control={form.control}
                                     name="website"
                                     render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="h-22 relative">
                                         <FormLabel>Website</FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="website"
                                                 {...field}
-                                                // onChange={(e) => {
-                                                //     field.onChange(e);
-                                                //     setWebsite(e.target.value)
-                                                // }}
+                                                onChange={(e) => {
+                                                    field.onChange(e);
+                                                    form.trigger("website");
+                                                }}
                                             />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="absolute left-0 bottom-[-2rem]"/>
                                     </FormItem>
                                     )}
                                 />
@@ -361,7 +367,7 @@ const Submit = () => {
                                     control={form.control}
                                     name="tag"
                                     render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="h-22 relative">
                                         <FormLabel>Tag</FormLabel>
                                         <FormControl>
                                             <Popover open={open} onOpenChange={setOpen}>
@@ -409,13 +415,13 @@ const Submit = () => {
                                                 </PopoverContent>
                                             </Popover>
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="absolute left-0 bottom-[-2rem]"/>
                                     </FormItem>
                                     )}
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-22">
                                 <FormField
                                     control={form.control}
                                     name="image"
@@ -436,12 +442,13 @@ const Submit = () => {
                                     render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Tiptap  onChange={(value) => {
-                                                const portableText = tiptapToPortableText(value);
-                                                const portableTextStr = JSON.stringify(portableText);
-                                                field.onChange(portableTextStr); // 这里传字符串
-                                                // setDescription(portableTextStr);
-                                            }} />
+                                            <Tiptap  
+                                                onChange={(value) => {
+                                                    const portableText = tiptapToPortableText(value);
+                                                    console.log("Converted Portable Text:", portableText); 
+                                                    const portableTextStr = JSON.stringify(portableText);
+                                                    field.onChange(portableTextStr);
+                                                }} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

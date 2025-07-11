@@ -55,7 +55,7 @@ export default function UploadImage({ onUpload }: { onUpload?: (file: File) => v
                         input?.click();
                     }
                 })}
-                className={cn("hover:cursor-pointer hover:bg-secondary hover:border-primary transition-all ease-in-out", 
+                className={cn("hover:cursor-pointer hover:bg-secondary hover:border-blue-500 transition-all ease-in-out", 
                 `${isDragActive ? "animate-pulse border-primary bg-secondary" : ""}`)}
             >
                 <CardContent className="flex flex-col items-center justify-center px-2 py-9 text-xs">
