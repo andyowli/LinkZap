@@ -5,11 +5,11 @@ import { Toggle } from "../ui/toggle";
 import { Bold, Code, Heading, Heading1, Heading2, Heading3, Italic, List, ListOrdered } from "lucide-react";
 
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
 } from '@/components/tiptap-ui-primitive/dropdown-menu';
 import { Button } from '@/components/tiptap-ui-primitive/button';
 

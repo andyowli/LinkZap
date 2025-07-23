@@ -149,21 +149,22 @@ const ProductPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">               
                   {filteredPosts.map((post) => (
                       <Link href={`/${post.slug}`} key={post._id}>
-                        <Card key={post.id} className="overflow-hidden hover:shadow-md transition-shadow">
-                          <CardHeader className="flex justify-between items-start">
+                        <Card key={post._id} className="overflow-hidden hover:shadow-md transition-shadow py-0">
+                          <CardHeader className="flex justify-between items-start px-0">
                             <div className="w-full">
                               <div>
                                 <img
                                   src={post.imgurl}
                                   alt={post.title}
-                                  className="object-cover w-full h-44"
+                                  className="object-cover w-full h-44 rounded-t-xl"
                                 />
                               </div>
+                              <div className="border-t border-gray-300 my-[0.1]"></div>
                             </div>
                           </CardHeader>
 
                           <CardContent>
-                            <h4 className="text-blue-400 mb-2.5">{post.title}</h4>
+                            <h4 className="text-blue-400 mb-2.5 mt-[-0.3rem]">{post.title}</h4>
                             <p className="text-sm text-gray-600 line-clamp-2">{post.content}</p>
                           </CardContent>
                         </Card>

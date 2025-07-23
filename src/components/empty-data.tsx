@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 export const EmptyData = () => {
     return (
         <div className="h-[80vh] flex flex-col items-center justify-center">
-            <img src="/IMG@1x.png"/>
+            <img src="/data.png"/>
             
             <div className="flex flex-col items-center justify-center mb-8">
                 <h2>No data yet</h2>

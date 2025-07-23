@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/navbar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -15,6 +15,9 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import UploadImage from "@/components/upload-image";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { Loading } from "@/components/loading";
 
 const frameworks = [
     {
@@ -53,14 +56,26 @@ const frameworks = [
 
 
 const Submit = () => {
+    const { isLoaded,isSignedIn } = useUser();
+    const router = useRouter();
+
     const [open, setOpen] = React.useState(false)
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
 
+    useEffect(() => {
+        if(!isLoaded) return;
+
+        if(!isSignedIn) {
+            router.push('/sign-in');
+        }
+    },[isLoaded, isSignedIn, router]);
+
+    if (!isLoaded || !isSignedIn) {
+        return <Loading />
+    }
+
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
         const formData = new FormData();
-        // formData.append('title', title);
-        // formData.append('slug', slug);
-        // formData.append('website', website);
         formData.append('title', data.title);
         formData.append('slug', data.slug);
         formData.append('website', data.website);
@@ -74,7 +89,7 @@ const Submit = () => {
         if (data.image instanceof File) {
             formData.append('file', data.image);
         }
-        // formData.append('description', description);
+
         formData.append('description', data.description);
         
 
@@ -92,6 +107,7 @@ const Submit = () => {
         return Math.random().toString(36).substr(2, 10);
     }
 
+    // Convert Tiptap JSON to Portable Text
     function tiptapToPortableText(tiptapJson: any) {
         if (!tiptapJson || !tiptapJson.content) return [];
         let markDefs: any[] = [];
