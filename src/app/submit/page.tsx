@@ -18,6 +18,7 @@ import UploadImage from "@/components/upload-image";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Loading } from "@/components/loading";
+import { Footer } from "@/components/footer";
 
 const frameworks = [
     {
@@ -463,6 +464,8 @@ const Submit = () => {
                     </Form>
                 </div>
             </Card>
+
+            <Footer />
         </div>
     )
 }

@@ -17,7 +17,7 @@ const getPage = `*[ _type == "post" && slug.current == $slug][0]{
 const options = { next: { revalidate: 30 } };
 
 interface PageProps {
-  params: { slug: string };
+    params: { slug: string };
 }
 
 

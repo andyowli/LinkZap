@@ -10,6 +10,7 @@ import { JSX, useEffect, useRef, useState } from "react";
 import { Loading } from "@/components/loading";
 import { usePathname, useSearchParams } from "next/navigation";
 import { EmptyData } from "@/components/empty-data";
+import { Footer } from "@/components/footer";
 
 const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
   _id,
@@ -178,21 +179,7 @@ const ProductPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="mt-auto py-6 bg-white border-t">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-muted-foreground mb-4 md:mb-0">© 2025 Product Collection</div>
-            <div className="flex space-x-6">
-              <Link href="/standards" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Inclusion criteria
-              </Link>
-              <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Contact Us
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }

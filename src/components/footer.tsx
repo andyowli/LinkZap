@@ -11,22 +11,23 @@ export function Footer() {
         {
             title: 'Product',
             links: [
-                { name: 'Product', href: '#' },
+                { name: 'Product', href: '/product' },
+                { name: 'Tools', href: '/product?category=tools' }
             ],
         },
         {
             title: 'Resources',
             links: [
-                { name: 'Blog', href: '#' },
-                { name: 'Price', href: '#' },
-                { name: 'Submit', href: '#' },
+                { name: 'Blog', href: '/blog' },
+                { name: 'Price', href: '/price' },
+                { name: 'Submit', href: '/submit' },
             ],
         },
         {
             title: 'Company',
             links: [
-                { name: 'Privacy Policy', href: '#' },
-                { name: 'Terms of Service', href: '#' },
+                { name: 'Privacy Policy', href: '/company/Privacy' },
+                { name: 'Terms of Service', href: '/company/Terms' },
             ],
         },
         {
@@ -40,7 +41,7 @@ export function Footer() {
     ];
 
     return (
-        <footer className="bg-white py-10 container mx-auto max-w-7xl">
+        <footer className="py-10 container mx-auto max-w-7xl">
             <div className="">
                 <div className="mb-8">
                     <div className="flex items-center">

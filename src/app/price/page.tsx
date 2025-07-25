@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 
 export default function PricePage() {
   const pricingPlans = [
@@ -122,7 +123,7 @@ export default function PricePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <h1 className="text-2xl font-bold mb-8 text-center">frequently asked questions</h1>
           <div className="space-y-6">
@@ -162,21 +163,7 @@ export default function PricePage() {
       </section>
 
       {/* Footer */}
-      <footer className="mt-auto py-6 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-muted-foreground mb-4 md:mb-0">© 2025 Product Collection</div>
-            <div className="flex space-x-6">
-              <Link href="/standards" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Inclusion criteria
-              </Link>
-              <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Contact Us
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }

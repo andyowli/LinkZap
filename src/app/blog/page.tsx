@@ -1,4 +1,5 @@
 import { EmptyData } from "@/components/empty-data";
+import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 
 const Blog = () => {
@@ -6,6 +7,8 @@ const Blog = () => {
         <div>
             <Navbar />
             <EmptyData />
+
+            <Footer />
         </div>
     )
 }
