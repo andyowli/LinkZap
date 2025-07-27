@@ -58,7 +58,7 @@ export default async function Home() {
             <Input
               type="search"
               placeholder="searching resources..."
-              className="w-full pl-12 pr-4 py-6 rounded-full text-base shadow-sm border-muted"
+              className="w-full pl-12 pr-4 py-6 rounded-full text-base shadow-sm border-muted focus-visible:ring-[2px] focus-visible:ring-blue-500"
             />
           </div>
         </div>
