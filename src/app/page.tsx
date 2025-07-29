@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { client } from "@/sanity/client";
 import { Search } from "lucide-react";
 import { SanityDocument } from "next-sanity";
+import Image from "next/image";
 import Link from "next/link";
 
 type Post = {
@@ -74,9 +75,11 @@ export default async function Home() {
                 <Card key={post._id} className="py-0 gap-1.5 transition-all hover:shadow-md hover:scale-[1.02]">
                 {/* Image takes up full width */}
                 <div className="relative w-full h-48 bg-muted rounded-t-xl">
-                  <img 
+                  <Image 
                     src={post.imgurl}
                     alt={post.title}
+                    fill
+                    unoptimized
                     className="w-full h-full rounded-t-xl"
                   />
                 </div>

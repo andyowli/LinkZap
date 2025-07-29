@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { client } from "@/sanity/client";
 import { PortableText, SanityDocument } from "next-sanity";
+import Image from "next/image";
 import Link from "next/link";
 
 const getPage = `*[ _type == "post" && slug.current == $slug][0]{
     _id,
+    title,
     "imgurl":image.asset->url,
     "content":body,
     website,
@@ -50,9 +52,13 @@ const Page = async({ params }: PageProps) => {
                 
                 <div className="space-y-6 md:space-y-10 w-full md:w-2/5 lg:w-1/3">
                     <Card className="w-full md:w-3/4 py-0">
-                        <img 
+                        <Image
                             src={page.imgurl} 
                             alt={page.title} 
+                            width={0}
+                            height={0}
+                            unoptimized
+                            priority
                             className="w-full h-60 rounded-sm object-cover rounded-t-xl" 
                         />
                     </Card>

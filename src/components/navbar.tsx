@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { MobileNav } from "./mobile-nav";
 import { SignOutButton, useUser } from "@clerk/nextjs";  
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 export const Navbar = () => {
     const { user } = useUser();
@@ -13,12 +14,12 @@ export const Navbar = () => {
     return (
         <header className="fixed top-0 left-0 right-0 h-16 bg-background border-b z-10">
             <div className="w-full h-16 px-4 flex justify-center items-center">
-                <div className="flex items-center justify-between container max-w-7xl h-full">
+                <div className="flex items-center justify-between container max-w-full md:max-w-7xl h-full">
                     <div className="flex items-center space-x-12">
-                        <Link href="/" className="flex items-center">
-                            <span className="text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                                LinkZap
-                            </span>
+                        <Link href="/" className="flex items-center gap-2">
+                            {/* Logo */}
+                            <Image src="/logo.svg" alt="logo" width={40} height={40} />
+                            <span className="font-bold text-lg">LinkZap</span>
                         </Link>
 
                         <nav className="hidden md:flex items-center space-x-6">

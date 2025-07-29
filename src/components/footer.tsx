@@ -1,4 +1,5 @@
 import { Github, Mail, MoonStar, Twitter } from "lucide-react";
+import Image from "next/image";
 
 type FooterLink = {
     name: string;
@@ -42,15 +43,12 @@ export function Footer() {
 
     return (
         <footer className="py-10 container mx-auto max-w-7xl">
-            <div className="">
-                <div className="mb-8">
-                    <div className="flex items-center">
-                        
-                        <span className="text-xl font-bold">LinkZap</span>
+            <div>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-x-8">
+                    <div className="flex items-start gap-2">
+                        <Image src="/logo.svg" alt="Logo" width={40} height={40} />
+                        <span className="text-xl font-bold mt-1.5">LinkZap</span>
                     </div>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     {sections.map((section, index) => (
                         <div key={index} className="space-y-4">
                             <h3 className="text-lg font-semibold mb-4">{section.title}</h3>

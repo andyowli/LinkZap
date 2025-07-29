@@ -6,6 +6,7 @@ import { ArrowRight, CreditCard, FileText, LayoutList, Menu } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { SignOutButton, useUser } from "@clerk/nextjs";
+import Image from "next/image";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -23,7 +24,12 @@ export function MobileNav() {
       <SheetContent side="right" className="w-[300px] sm:w-[350px]">
         <SheetHeader>
           <SheetTitle className="text-left text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-            Product Collection
+            <div className="flex items-center gap-8">
+              <Image src="/logo.svg" alt="Logo" width={40} height={40} />
+              {/* Logo */}
+              <span className="ml-[-26]">LinkZap</span>
+            </div>
+            
           </SheetTitle>
         </SheetHeader>
 

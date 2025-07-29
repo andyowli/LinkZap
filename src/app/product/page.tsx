@@ -11,6 +11,7 @@ import { Loading } from "@/components/loading";
 import { usePathname, useSearchParams } from "next/navigation";
 import { EmptyData } from "@/components/empty-data";
 import { Footer } from "@/components/footer";
+import Image from "next/image";
 
 const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
   _id,
@@ -154,9 +155,11 @@ const ProductPage = () => {
                           <CardHeader className="flex justify-between items-start px-0">
                             <div className="w-full">
                               <div>
-                                <img
+                                <Image
                                   src={post.imgurl}
                                   alt={post.title}
+                                  width={300}
+                                  height={300}
                                   className="object-cover w-full h-44 rounded-t-xl"
                                 />
                               </div>

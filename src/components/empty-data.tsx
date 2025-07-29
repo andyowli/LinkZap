@@ -2,13 +2,19 @@
 
 import { RotateCw } from "lucide-react";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 export const EmptyData = () => {
     return (
         <div className="h-[80vh] flex flex-col items-center justify-center">
-            <img src="/data.png"/>
-            
-            <div className="flex flex-col items-center justify-center mb-8">
+            <Image
+                src="/data.png"
+                alt="No data"
+                width={300}
+                height={300}
+                className="mb-4"
+            />
+            <div className="flex flex-col items-center justify-center mb-8 mt-[-60]">
                 <h2>No data yet</h2>
                 <p className="text-[#6B7280]">There is no content on this page. Please try again later.</p>
             </div>
