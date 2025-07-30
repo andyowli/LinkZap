@@ -4,11 +4,13 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { MobileNav } from "./mobile-nav";
 import { SignOutButton, useUser } from "@clerk/nextjs";  
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Moon, Sun } from "lucide-react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 
 export const Navbar = () => {
     const { user } = useUser();
+    const { theme, setTheme } = useTheme();
 
 
     return (
@@ -66,6 +68,14 @@ export const Navbar = () => {
                                 </Button>
                             </>
                         )}
+
+                        <button
+                            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                            className="p-2 rounded-full hover:bg-accent transition-colors"
+                            aria-label="切换主题"
+                        >
+                            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+                        </button>
 
                         <MobileNav />
                     </div>    

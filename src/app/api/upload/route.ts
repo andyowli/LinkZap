@@ -1,4 +1,3 @@
-// app/api/upload/route.js
 import { client } from '../../../sanity/client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -9,8 +8,8 @@ export async function POST(request:NextRequest) {
         const title = formData.get('title');
         const slug = formData.get('slug');
         const website = formData.get('website');
-        const category = formData.getAll('category'); // 获取所有分类
-        const description = formData.get('description') as string; // 获取文本
+        const category = formData.getAll('category'); // get classification
+        const description = formData.get('description') as string; // get text
 
         let body = [];
         try {
@@ -29,7 +28,7 @@ export async function POST(request:NextRequest) {
             );
         }
 
-        // 上传图片
+        // upload pictures
         if (!(file instanceof Blob)) {
             return NextResponse.json(
                 { error: 'Invalid file type' }, 
@@ -41,9 +40,9 @@ export async function POST(request:NextRequest) {
         });
 
 
-        // 创建 post 类型文档
+        // Create a sanity post type document
         const newPost = {
-            _type: 'post', // 与查询 *[_type == "post"] 匹配
+            _type: 'post',
             title,
             slug: {
                 _type: 'slug',
@@ -62,7 +61,7 @@ export async function POST(request:NextRequest) {
             publishedAt: new Date().toISOString(),
         }
 
-        const result = await client.create(newPost); // 创建命令
+        const result = await client.create(newPost); // create content for sanity
 
         return NextResponse.json({
             message: 'Post created successfully',

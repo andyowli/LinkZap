@@ -109,7 +109,7 @@ const ProductPage = () => {
 
 
   return (
-    <main className="min-h-screen flex flex-col bg-gray-50">
+    <main className="min-h-screen flex flex-col bg-gray-50 dark:bg-black">
       <Navbar />
 
       <div className="pt-24 container mx-auto max-w-7xl">
@@ -126,15 +126,14 @@ const ProductPage = () => {
             <div className="flex flex-col md:flex-row gap-8">
               {/* Sidebar */}
               <div className="w-full md:w-64 flex-shrink-0">
-                <div className="bg-white rounded-xl shadow-sm p-5 sticky top-24">
+                <div className="bg-white dark:bg-black/20 rounded-xl shadow-sm dark:shadow-gray-700 p-5 sticky top-24">
                   <h2 className="text-lg font-bold mb-4">Categories</h2>
                   <div className="space-y-1">
                     {orderedSidebar.map((title) => (
                       <Link
                         key={title._id}
                         href={`/product?category=${title.title.toLowerCase()}`}
-                        className="flex items-center py-2 px-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-                        // onClick={() => setSelectedCategory(title.title)}
+                        className="flex items-center py-2 px-3 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-100/50 rounded-md transition-colors"
                       >
                         {/* {title.icon} */}
                         {sidebarIcons[title.title] || null} 
@@ -163,13 +162,13 @@ const ProductPage = () => {
                                   className="object-cover w-full h-44 rounded-t-xl"
                                 />
                               </div>
-                              <div className="border-t border-gray-300 my-[0.1]"></div>
+                              <div className="border-t border-gray-300 dark:border-black/15 my-[0.1]"></div>
                             </div>
                           </CardHeader>
 
                           <CardContent>
                             <h4 className="text-blue-400 mb-2.5 mt-[-0.3rem]">{post.title}</h4>
-                            <p className="text-sm text-gray-600 line-clamp-2">{post.content}</p>
+                            <p className="text-sm text-gray-600 line-clamp-2 dark:text-white/65">{post.content}</p>
                           </CardContent>
                         </Card>
                       </Link>

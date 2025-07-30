@@ -42,7 +42,7 @@ export default async function Home() {
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="h-11 text-4xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+          <h1 className="h-11 text-4xl md:text-4xl font-bold mb-4">
             Selected resources , empower creativity
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -68,7 +68,7 @@ export default async function Home() {
       {/* Featured Resources */}
       <section className="py-6 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold mb-8">Editors Picks</h2>
+          <h2 className="text-2xl font-bold mb-8 dark:text-white/65">Editors Picks</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PSOT_CARD.map((post:Post) => (
               <Link href={`/${post.slug}`} key={post._id}>
@@ -86,9 +86,9 @@ export default async function Home() {
 
                 {/* Content below the image */}
                 <CardHeader>
-                  <h3 className="font-semibold text-lg mb-2">{post.title}</h3>
+                  <h3 className="font-semibold text-lg mb-2 text-blue-400">{post.title}</h3>
                 </CardHeader>
-                <CardContent className="pb-2">
+                <CardContent className="pb-2 mt-[-1.3rem]">
                   <p className="text-sm text-muted-foreground line-clamp-2">{post.content}</p>
                 </CardContent>
                 <CardFooter className="pb-6 flex justify-end">
