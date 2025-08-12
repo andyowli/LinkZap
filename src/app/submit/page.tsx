@@ -1,24 +1,24 @@
 "use client"
 
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Navbar } from "@/components/navbar";
+import { Card } from "../../components/ui/card";
+import { Input } from "../../components/ui/input";
+import { Navbar } from "../../components/navbar";
 import React, { useEffect } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
+import { Button } from "../../components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../../components/ui/command";
 import { cn } from "@/lib/utils";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import Tiptap from "@/components/editor/Tiptap";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
+import Tiptap from "../../components/editor/Tiptap";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import UploadImage from "@/components/upload-image";
+import UploadImage from "../../components/upload-image";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { Loading } from "@/components/loading";
-import { Footer } from "@/components/footer";
+import { Loading } from "../../components/loading";
+import { Footer } from "../../components/footer";
 
 const frameworks = [
     {

@@ -1,10 +1,10 @@
-import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { client } from "@/sanity/client";
+import { Footer } from "../components/footer";
+import { Navbar } from "../components/navbar";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { client } from "../sanity/client";
 import { Search } from "lucide-react";
 import { SanityDocument } from "next-sanity";
 import Image from "next/image";

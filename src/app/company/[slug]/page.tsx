@@ -1,5 +1,5 @@
-import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
+import { Footer } from "../../../components/footer";
+import { Navbar } from "../../../components/navbar";
 import { client } from "@/sanity/client";
 import { PortableText, SanityDocument } from "next-sanity";
 

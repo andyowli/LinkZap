@@ -1,8 +1,8 @@
-import { EmptyData } from "@/components/empty-data";
-import { Navbar } from "@/components/navbar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { client } from "@/sanity/client";
+import { EmptyData } from "../../components/empty-data";
+import { Navbar } from "../../components/navbar";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { client } from "../../sanity/client";
 import { PortableText, SanityDocument } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
