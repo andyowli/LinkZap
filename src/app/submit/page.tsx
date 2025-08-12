@@ -55,6 +55,20 @@ const frameworks = [
     }
 ]
 
+type TiptapMark = { type: string; attrs?: { href?: string } };
+type TiptapContent = {
+    type?: string;
+    attrs?: { level?: number };
+    content?: Array<{
+        text?: string;
+        marks?: TiptapMark[];
+        content?: Array<{
+            text?: string;
+            marks?: TiptapMark[];
+        }>;
+    }>;
+};
+
 
 const Submit = () => {
     const { isLoaded,isSignedIn } = useUser();
@@ -74,6 +88,49 @@ const Submit = () => {
     if (!isLoaded || !isSignedIn) {
         return <Loading />
     }
+
+    const formSchema = z.object({
+        title: z
+        .string({ message: "Title cannot be empty" })
+        .nonempty({ message: "Title cannot be empty" })
+        .min(5, { message:"Title is not long enough" })
+        .max(50, { message: "Title is too long" }),
+
+        slug: z
+        .string()
+        .nonempty({ message: "Slug cannot be empty" })
+        .max(50, { message: "Slug is too long" }),
+
+        website: z
+        .string()
+        .nonempty({ message: "Website cannot be empty" })
+        .url({ message: "Please enter a valid URL" })
+        .max(50, { message: "Website is too long" }),
+
+        tag: z
+        .string()
+        .nonempty({ message: "Tag cannot be empty" }),
+
+        image: z
+        .instanceof(File),
+
+        description: z
+        .string()
+        .nonempty({ message: "Description cannot be empty" })
+    })
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        mode: "onChange", 
+        defaultValues: {
+        title:"",
+        slug: "",
+        website: "",
+        tag: "",
+        image: undefined,
+        description: "",
+        }
+    })
 
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
         const formData = new FormData();
@@ -110,12 +167,13 @@ const Submit = () => {
     }
 
     // Convert Tiptap JSON to Portable Text
-    function tiptapToPortableText(tiptapJson: any) {
+    function tiptapToPortableText(tiptapJson: { content?: TiptapContent[] }): unknown[] {
         if (!tiptapJson || !tiptapJson.content) return [];
-        let markDefs: any[] = [];
+        // let markDefs: any[] = [];
+        const markDefs: Array<{ _key: string; _type: string; href: string }> = [];
         let markKey = 0;
 
-        function getMarks(marks: any[]) {
+        function getMarks(marks?: TiptapMark[]): (string | null)[] {
             if (!marks) return [];
             return marks.map((mark: any) => {
                 if (mark.type === 'bold') return 'strong';
@@ -230,49 +288,6 @@ const Submit = () => {
             markDefs: markDefs, // 全局 markDefs
         }));
     }
-
-    const formSchema = z.object({
-        title: z
-        .string({ message: "Title cannot be empty" })
-        .nonempty({ message: "Title cannot be empty" })
-        .min(5, { message:"Title is not long enough" })
-        .max(50, { message: "Title is too long" }),
-
-        slug: z
-        .string()
-        .nonempty({ message: "Slug cannot be empty" })
-        .max(50, { message: "Slug is too long" }),
-
-        website: z
-        .string()
-        .nonempty({ message: "Website cannot be empty" })
-        .url({ message: "Please enter a valid URL" })
-        .max(50, { message: "Website is too long" }),
-
-        tag: z
-        .string()
-        .nonempty({ message: "Tag cannot be empty" }),
-
-        image: z
-        .instanceof(File),
-
-        description: z
-        .string()
-        .nonempty({ message: "Description cannot be empty" })
-    })
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        mode: "onChange", 
-        defaultValues: {
-        title:"",
-        slug: "",
-        website: "",
-        tag: "",
-        image: undefined,
-        description: "",
-        }
-    })
 
     useEffect(() => {
         form.setValue('tag', selectedValues.join(', '));
