@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/pop
 import { Button } from "../../components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../../components/ui/command";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
 import Tiptap from "../../components/editor/Tiptap";
 import { useForm } from "react-hook-form";
