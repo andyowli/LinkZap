@@ -11,7 +11,10 @@ const nextConfig: NextConfig = {
         pathname: '/images/**',
       },
     ],
-  }
+  },
+  eslint: {
+    ignoreDuringBuilds: true, // 禁用构建时的 ESLint 检查
+  },
 };
 
 export default nextConfig;

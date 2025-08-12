@@ -77,18 +77,6 @@ const Submit = () => {
     const [open, setOpen] = React.useState(false)
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
 
-    useEffect(() => {
-        if(!isLoaded) return;
-
-        if(!isSignedIn) {
-            router.push('/sign-in');
-        }
-    },[isLoaded, isSignedIn, router]);
-
-    if (!isLoaded || !isSignedIn) {
-        return <Loading />
-    }
-
     const formSchema = z.object({
         title: z
         .string({ message: "Title cannot be empty" })
@@ -132,6 +120,18 @@ const Submit = () => {
         }
     })
 
+    useEffect(() => {
+        if(!isLoaded) return;
+
+        if(!isSignedIn) {
+            router.push('/sign-in');
+        }
+    },[isLoaded, isSignedIn, router]);
+
+    // if (!isLoaded || !isSignedIn) {
+    //     return <Loading />
+    // }
+
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
         const formData = new FormData();
         formData.append('title', data.title);
@@ -171,9 +171,11 @@ const Submit = () => {
         if (!tiptapJson || !tiptapJson.content) return [];
         // let markDefs: any[] = [];
         const markDefs: Array<{ _key: string; _type: string; href: string }> = [];
-        let markKey = 0;
+        // let markKey = 0;
 
         function getMarks(marks?: TiptapMark[]): (string | null)[] {
+            let markKey = 0;
+
             if (!marks) return [];
             return marks.map((mark: any) => {
                 if (mark.type === 'bold') return 'strong';
@@ -326,16 +328,16 @@ const Submit = () => {
                                     control={form.control}
                                     name="title"
                                     render={({ field }) => (
-                                    <FormItem className="h-22 relative">
-                                        <FormLabel>Title</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Enter title"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="absolute left-0 bottom-[-2rem]"/>
-                                    </FormItem>
+                                        <FormItem className="h-22 relative">
+                                            <FormLabel>Title</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Enter title"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage className="absolute left-0 bottom-[-2rem]"/>
+                                        </FormItem>
                                     )}
                                 />
 
@@ -343,16 +345,16 @@ const Submit = () => {
                                     control={form.control}
                                     name="slug"
                                     render={({ field }) => (
-                                    <FormItem className="h-22 relative">
-                                        <FormLabel>Slug</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="slug"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="absolute left-0 bottom-[-2rem]"/>
-                                    </FormItem>
+                                        <FormItem className="h-22 relative">
+                                            <FormLabel>Slug</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="slug"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage className="absolute left-0 bottom-[-2rem]"/>
+                                        </FormItem>
                                     )}
                                 />
 
@@ -360,20 +362,20 @@ const Submit = () => {
                                     control={form.control}
                                     name="website"
                                     render={({ field }) => (
-                                    <FormItem className="h-22 relative">
-                                        <FormLabel>Website</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="website"
-                                                {...field}
-                                                onChange={(e) => {
-                                                    field.onChange(e);
-                                                    form.trigger("website");
-                                                }}
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="absolute left-0 bottom-[-2rem]"/>
-                                    </FormItem>
+                                        <FormItem className="h-22 relative">
+                                            <FormLabel>Website</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="website"
+                                                    {...field}
+                                                    onChange={(e) => {
+                                                        field.onChange(e);
+                                                        form.trigger("website");
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <FormMessage className="absolute left-0 bottom-[-2rem]"/>
+                                        </FormItem>
                                     )}
                                 />
 
@@ -381,56 +383,56 @@ const Submit = () => {
                                     control={form.control}
                                     name="tag"
                                     render={({ field }) => (
-                                    <FormItem className="h-22 relative">
-                                        <FormLabel>Tag</FormLabel>
-                                        <FormControl>
-                                            <Popover open={open} onOpenChange={setOpen}>
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        variant="outline"
-                                                        role="combobox"
-                                                        aria-expanded={open}
-                                                        className="w-full justify-between"
-                                                    >
-                                                        {selectedValues.length > 0
-                                                            ? frameworks
-                                                                .filter(fw => selectedValues.includes(fw.value))
-                                                                .map(fw => fw.label)
-                                                                .join(", ")
-                                                            : "Select framework..."
-                                                        }
-                                                        <ChevronsUpDown className="opacity-50" />
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-                                                    <Command>
-                                                        <CommandInput placeholder="Search framework..." className="h-9" />
-                                                        <CommandList>
-                                                            <CommandEmpty>No framework found.</CommandEmpty>
-                                                            <CommandGroup>
-                                                                {frameworks.map((framework) => (
-                                                                    <CommandItem
-                                                                        key={framework.value}
-                                                                        value={framework.value}
-                                                                        onSelect={() => handleSelect(framework.value)}
-                                                                    >
-                                                                        {framework.label}
-                                                                        <Check
-                                                                            className={cn(
-                                                                                "ml-auto",
-                                                                                selectedValues.includes(framework.value) ? "opacity-100" : "opacity-0"
-                                                                            )}
-                                                                        />
-                                                                    </CommandItem>
-                                                                ))}
-                                                            </CommandGroup>
-                                                        </CommandList>
-                                                    </Command>
-                                                </PopoverContent>
-                                            </Popover>
-                                        </FormControl>
-                                        <FormMessage className="absolute left-0 bottom-[-2rem]"/>
-                                    </FormItem>
+                                        <FormItem className="h-22 relative">
+                                            <FormLabel>Tag</FormLabel>
+                                            <FormControl>
+                                                <Popover open={open} onOpenChange={setOpen}>
+                                                    <PopoverTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            role="combobox"
+                                                            aria-expanded={open}
+                                                            className="w-full justify-between"
+                                                        >
+                                                            {selectedValues.length > 0
+                                                                ? frameworks
+                                                                    .filter(fw => selectedValues.includes(fw.value))
+                                                                    .map(fw => fw.label)
+                                                                    .join(", ")
+                                                                : "Select framework..."
+                                                            }
+                                                            <ChevronsUpDown className="opacity-50" />
+                                                        </Button>
+                                                    </PopoverTrigger>
+                                                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                                                        <Command>
+                                                            <CommandInput placeholder="Search framework..." className="h-9" />
+                                                            <CommandList>
+                                                                <CommandEmpty>No framework found.</CommandEmpty>
+                                                                <CommandGroup>
+                                                                    {frameworks.map((framework) => (
+                                                                        <CommandItem
+                                                                            key={framework.value}
+                                                                            value={framework.value}
+                                                                            onSelect={() => handleSelect(framework.value)}
+                                                                        >
+                                                                            {framework.label}
+                                                                            <Check
+                                                                                className={cn(
+                                                                                    "ml-auto",
+                                                                                    selectedValues.includes(framework.value) ? "opacity-100" : "opacity-0"
+                                                                                )}
+                                                                            />
+                                                                        </CommandItem>
+                                                                    ))}
+                                                                </CommandGroup>
+                                                            </CommandList>
+                                                        </Command>
+                                                    </PopoverContent>
+                                                </Popover>
+                                            </FormControl>
+                                            <FormMessage className="absolute left-0 bottom-[-2rem]"/>
+                                        </FormItem>
                                     )}
                                 />
                             </div>
@@ -440,13 +442,13 @@ const Submit = () => {
                                     control={form.control}
                                     name="image"
                                     render={({ field }) => (
-                                    <FormItem className="self-start">
-                                        <FormLabel>Image</FormLabel>
-                                        <FormControl>
-                                            <UploadImage onUpload={field.onChange} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
+                                        <FormItem className="self-start">
+                                            <FormLabel>Image</FormLabel>
+                                            <FormControl>
+                                                <UploadImage onUpload={field.onChange} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
                                     )}
                                 />
 
@@ -454,18 +456,21 @@ const Submit = () => {
                                     control={form.control}
                                     name="description"
                                     render={({ field }) => (
-                                    <FormItem>
-                                        <FormControl>
-                                            <Tiptap  
-                                                onChange={(value) => {
-                                                    const portableText = tiptapToPortableText(value);
-                                                    console.log("Converted Portable Text:", portableText); 
-                                                    const portableTextStr = JSON.stringify(portableText);
-                                                    field.onChange(portableTextStr);
-                                                }} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
+                                        <FormItem>
+                                            <FormControl>
+                                                <Tiptap  
+                                                    onChange={(value) => {
+                                                        const portableText = tiptapToPortableText(value);
+                                                        console.log("Converted Portable Text:", portableText); 
+                                                        const portableTextStr = JSON.stringify(portableText);
+                                                        field.onChange(portableTextStr);
+                                                        // form.setValue("description", portableTextStr);
+                                                    }} 
+                                                    // {...field}
+                                                    />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
                                     )}
                                 />
                             </div>
