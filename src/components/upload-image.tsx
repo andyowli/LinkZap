@@ -3,7 +3,7 @@
 import { useDropzone } from "react-dropzone";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 import { useState } from "react";
 import { Progress } from "./ui/progress";
 export default function UploadImage({ onUpload }: { onUpload?: (file: File) => void }) {

@@ -10,8 +10,8 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-} from '@/components/tiptap-ui-primitive/dropdown-menu';
-import { Button } from '@/components/tiptap-ui-primitive/button';
+} from '../tiptap-ui-primitive/dropdown-menu/dropdown-menu';
+import { Button } from '../tiptap-ui-primitive/button';
 
 
 type Props = {
