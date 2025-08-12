@@ -1,16 +1,16 @@
 "use client"
 
 import Link from "next/link";
-import { Navbar } from "@/components/navbar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Navbar } from "../../components/navbar";
+import { Card, CardContent, CardHeader } from "../../components/ui/card";
 import { ArrowRight, Bot, PanelsTopLeft, WandSparkles, BookText, BriefcaseBusiness, Laptop, Backpack, PencilRuler, Handshake } from "lucide-react";
-import { client } from "@/sanity/client";
+import { client } from "../../sanity/client";
 import { SanityDocument } from "next-sanity";
 import { JSX, useEffect, useRef, useState } from "react";
-import { Loading } from "@/components/loading";
+import { Loading } from "../../components/loading";
 import { usePathname, useSearchParams } from "next/navigation";
-import { EmptyData } from "@/components/empty-data";
-import { Footer } from "@/components/footer";
+import { EmptyData } from "../../components/empty-data";
+import { Footer } from "../../components/footer";
 import Image from "next/image";
 
 const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
