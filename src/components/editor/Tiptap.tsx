@@ -14,7 +14,7 @@ const Tiptap = ({
     description?: string;
     onChange: (richText: JSONContent) => void;
 }) => {
-    const [content, setContent] = useState('');
+    // const [content, setContent] = useState('');
 
     const editor = useEditor({
         extensions: [
@@ -39,7 +39,7 @@ const Tiptap = ({
         },
         onUpdate({ editor }) {
             onChange(editor.getJSON())
-            setContent(editor.getHTML())
+            // setContent(editor.getHTML())
         }
     })
 

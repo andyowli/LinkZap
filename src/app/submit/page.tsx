@@ -99,6 +99,7 @@ const Submit = () => {
                 method: 'POST',
                 body: formData,
             });
+            console.log('Upload response:', res);
         } catch (error) {
             console.error("Error uploading data:", error);
         }

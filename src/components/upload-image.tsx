@@ -18,7 +18,7 @@ export default function UploadImage({ onUpload }: { onUpload?: (file: File) => v
             "image/jpeg": [".jpeg", ".jpg"],
             "image/webp": [".webp"]
         },
-        onDrop: async(acceptFiles,fileRejections) => {
+        onDrop: async(acceptFiles) => {
             if (acceptFiles && acceptFiles.length > 0) {
                 setUploading(true);
                 setProgress(0);
