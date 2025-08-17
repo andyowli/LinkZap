@@ -18,12 +18,12 @@ const getPage = `*[ _type == "post" && slug.current == $slug][0]{
 
 const options = { next: { revalidate: 30 } };
 
-interface PageProps {
-    params: { slug: string };
-}
+// interface PageProps {
+//     params: { slug: string };
+// }
 
 
-const Page = async({ params }: PageProps) => {
+const Page = async({ params }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params;
 
     const page = await client.fetch<SanityDocument>(getPage, {slug}, options);
