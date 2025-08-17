@@ -23,8 +23,8 @@ const options = { next: { revalidate: 30 } };
 // }
 
 
-const Page = async({ params }: { params: Promise<{ slug: string }> }) => {
-    const { slug } = await params;
+const Page = async({ params }: { params: { slug: string } }) => {
+    const { slug } = params;
 
     const page = await client.fetch<SanityDocument>(getPage, {slug}, options);
     console.log(page);
