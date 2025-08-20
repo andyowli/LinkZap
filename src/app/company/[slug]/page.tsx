@@ -14,7 +14,7 @@ console.log(getPage);
 const options = { next: { revalidate: 30 } };
 
 interface PageProps {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }
 export default async function Company ({ params }: PageProps) {
     const { slug } = await params;

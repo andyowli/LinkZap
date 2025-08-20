@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import { EmptyData } from "../../components/empty-data";
 import { Navbar } from "../../components/navbar";
 import { Button } from "../../components/ui/button";
@@ -18,12 +19,14 @@ const getPage = `*[ _type == "post" && slug.current == $slug][0]{
 
 const options = { next: { revalidate: 30 } };
 
-interface PageProps {
-    params: { slug: string };
-}
+// interface PageProps {
+//     params: {
+//         slug: string;
+//     };
+// }
 
 
-const Page = async({ params }: PageProps) => {
+export default async function Page({params} : {params: { slug: string } & Promise<any>}) {
     const { slug } = params;
 
     const page = await client.fetch<SanityDocument>(getPage, {slug}, options);
@@ -94,5 +97,3 @@ const Page = async({ params }: PageProps) => {
         </div>
     )
 }
-
-export default Page;
