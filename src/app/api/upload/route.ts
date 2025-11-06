@@ -10,6 +10,7 @@ export async function POST(request:NextRequest) {
         const website = formData.get('website');
         const category = formData.getAll('category'); // get classification
         const description = formData.get('description') as string; // get text
+        const featured = formData.get('featured'); // get featured
 
         let body = [];
         try {
@@ -39,6 +40,16 @@ export async function POST(request:NextRequest) {
             filename: (file as File).name || 'uploaded-image',
         });
 
+        // icon upload
+        const iconFile = formData.get('icon');
+        let iconAsset = null;
+
+        if (iconFile && iconFile instanceof Blob) {
+            iconAsset = await client.assets.upload('image', iconFile as Blob, {
+                filename: (iconFile as File).name || 'uploaded-icon',
+            });
+        }
+
 
         // Create a sanity post type document
         const newPost = {
@@ -55,10 +66,18 @@ export async function POST(request:NextRequest) {
                     _ref: imageAsset._id,
                 },
             },
+            icon: iconAsset ? {
+                _type: 'image',
+                asset: {
+                    _type: 'reference',
+                    _ref: iconAsset._id,
+                },
+            } : null,
             website,
             category:category.length > 0 ? category : null ,
             body,
             publishedAt: new Date().toISOString(),
+            featured: featured === 'true' ? true : false,
         }
 
         const result = await client.create(newPost); // create content for sanity

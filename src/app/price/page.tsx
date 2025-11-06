@@ -1,14 +1,20 @@
+"use client"
+
 import { Check } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/card";
 import { Navbar } from "../../components/navbar";
 import { Footer } from "../../components/footer";
+import { useRouter } from "next/navigation";
+import usePrice from "../../store/priceCount";
 
 export default function PricePage() {
+  const router = useRouter();
+
   const pricingPlans = [
     {
         name: "Basic",
-        price: "$5.9",
+        price: 5.9,
         period: "/month",
         description: "Basic Listing",
         features: [
@@ -22,7 +28,7 @@ export default function PricePage() {
     },
     {
         name: "Professional",
-        price: "$9.9",
+        price: 9.9,
         period: "/month",
         description: "Featured Listing",
         features: [
@@ -38,7 +44,7 @@ export default function PricePage() {
     },
     {
         name: "Sponsor",
-        price: "$19.9",
+        price: 19.9,
         period: "/month",
         description: "Sponsors and Advertisers",
         features: [
@@ -52,6 +58,13 @@ export default function PricePage() {
         popular: false,
     },
   ]
+
+  const handlePaymentClick = (price: number) => {
+    console.log("价格",price)
+    usePrice.getState().setPrice(price);
+    router.push('/payment');
+    // router.push('/payment-success');
+  };
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -91,7 +104,7 @@ export default function PricePage() {
                 <CardHeader>
                   <CardTitle>{plan.name}</CardTitle>
                   <div className="mt-4 flex items-baseline">
-                    <span className="text-3xl  text-[#409eff] font-bold">{plan.price}</span>
+                    <span className="text-3xl  text-[#409eff] font-bold">${plan.price}</span>
                     {plan.period && <span className="text-muted-foreground ml-1">{plan.period}</span>}
                   </div>
                   <CardDescription className="mt-2]">{plan.description}</CardDescription>
@@ -107,7 +120,9 @@ export default function PricePage() {
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button className={`w-full rounded-full ${
+                  <Button
+                    onClick={() => handlePaymentClick(plan.price)}
+                    className={`w-full rounded-full ${
                         index === 1
                         ? "bg-[#409eff] hover:bg-[#409eff]/90 text-white"
                         : "bg-white text-black border border-gray-200 hover:bg-[#409eff]/90 hover:text-white"

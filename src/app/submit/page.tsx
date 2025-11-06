@@ -17,8 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import UploadImage from "../../components/upload-image";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { Loading } from "../../components/loading";
 import { Footer } from "../../components/footer";
+import useFormData from "../../store/formData";
 
 const frameworks = [
     {
@@ -102,6 +102,9 @@ const Submit = () => {
         image: z
         .instanceof(File),
 
+        icon: z
+        .instanceof(File),
+
         description: z
         .string()
         .nonempty({ message: "Description cannot be empty" })
@@ -116,6 +119,7 @@ const Submit = () => {
         website: "",
         tag: "",
         image: undefined,
+        icon: undefined,
         description: "",
         }
     })
@@ -123,42 +127,47 @@ const Submit = () => {
     useEffect(() => {
         if(!isLoaded) return;
 
-        if(!isSignedIn) {
-            router.push('/sign-in');
-        }
+        // if(!isSignedIn) {
+        //     router.push('/sign-in');
+        // }
     },[isLoaded, isSignedIn, router]);
 
-    // if (!isLoaded || !isSignedIn) {
-    //     return <Loading />
-    // }
-
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-        const formData = new FormData();
-        formData.append('title', data.title);
-        formData.append('slug', data.slug);
-        formData.append('website', data.website);
+        console.log('图片',data.image);
 
-        if (selectedValues.length > 0) {
-            selectedValues.forEach(value => {
-                formData.append('category', value);
-            });
-        } 
-
-        if (data.image instanceof File) {
-            formData.append('file', data.image);
+        if (!data.title || !data.slug || !data.website || !data.tag || !data.image) {
+            alert('Please fill in all required fields');
+            return;
         }
-
-        formData.append('description', data.description);
         
-
-        try {
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
+        // Convert image files to base64 strings for persistent storage
+        const fileToBase64 = (file: File): Promise<string> => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result as string);
+                reader.onerror = (error) => reject(error);
             });
-            console.log('Upload response:', res);
+        };
+        
+        try {
+            const base64Image = await fileToBase64(data.image);
+            const base64Icon = await fileToBase64(data.icon);
+            
+            // Save form data
+            useFormData.getState().setFormData({
+                ...data,
+                image: data.image, // Keep file references (current session only)
+                icon: data.icon, // Keep file references (current session only)
+            });
+            
+            // Save base64 string (persistent)
+            useFormData.getState().setImageBase64(base64Image,base64Icon);
+            
+            router.push('/price');
         } catch (error) {
-            console.error("Error uploading data:", error);
+            console.error('Error converting file to base64:', error);
+            alert('Failed to process image. Please try again.');
         }
     }
 
@@ -210,10 +219,10 @@ const Submit = () => {
                             marks: getMarks(child.marks),
                         }))
                         : [],
-                    // 添加段落分隔符
+                    // Add paragraph separator
                     markDecorations: [
                         {
-                            _type: 'break', // 自定义换行标记
+                            _type: 'break', // Custom line break marker
                             _key: randomKey()
                         }
                     ]
@@ -287,7 +296,7 @@ const Submit = () => {
         }).filter((block: any) => block && block.children && block.children.length > 0)
         .map((block: any) => ({
             ...block,
-            markDefs: markDefs, // 全局 markDefs
+            markDefs: markDefs, // Global markDefs
         }));
     }
 
@@ -313,6 +322,9 @@ const Submit = () => {
         setOpen(false); 
     }
 
+    const pay = async () => { 
+        router.push('/payment-success');
+    }
 
 
     return (
@@ -454,6 +466,20 @@ const Submit = () => {
 
                                 <FormField
                                     control={form.control}
+                                    name="icon"
+                                    render={({ field }) => (
+                                        <FormItem className="self-start">
+                                            <FormLabel>icon</FormLabel>
+                                            <FormControl>
+                                                <UploadImage onUpload={field.onChange} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                {/* <FormField
+                                    control={form.control}
                                     name="description"
                                     render={({ field }) => (
                                         <FormItem>
@@ -472,11 +498,41 @@ const Submit = () => {
                                             <FormMessage />
                                         </FormItem>
                                     )}
-                                />
+                                /> */}
+
+                                <div>
+                                    <FormField
+                                        control={form.control}
+                                        name="description"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Tiptap  
+                                                        onChange={(value) => {
+                                                            const portableText = tiptapToPortableText(value);
+                                                            console.log("Converted Portable Text:", portableText); 
+                                                            const portableTextStr = JSON.stringify(portableText);
+                                                            field.onChange(portableTextStr);
+                                                            // form.setValue("description", portableTextStr);
+                                                        }} 
+                                                        // {...field}
+                                                        />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
                             </div>
 
                             <div className="bg-[#f1f5f9] p-4 flex justify-between items-center rounded-b-lg absolute left-0 right-0 bottom-0">
-                                <Button type="submit" className="cursor-pointer rounded-full hidden md:inline-flex bg-[#409eff] hover:bg-[#409eff]/90 text-white">提交编辑</Button>
+                                <Button 
+                                    
+                                    
+                                    className="cursor-pointer rounded-full hidden md:inline-flex bg-[#409eff] hover:bg-[#409eff]/90 text-white"
+                                >
+                                    提交编辑
+                                </Button>
                                 <p className="text-[#64748b]">
                                     Don't worry, please check if each item is filled in correctly before submitting
                                 </p>

@@ -1,189 +1,106 @@
-"use client"
-
-import Link from "next/link";
-import { Navbar } from "../../components/navbar";
-import { Card, CardContent, CardHeader } from "../../components/ui/card";
-import { ArrowRight, Bot, PanelsTopLeft, WandSparkles, BookText, BriefcaseBusiness, Laptop, Backpack, PencilRuler, Handshake } from "lucide-react";
 import { client } from "../../sanity/client";
 import { SanityDocument } from "next-sanity";
-import { JSX, useEffect, useRef, useState } from "react";
-import { Loading } from "../../components/loading";
-import { usePathname, useSearchParams } from "next/navigation";
-import { EmptyData } from "../../components/empty-data";
-import { Footer } from "../../components/footer";
-import Image from "next/image";
+import ProductClient from "@/components/ProductClient";
+import { POSTS_QUERY,POST_SIDEBAR, options } from "../../lib/sanityDB";
 
-const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
-  _id,
-  title,
-  "slug": slug.current,
-  category,
-  "imgurl":image.asset->url,
-  "content":body[].children[].text
-}`;
+// Add SEO metadata to the product list page
+export async function generateMetadata({ searchParams }: { searchParams: { category?: string } }) {
+  const sidebar = await client.fetch<SanityDocument[]>(POST_SIDEBAR, {}, options);
+  const category = (await searchParams)?.category;
+  const categoryName = sidebar.find(item => item.title.toLowerCase() === category)?.title;
+  
+  const baseTitle = 'Selected product collection - High-quality tools and resources for enhancing creativity and productivity.';
+  const baseDescription = 'Discover and connect high-quality tools and resources to help independent creators achieve a leap in creativity and productivity. We have carefully selected high-quality products from multiple fields such as AI, UI, design, travel, and community.';
+  
+  let title = baseTitle;
+  let description = baseDescription;
+  
+  if (categoryName) {
+    title = `${categoryName} Product Collection`;
+    description = `Browse our curated selection of high-quality products in the ${categoryName} category to help you discover and connect with the most suitable tools and resources.`;
+  }
+  
+  return {
+    title,
+    description,
+    keywords: ['Product Catalog', 'Tool Collection', 'AI tools', 'Design resources', 'Productivity tools', 'Independent Creator', ...(categoryName ? [categoryName] : [])],
+    openGraph: {
+      type: 'website',
+      title,
+      description,
+      url: category ? `https://www.linkzap.link/product?category=${category}` : 'https://www.linkzap.link/product',
+      images: [
+        {
+          url: '/logo.svg',
+          alt: 'Product Collection Logo',
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/logo.svg'],
+    },
+  };
+}
 
-const POST_SIDEBAR = `*[_type == "sidebar"]{
-  _id,
-  title
-}`;
+const ProductPage = async ({ searchParams } : { searchParams : { category?: string, search?: string } }) => {
+  const selectedCategory = (await searchParams).category;
+  const searchQuery = (await searchParams).search;
 
-const options = { next: { revalidate: 30 } };
-
-const ProductPage = () => { 
-  const [posts, setPosts] = useState<SanityDocument[]>([]);
-  const [sidebar, setSidebar] = useState<SanityDocument[]>([]);
-
-  const [loading, setLoading] = useState(true);
-
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const selectedCategory = searchParams.get("category");
-
-  // Ref records the last path name
-  const lastPathname = useRef(pathname);
-  const lastCategory = useRef(selectedCategory);
-
-  useEffect(() => {
-    if (
-      lastPathname.current !== pathname ||
-      (lastCategory.current && !selectedCategory)
-    ) {
-      setLoading(true);
-      lastPathname.current = pathname;
-      lastCategory.current = selectedCategory;
-    }
-    async function fetchData() {
-      try {
-        const [postsRes, sidebarRes] = await Promise.all([
-          client.fetch<SanityDocument[]>(POSTS_QUERY,{},options),
-          client.fetch<SanityDocument[]>(POST_SIDEBAR,{},options)
-        ]);
-        setPosts(postsRes);
-        setSidebar(sidebarRes);
-      } catch (error) {
-        if(error) {
-          setPosts([]); 
-          setSidebar([]);
-
-          return <EmptyData />
-        }
-      }
-      
-      setLoading(false);
-
-      lastPathname.current = pathname;
-      lastCategory.current = selectedCategory;
-    }
-    fetchData();
-  }, [pathname,selectedCategory]);
-
-  const orderedSidebar = [...sidebar].reverse();
-
-  console.log(orderedSidebar);
-
-  if (loading) {
-    return <Loading />;
+  // Obtain article data
+  const postsData = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
+  // Get sidebar data
+  const sidebarData = await client.fetch<SanityDocument[]>(POST_SIDEBAR, {}, options);
+  
+  // Application classification filtering
+  let posts = postsData;
+  if (selectedCategory) {
+    posts = postsData.filter(post =>
+      Array.isArray(post.category)
+        ? post.category.some(cat => cat.toLowerCase() === selectedCategory)
+        : post.category?.toLowerCase() === selectedCategory
+    );
   }
 
-  const filteredPosts = selectedCategory
-  ? posts.filter(post =>
-      Array.isArray(post.category)
-        ? post.category.some(
-            c => c && c.toLowerCase() === selectedCategory.toLowerCase()
-          )
-        : post.category && post.category.toLowerCase() === selectedCategory.toLowerCase()
-    )
-  : posts;
+  // Sort posts to put featured items first
+  posts.sort((a, b) => {
+    const aFeatured = a.featured ? 1 : 0;
+    const bFeatured = b.featured ? 1 : 0;
+    return bFeatured - aFeatured; // 降序排列，featured为true的排在前面
+  });
 
-  const sidebarIcons: Record<string, JSX.Element> = {
-    AI: <Bot className="w-4 h-4 mr-2" />,
-    UI: <PanelsTopLeft className="w-4 h-4 mr-2" />,
-    Design: <WandSparkles className="w-4 h-4 mr-2" />,
-    Travel: <Backpack className="w-4 h-4 mr-2" />,
-    Community: <BookText className="w-4 h-4 mr-2" />,
-    Work: <BriefcaseBusiness className="w-4 h-4 mr-2" />,
-    "digital nomad": <Laptop className="w-4 h-4 mr-2" />,
-    Tools: <PencilRuler className="w-4 h-4 mr-2" />,
-    Business: <Handshake className="w-4 h-4 mr-2" />
-  };
+  // homePage search
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase().trim();
+    posts = posts.filter(post => {
+      // 只检查标题是否精确匹配（忽略大小写）
+      const title = post.title?.toLowerCase().trim();
 
+      // 检查分类
+      let categoryMatch = false;
+      if (Array.isArray(post.category)) {
+        categoryMatch = post.category.some((cat: string) => cat.toLowerCase().includes(query));
+      } else if (typeof post.category === 'string') {
+        categoryMatch = post.category.toLowerCase().includes(query);
+      }
+
+      return title.includes(query) || categoryMatch;
+
+
+    });
+  }
 
   return (
-    <main className="min-h-screen flex flex-col bg-gray-50 dark:bg-black">
-      <Navbar />
-
-      <div className="pt-24 container mx-auto max-w-7xl">
-        <div className="flex items-center justify-center flex-col mb-8">
-          <h1 className="font-bold text-balance text-2xl sm:text-3xl md:text-4xl">
-            Your Ultimate
-            <span className="text-blue-500"> Directory of Directories</span>
-          </h1>
-          <p className="max-w-3xl text-balance text-muted-foreground sm:text-xl">Iscover the best catalog and easily launch your products</p>
-        </div>
-        
-        <div className="pb-16 px-4">
-          <div className="container mx-auto">
-            <div className="flex flex-col md:flex-row gap-8">
-              {/* Sidebar */}
-              <div className="w-full md:w-64 flex-shrink-0">
-                <div className="bg-white dark:bg-black/20 rounded-xl shadow-sm dark:shadow-gray-700 p-5 sticky top-24">
-                  <h2 className="text-lg font-bold mb-4">Categories</h2>
-                  <div className="space-y-1">
-                    {orderedSidebar.map((title) => (
-                      <Link
-                        key={title._id}
-                        href={`/product?category=${title.title.toLowerCase()}`}
-                        className="flex items-center py-2 px-3 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-100/50 rounded-md transition-colors"
-                      >
-                        {/* {title.icon} */}
-                        {sidebarIcons[title.title] || null} 
-                        <span>{title.title}</span>
-                        <ArrowRight className="w-4 h-4 ml-auto" />
-                      </Link>
-                    ))}
-                  </div>    
-                </div>
-              </div>
-
-              {/* Main Content */}
-              <div className="flex-1">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">               
-                  {filteredPosts.map((post) => (
-                      <Link href={`/${post.slug}`} key={post._id}>
-                        <Card key={post._id} className="overflow-hidden hover:shadow-md transition-shadow py-0">
-                          <CardHeader className="flex justify-between items-start px-0">
-                            <div className="w-full">
-                              <div>
-                                <Image
-                                  src={post.imgurl}
-                                  alt={post.title}
-                                  width={300}
-                                  height={300}
-                                  className="object-cover w-full h-44 rounded-t-xl"
-                                />
-                              </div>
-                              <div className="border-t border-gray-300 dark:border-black/15 my-[0.1]"></div>
-                            </div>
-                          </CardHeader>
-
-                          <CardContent>
-                            <h4 className="text-blue-400 mb-2.5 mt-[-0.3rem]">{post.title}</h4>
-                            <p className="text-sm text-gray-600 line-clamp-2 dark:text-white/65">{post.content}</p>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <Footer />
-    </main>
-  )
+    <ProductClient 
+      posts={posts} 
+      sidebar={sidebarData} 
+      selectedCategory={selectedCategory} 
+    />
+  );
 }
 
 export default ProductPage;

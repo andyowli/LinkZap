@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /api/
+Disallow: /submit/
+Disallow: /payment-success/
+
+Sitemap: https://www.linkzap.link/sitemap.xml

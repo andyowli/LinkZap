@@ -28,7 +28,7 @@ const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
   "content":body[].children[].text
 }`;
 
-const options = { next: { revalidate: 30 } };
+const options = { next: { revalidate: 10 } };
 
 export default async function Home() {
   const PSOT_CARD = await client.fetch<SanityDocument>(POSTS_QUERY,{}, options);
@@ -55,12 +55,16 @@ export default async function Home() {
       <section className="pb-4 px-4">
         <div className="container mx-auto max-w-2xl">
           <div className="relative">
-            <Search className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="searching resources..."
-              className="w-full pl-12 pr-4 py-6 rounded-full text-base shadow-sm border-muted focus-visible:ring-[2px] focus-visible:ring-blue-500"
-            />
+            <form action="/product" method="GET">
+              <Search className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground" />
+              <Input
+                name="search"
+                type="search"
+                autoComplete="off"
+                placeholder="Please enter product title or category"
+                className="w-full pl-12 pr-4 py-6 rounded-full text-base shadow-sm border-muted focus-visible:ring-[2px] focus-visible:ring-blue-500"
+              />
+            </form>
           </div>
         </div>
       </section>
@@ -72,36 +76,39 @@ export default async function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PSOT_CARD.map((post:Post) => (
               <Link href={`/${post.slug}`} key={post._id}>
-                <Card key={post._id} className="py-0 gap-1.5 transition-all hover:shadow-md hover:scale-[1.02]">
-                {/* Image takes up full width */}
-                <div className="relative w-full h-48 bg-muted rounded-t-xl">
-                  <Image 
-                    src={post.imgurl}
-                    alt={post.title}
-                    fill
-                    unoptimized
-                    className="w-full h-full rounded-t-xl"
-                  />
-                </div>
+                <Card 
+                  key={post._id} 
+                  className="py-0 gap-1.5 transition-all hover:shadow-md hover:scale-[1.02] h-96"
+                >
+                  {/* Image takes up full width */}
+                  <div className="relative w-full h-48 bg-muted rounded-t-xl">
+                    <Image 
+                      src={post.imgurl}
+                      alt={post.title}
+                      fill
+                      unoptimized
+                      className="w-full h-full rounded-t-xl"
+                    />
+                  </div>
 
-                {/* Content below the image */}
-                <CardHeader>
-                  <h3 className="font-semibold text-lg mb-2 text-blue-400">{post.title}</h3>
-                </CardHeader>
-                <CardContent className="pb-2 mt-[-1.3rem]">
-                  <p className="text-sm text-muted-foreground line-clamp-2">{post.content}</p>
-                </CardContent>
-                <CardFooter className="pb-6 flex justify-end">
-                  {post.category.map((category,index) => (
-                    <Badge 
-                      key={index} 
-                      variant="secondary"
-                      className="bg-blue-500 text-white ml-2 first:ml-0"
-                    >
-                      {category}
-                    </Badge>
-                  ))}
-                </CardFooter>
+                  {/* Content below the image */}
+                  <CardHeader>
+                    <h3 className="font-semibold text-lg mb-2 text-blue-400">{post.title}</h3>
+                  </CardHeader>
+                  <CardContent className="pb-2 mt-[-1.3rem]">
+                    <p className="text-sm text-muted-foreground line-clamp-2">{post.content}</p>
+                  </CardContent>
+                  <CardFooter className="pb-6 flex justify-end">
+                    {post.category.map((category,index) => (
+                      <Badge 
+                        key={index} 
+                        variant="secondary"
+                        className="bg-blue-500 text-white ml-2 first:ml-0"
+                      >
+                        {category}
+                      </Badge>
+                    ))}
+                  </CardFooter>
                 </Card>
               </Link>
             ))}

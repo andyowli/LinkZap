@@ -34,15 +34,15 @@ export function Footer() {
         {
             title: 'Social',
             links: [
-                { name: 'Twitter', href: '#', icon: <Twitter /> },
-                { name: 'Github', href: '#', icon: <Github />  },
-                { name: 'Email', href: '#', icon: <Mail /> },
+                { name: 'Twitter', href: 'https://x.com/yuwensuotuo', icon: <Twitter /> },
+                { name: 'Github', href: 'https://github.com/andyowli', icon: <Github />  },
+                { name: 'Email', href: 'mailto:kissfish1376@163.com', icon: <Mail /> },
             ] as FooterLink[]
         },
     ];
 
     return (
-        <footer className="py-10 container mx-auto max-w-7xl">
+        <footer className="py-10 container mx-auto max-w-7xl max-sm:px-4 px-6">
             <div>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-x-8">
                     <div className="flex items-start gap-2">
