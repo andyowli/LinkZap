@@ -9,23 +9,23 @@ export function Loading({ className }: { className?: string }) {
         <div className="bg-white rounded-2xl shadow-lg px-16 py-12 flex flex-col items-center">
             <div className="mb-6">
                 <svg className="animate-spin" width="64" height="64" viewBox="0 0 64 64">
-                <circle
-                    className="opacity-30"
-                    cx="32"
-                    cy="32"
-                    r="26"
-                    stroke="#e5e7eb"
+                    <circle
+                        className="opacity-30"
+                        cx="32"
+                        cy="32"
+                        r="26"
+                        stroke="#e5e7eb"
+                        strokeWidth="6"
+                        fill="none"
+                    />
+                    <path
+                    d="M58 32a26 26 0 0 1-26 26"
+                    stroke="#1976d2"
                     strokeWidth="6"
                     fill="none"
-                />
-                <path
-                d="M58 32a26 26 0 0 1-26 26"
-                stroke="#1976d2"
-                strokeWidth="6"
-                fill="none"
-                strokeLinecap="round"
-                />
-            </svg>
+                    strokeLinecap="round"
+                    />
+                </svg>
             </div>
             <span className="text-gray-400 text-xl tracking-wide">加载中...</span>
         </div>

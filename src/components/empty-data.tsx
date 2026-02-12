@@ -1,27 +1,38 @@
-"use client"
+import { Button } from "../components/ui/button";
+import {
+    Empty,
+    EmptyContent,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "../components/ui/empty";
+import { ArrowUpRightIcon,FileText } from "lucide-react";
 
-import { RotateCw } from "lucide-react";
-import { Button } from "./ui/button";
-import { Empty } from 'antd';
-
-export const EmptyData = () => {
+export function EmptyData() {
     return (
-        <div className="h-[80vh] flex flex-col items-center justify-center">
-            <div className="mb-8">
-                <Empty 
-                    description={<span className="dark:text-[#6B7280] text-gray-600">No Data</span>}
-                />
-                <p className="text-[#6B7280]">There is no content on this page,please try again later.</p>
-            </div>
-
-            <Button 
-                variant="outline"
-                className="cursor-pointer"
-                onClick={() => window.location.reload()}
-            >
-                <RotateCw className="text-[#0A0A0A]"/>
-                Refresh the page
-            </Button>
+        <div>
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <FileText />
+                    </EmptyMedia>
+                    <EmptyTitle>No data available</EmptyTitle>
+                </EmptyHeader>
+                <EmptyContent className="flex-row justify-center gap-2">
+                    <Button>Back Home</Button>
+                    <Button variant="outline">View project</Button>
+                </EmptyContent>
+                <Button
+                    variant="link"
+                    asChild
+                    className="text-muted-foreground"
+                    size="sm"
+                >
+                    <a href="#">
+                        There are currently no blogs available <ArrowUpRightIcon />
+                    </a>
+                </Button>
+            </Empty>
         </div>
     )
 }

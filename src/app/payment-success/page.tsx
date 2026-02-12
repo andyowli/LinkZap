@@ -1,14 +1,14 @@
 "use client"
-import { Footer } from "@/components/footer";
-import { Navbar } from "@/components/navbar";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Footer } from "../../components/footer";
+import { Navbar } from "../../components/navbar-wrapper";
+import { Button } from "../../components/ui/button";
+import { Card } from "../../components/ui/card";
 import { Check } from "lucide-react";
 import { useEffect, useRef } from "react";
 import JSConfetti from 'js-confetti';
 import Link from "next/link";
-import useFormData from "@/store/formData";
-import usePrice from "@/store/priceCount";
+import useFormData from "../../store/formData";
+import usePrice from "../../store/priceCount";
 
 export default function SuccessPage() {
     const {data:formData} = useFormData();
@@ -114,7 +114,7 @@ export default function SuccessPage() {
             uploadData();
         }
     }, [formData, price]);
-
+    
     return (
         <div className="min-h-screen flex flex-col">
             <Navbar />

@@ -2,8 +2,7 @@
 
 import { Card } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import { Navbar } from "../../components/navbar";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import { Button } from "../../components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -15,10 +14,13 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import UploadImage from "../../components/upload-image";
-import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Footer } from "../../components/footer";
 import useFormData from "../../store/formData";
+import { createAuthClient } from "better-auth/client";
+import { NavbarClient } from "../../components/navbar-client";
+import usePrice from "../../store/priceCount";
+import { toast } from "sonner";
 
 const frameworks = [
     {
@@ -71,11 +73,43 @@ type TiptapContent = {
 
 
 const Submit = () => {
-    const { isLoaded,isSignedIn } = useUser();
     const router = useRouter();
+    const authClient = createAuthClient();
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState<{ id: string; name?: string | null; email?: string | null; image?: string | null } | null>(null);
 
     const [open, setOpen] = React.useState(false)
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
+
+    // Check if the user has logged in
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const session = await authClient.getSession();
+                if (session?.data?.session) {
+                    setIsAuthenticated(true);
+                    // The better auth client may return different structures, try multiple possibilities
+                    const userData = (session.data as any).user || (session.data.session as any)?.user || null;
+                    if (userData) {
+                        setUser({
+                            id: userData.id,
+                            name: userData.name,
+                            email: userData.email,
+                            image: userData.image,
+                        });
+                    }
+                } else {
+                    // Not logged in, redirected to login page
+                    router.push('/sign-in?callbackUrl=/submit');
+                }
+            } catch (error) {
+                toast.error("Failed to check login status.");
+                router.push('/sign-in');
+            }
+        };
+
+        checkAuth();
+    }, [router]);
 
     const formSchema = z.object({
         title: z
@@ -114,27 +148,18 @@ const Submit = () => {
         resolver: zodResolver(formSchema),
         mode: "onChange", 
         defaultValues: {
-        title:"",
-        slug: "",
-        website: "",
-        tag: "",
-        image: undefined,
-        icon: undefined,
-        description: "",
+            title:"",
+            slug: "",
+            website: "",
+            tag: "",
+            image: undefined,
+            icon: undefined,
+            description: "",
         }
     })
 
-    useEffect(() => {
-        if(!isLoaded) return;
-
-        // if(!isSignedIn) {
-        //     router.push('/sign-in');
-        // }
-    },[isLoaded, isSignedIn, router]);
 
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-        console.log('图片',data.image);
-
         if (!data.title || !data.slug || !data.website || !data.tag || !data.image) {
             alert('Please fill in all required fields');
             return;
@@ -151,23 +176,59 @@ const Submit = () => {
         };
         
         try {
-            const base64Image = await fileToBase64(data.image);
-            const base64Icon = await fileToBase64(data.icon);
-            
-            // Save form data
+            // First, save the form data to ensure that it has been saved
             useFormData.getState().setFormData({
                 ...data,
                 image: data.image, // Keep file references (current session only)
                 icon: data.icon, // Keep file references (current session only)
             });
+
+            // Asynchronous conversion of files to base64 (without blocking subsequent processes)
+            Promise.all([
+                fileToBase64(data.image),
+                data.icon ? fileToBase64(data.icon) : Promise.resolve('')
+            ]).then(([base64Image, base64Icon]) => {
+                // Save base64 string (persistent)
+                useFormData.getState().setImageBase64(base64Image, base64Icon);
+            }).catch((error) => {
+                console.error('Error converting file to base64:', error);
+                // 不阻止流程继续，因为文件引用已保存
+            });
+
+            const getPrice = localStorage.getItem('price-storage');
             
-            // Save base64 string (persistent)
-            useFormData.getState().setImageBase64(base64Image,base64Icon);
-            
-            router.push('/price');
+            if(!getPrice){
+                router.push('/price');
+            } else {
+                const priceId = localStorage.getItem('selected-price-id');
+
+                // Create a payment session
+                const response = await fetch('/api/checkout_sessions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        priceId: priceId,
+                    })
+                });
+
+                if (!response.ok) {
+                    toast("Event has been created.")
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (result.url) {
+                    // Jump to Stripe payment page
+                    window.location.href = result.url;
+                } else {
+                    toast.error("Failed to create payment session. Please try again.")
+                }
+            }
         } catch (error) {
-            console.error('Error converting file to base64:', error);
-            alert('Failed to process image. Please try again.');
+            toast.error("Failed to process form. Please try again.")
         }
     }
 
@@ -178,9 +239,7 @@ const Submit = () => {
     // Convert Tiptap JSON to Portable Text
     function tiptapToPortableText(tiptapJson: { content?: TiptapContent[] }): unknown[] {
         if (!tiptapJson || !tiptapJson.content) return [];
-        // let markDefs: any[] = [];
         const markDefs: Array<{ _key: string; _type: string; href: string }> = [];
-        // let markKey = 0;
 
         function getMarks(marks?: TiptapMark[]): (string | null)[] {
             let markKey = 0;
@@ -322,15 +381,9 @@ const Submit = () => {
         setOpen(false); 
     }
 
-    const pay = async () => { 
-        router.push('/payment-success');
-    }
-
-
     return (
         <div>
-            <Navbar />
-
+            <NavbarClient isLoggedIn={isAuthenticated} user={user} />
             <Card className="mt-28 mb-6 container mx-auto py-0 relative">
                 <div className="p-7">
                     <Form {...form}>
@@ -478,28 +531,6 @@ const Submit = () => {
                                     )}
                                 />
 
-                                {/* <FormField
-                                    control={form.control}
-                                    name="description"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Tiptap  
-                                                    onChange={(value) => {
-                                                        const portableText = tiptapToPortableText(value);
-                                                        console.log("Converted Portable Text:", portableText); 
-                                                        const portableTextStr = JSON.stringify(portableText);
-                                                        field.onChange(portableTextStr);
-                                                        // form.setValue("description", portableTextStr);
-                                                    }} 
-                                                    // {...field}
-                                                    />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                /> */}
-
                                 <div>
                                     <FormField
                                         control={form.control}
@@ -510,12 +541,9 @@ const Submit = () => {
                                                     <Tiptap  
                                                         onChange={(value) => {
                                                             const portableText = tiptapToPortableText(value);
-                                                            console.log("Converted Portable Text:", portableText); 
                                                             const portableTextStr = JSON.stringify(portableText);
                                                             field.onChange(portableTextStr);
-                                                            // form.setValue("description", portableTextStr);
                                                         }} 
-                                                        // {...field}
                                                         />
                                                 </FormControl>
                                                 <FormMessage />
@@ -525,13 +553,13 @@ const Submit = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-[#f1f5f9] p-4 flex justify-between items-center rounded-b-lg absolute left-0 right-0 bottom-0">
+                            <div className="bg-[#f1f5f9] dark:bg-[#171717] dark:border-gray-600/50 border-t p-4 flex justify-between items-center rounded-b-lg absolute left-0 right-0 bottom-0">
                                 <Button 
                                     
                                     
                                     className="cursor-pointer rounded-full hidden md:inline-flex bg-[#409eff] hover:bg-[#409eff]/90 text-white"
                                 >
-                                    提交编辑
+                                    Submit
                                 </Button>
                                 <p className="text-[#64748b]">
                                     Don't worry, please check if each item is filled in correctly before submitting

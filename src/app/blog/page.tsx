@@ -1,6 +1,6 @@
 import { EmptyData } from "../../components/empty-data";
 import { Footer } from "../../components/footer";
-import { Navbar } from "../../components/navbar";
+import { Navbar } from "../../components/navbar-wrapper";
 
 export const viewport = {
     width: 'device-width',
@@ -10,9 +10,12 @@ export const viewport = {
 
 const Blog = () => {
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <Navbar />
-            <EmptyData />
+
+            <main className="flex-1 pt-40">
+                <EmptyData />
+            </main>
 
             <Footer />
         </div>

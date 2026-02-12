@@ -1,6 +1,5 @@
-// import { JSX } from "react";
 import { EmptyData } from "../../components/empty-data";
-import { Navbar } from "../../components/navbar";
+import { Navbar } from "../../components/navbar-wrapper";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { client } from "../../sanity/client";
@@ -9,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import { Footer } from "../../components/footer";
+import { ClientComponent } from "../../components/affiliate";
 
 const getPage = `*[ _type == "post" && slug.current == $slug][0]{
     _id,
@@ -17,6 +17,7 @@ const getPage = `*[ _type == "post" && slug.current == $slug][0]{
     "iconurl":icon.asset->url,
     "content":body,
     website,
+    affiliate,
     category
 }`;
 
@@ -24,23 +25,23 @@ const options = { next: { revalidate: 30 } };
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const resolvedParams = await params;
-    // const page = await client.fetch<SanityDocument>(getPage, { slug: params.slug }, options);
+
     const page = await client.fetch<SanityDocument>(getPage, { slug: resolvedParams.slug }, options);
     
     if (!page) {
         return {
-        title: 'Page not found',
-        description: 'The requested product page could not be found.',
-        openGraph: {
-            type: 'website',
             title: 'Page not found',
             description: 'The requested product page could not be found.',
-            url: `https://www.linkzap.link/${resolvedParams.slug}`,
-        },
+            openGraph: {
+                type: 'website',
+                title: 'Page not found',
+                description: 'The requested product page could not be found.',
+                url: `https://www.linkzap.link/${resolvedParams.slug}`,
+            },
         };
     }
     
-    // 提取描述文本，处理不同格式的content数据
+    // Extract descriptive text and process content data in different formats
     let description = 'Discover this amazing product';
     if (page.content?.[0]?.children?.[0]?.text) {
         description = page.content[0].children[0].text.slice(0, 160);
@@ -56,38 +57,31 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             ...(Array.isArray(page.category) ? page.category : [page.category]).filter(Boolean)
         ],
         openGraph: {
-        type: 'website',
-        title: page.title,
-        description,
-        url: `https://www.linkzap.link/${resolvedParams.slug}`,
-        images: page.imgurl ? [
-            {
-            url: page.imgurl,
-            alt: page.title || 'Product image',
-            width: 1200,
-            height: 630,
-            }
-        ] : [],
+            type: 'website',
+            title: page.title,
+            description,
+            url: `https://www.linkzap.link/${resolvedParams.slug}`,
+            images: page.imgurl ? [
+                {
+                url: page.imgurl,
+                alt: page.title || 'Product image',
+                width: 1200,
+                height: 630,
+                }
+            ] : [],
         },
         twitter: {
-        card: 'summary_large_image',
-        title: page.title,
-        description,
-        images: page.imgurl ? [page.imgurl] : [],
+            card: 'summary_large_image',
+            title: page.title,
+            description,
+            images: page.imgurl ? [page.imgurl] : [],
         },
-        // 添加canonical链接
+        // Add canonical link
         alternates: {
-        canonical: `https://www.linkzap.link/${resolvedParams.slug}`,
+            canonical: `https://www.linkzap.link/${resolvedParams.slug}`,
         },
     };
 }
-
-// interface PageProps {
-//     params: {
-//         slug: string;
-//     };
-// }
-
 
 export default async function Page({params}: {params: Promise<{ slug: string }>}) {
     const { slug } = await params;
@@ -97,13 +91,22 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
     // 先检查页面是否存在
     if (!page) {
         return (
-            <div className="min-h-screen">
+            <div className="flex flex-col min-h-screen">
                 <Navbar />
-                <EmptyData />
+
+                <main className="flex-1 pt-40">
+                    <EmptyData />
+                </main>
+
                 <Footer />
             </div>
         );
     }
+
+    const handleClick = () => {
+        window.location.href = page.affiliate;
+    };
+
     
     // Generate JSON-LD structured data only when the page exists
     const jsonLd = {
@@ -150,8 +153,8 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                 <Button 
                     className="bg-[#409eff] hover:bg-[#409eff]/90 dark:text-white"
                 >
-                    <Link
-                        href={page.website} 
+                    <Link 
+                        href={page.affiliate ? page.affiliate : page.website} 
                         target="_blank"
                     >
                         Visit Website
@@ -159,8 +162,8 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                 </Button>
             </div>
 
-            <div className="container mx-auto max-w-[85rem] flex flex-col md:flex-row justify-between mt-12 max-2xl:p-4">
-                <Card className="p-5 w-full md:w-3/5 bg-gray-300/10 max-sm:mb-6">
+            <div className="container mx-auto max-w-[85rem] flex flex-col md:flex-row items-start justify-between mt-12 max-2xl:p-4">
+                <Card className="p-5 w-full md:w-3/5 self-start bg-gray-300/10 max-sm:mb-6">
                     <div className="text-lg">
                         <PortableText value={page.content} />
                     </div>
@@ -193,17 +196,26 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                         </CardContent>
                     </Card>
 
-                    <Card className="w-full md:w-3/4 gap-1 mb-4"> 
+                    <ClientComponent 
+                        affiliate={page.affiliate ? page.affiliate : page.website} 
+                        website={page.website} 
+                    />
+
+                    {/* <Card className="w-full md:w-3/4 gap-1 mb-4"> 
                         <CardHeader>
                             <CardTitle>website</CardTitle>
                         </CardHeader>
 
                         <CardContent> 
-                            <Button variant="link" className="justify-start px-0" >
-                                <Link href={page.website} target="_blank" rel="noopener noreferrer">{page.website}</Link>
+                            <Button 
+                                variant="link" 
+                                className="justify-start px-0"
+                                onClick={handleClick} 
+                            >
+                                {page.website}
                             </Button>
                         </CardContent>
-                    </Card>
+                    </Card> */}
                 </div>
             </div>
             <Footer />

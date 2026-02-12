@@ -19,8 +19,6 @@ export async function POST(request:NextRequest) {
             body = [];
         }
 
-        console.log('text',description);
-
 
         if (!file || !title || !slug) {
             return NextResponse.json(

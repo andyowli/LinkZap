@@ -1,5 +1,6 @@
+import { EmptyData } from "../../../components/empty-data";
 import { Footer } from "../../../components/footer";
-import { Navbar } from "../../../components/navbar";
+import { Navbar } from "../../../components/navbar-wrapper";
 import { client } from "../../../sanity/client";
 import { PortableText, SanityDocument } from "next-sanity";
 
@@ -8,8 +9,6 @@ const getPage = `*[_type == "company" && slug.current == $slug][0]{
     subtitle,
     body
 }`;
-
-console.log(getPage);
 
 const options = { next: { revalidate: 30 } };
 
@@ -23,7 +22,17 @@ export default async function Company ({ params }: PageProps) {
     console.log(page);
 
     if (!page) {
-        return <div>Page not found</div>;
+        return (
+            <div className="flex flex-col min-h-screen">
+                <Navbar />
+
+                <main className="flex-1 pt-40">
+                    <EmptyData />
+                </main>
+
+                <Footer />
+            </div>
+        )
     }
 
     return (

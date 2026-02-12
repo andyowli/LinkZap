@@ -4,6 +4,7 @@ const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
     "slug": slug.current,
     category,
     "imgurl":image.asset->url,
+    "webUrl":website,
     "content":body[].children[].text,
     featured
 }`;
