@@ -49,12 +49,12 @@ export default  function ForgotPasswordForm({
 
             if (error) {
                 setErr(error.message ?? "An unknown error occurred.");
-                console.error(err);
+                toast.error(err);
             } else {
                 setSuccess(true);
                 toast.success("Password reset successfully!");
             }
-        } catch (err) {
+        } catch (error) {
             setErr("An unexpected error occurred.");
         }
     };

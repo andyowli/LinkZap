@@ -1,5 +1,6 @@
 import { client } from '../../../sanity/client';
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request:NextRequest) {
     try {
@@ -79,6 +80,10 @@ export async function POST(request:NextRequest) {
         }
 
         const result = await client.create(newPost); // create content for sanity
+
+        // 刷新首页和产品页面的缓存，使新数据立即显示
+        revalidatePath('/');
+        revalidatePath('/product');
 
         return NextResponse.json({
             message: 'Post created successfully',

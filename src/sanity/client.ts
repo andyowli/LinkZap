@@ -7,7 +7,7 @@ export const client = createClient({
   dataset: "production",
   token: process.env.NEXT_PUBLIC_SANITY_USER_ADDER_TOKEN,
   apiVersion: "2024-01-01",
-  useCdn: true,
+  useCdn: false,
 });
 
 // Create Image URL Generator
