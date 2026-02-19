@@ -9,6 +9,8 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { Footer } from "../../components/footer";
 import { ClientComponent } from "../../components/affiliate";
+import { MoreCarousel } from "../../components/more-carousel";
+import { LayoutDashboard } from "lucide-react";
 
 const getPage = `*[ _type == "post" && slug.current == $slug][0]{
     _id,
@@ -21,6 +23,16 @@ const getPage = `*[ _type == "post" && slug.current == $slug][0]{
     category
 }`;
 
+const getRelatedProducts = `*[_type == "post" && slug.current != $slug && defined(category) && count(category[@ in $categories]) > 0][0...3]{
+    _id,
+    title,
+    "imgurl":image.asset->url,
+    "slug":slug.current,
+    "category":category,
+    "content":body,
+    website
+}`;
+
 const options = { next: { revalidate: 30 } };
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -28,6 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const page = await client.fetch<SanityDocument>(getPage, { slug: resolvedParams.slug }, options);
     
+
     if (!page) {
         return {
             title: 'Page not found',
@@ -88,6 +101,23 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
 
     const page = await client.fetch<SanityDocument>(getPage, {slug}, options);
     
+    const relatedProducts = await client.fetch<SanityDocument[]>(getRelatedProducts, {
+        slug,
+        categories: page.category || []
+    }, options);
+
+    console.log(relatedProducts);
+    const extractPlainText = (content: any): string => {
+        if (!content || !Array.isArray(content)) return '';
+            return content
+            .map((block: any) =>
+                block.children
+                ?.map((child: any) => child.text || '')
+                .join(' ')
+            )
+            .join(' ');
+        };
+
     // 先检查页面是否存在
     if (!page) {
         return (
@@ -200,24 +230,31 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                         affiliate={page.affiliate ? page.affiliate : page.website} 
                         website={page.website} 
                     />
-
-                    {/* <Card className="w-full md:w-3/4 gap-1 mb-4"> 
-                        <CardHeader>
-                            <CardTitle>website</CardTitle>
-                        </CardHeader>
-
-                        <CardContent> 
-                            <Button 
-                                variant="link" 
-                                className="justify-start px-0"
-                                onClick={handleClick} 
-                            >
-                                {page.website}
-                            </Button>
-                        </CardContent>
-                    </Card> */}
                 </div>
             </div>
+            {/* more */}
+            {relatedProducts && relatedProducts.length > 0 && (
+                <div className="container mx-auto max-w-[85rem] mt-12 p-4">
+                    <div className="flex items-center gap-2 mb-6">
+                        <LayoutDashboard className="text-blue-500" />
+                        <h3 className="text-lg font-semibold leading-none m-0">
+                            More product
+                        </h3>
+                    </div>
+                    <MoreCarousel
+                        products={relatedProducts.map((product: any) => ({
+                            id: product._id,
+                            title: product.title,
+                            slug: product.slug,
+                            category: Array.isArray(product.category) ? product.category : [product.category].filter(Boolean),
+                            imgurl: product.imgurl,
+                            content: extractPlainText(product.content),
+                            webUrl: product.website || undefined,
+                        }))}
+                    />
+                </div>
+            )}
+
             <Footer />
         </div>
     )
