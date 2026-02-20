@@ -19,7 +19,6 @@ import { Footer } from "../../components/footer";
 import useFormData from "../../store/formData";
 import { createAuthClient } from "better-auth/client";
 import { NavbarClient } from "../../components/navbar-client";
-import usePrice from "../../store/priceCount";
 import { toast } from "sonner";
 
 const frameworks = [
@@ -383,7 +382,7 @@ const Submit = () => {
 
     return (
         <div>
-            <NavbarClient isLoggedIn={isAuthenticated} user={user} />
+            <NavbarClient isLoggedIn={isAuthenticated} user={user}/>
             <Card className="mt-28 mb-6 container mx-auto py-0 relative">
                 <div className="p-7">
                     <Form {...form}>

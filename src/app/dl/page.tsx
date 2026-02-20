@@ -34,8 +34,8 @@ export default async function HiddenLinksPage() {
     }
 
     return (
-        <div >
-            <h1 style={{ display: 'none' }}>Reference Links</h1>
+        <div className="hidden">
+            <h1 className="hidden">Reference Links</h1>
 
             <div className="flex flex-wrap gap-4 p-4">
                 {paidLinks.map((link: { webUrl: string; anchorText: string }, index: number) => (

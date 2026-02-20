@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
         rules: [
             {
                 userAgent: '*',
-                allow: ['/', '/hl'],  // allow
+                allow: ['/', '/dl'],  // allow
             },
         ],
         sitemap: 'https://linkzap.link/sitemap.xml'

@@ -27,7 +27,6 @@ interface NavbarClientProps {
 }
 
 export function NavbarClient({ isLoggedIn, user }: NavbarClientProps) {
-    console.log(isLoggedIn, user);
     const [isOpen, setIsOpen] = useState(false);
 
     const handleSignOut = async () => {

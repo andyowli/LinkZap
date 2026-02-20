@@ -1,12 +1,5 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "../components/ui/card";
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "../components/ui/carousel";
 import Image from "next/image";
 import { Badge } from "./ui/badge";
 
