@@ -1,3 +1,4 @@
+import Banner from "@/components/banner";
 import { Footer } from "../components/footer";
 import { Navbar } from "../components/navbar-wrapper";
 import { Badge } from "../components/ui/badge";
@@ -81,7 +82,8 @@ export default async function Home() {
   // Add Featured Categories
   limitedGroupedPosts["Featured"] = limitedFeaturedPosts;
 
-  const categories = Object.keys(groupedPosts).slice(0, 2); // only select the first 4 groups
+  const categories = Object.keys(groupedPosts).slice(0, 2);
+  console.log(categories); // only select the first 4 groups
   const allCategories = ["Featured", ...categories];
 
   allCategories.forEach(category => {
@@ -108,8 +110,10 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen flex flex-col">
+      <Banner />
+      
       {/* Header */}
-      <Navbar />
+      <Navbar topClass="top-10"/>
 
       {/* Category Zone */}
       <section className="pt-32 pb-16 px-4">
@@ -171,7 +175,7 @@ export default async function Home() {
                           rel="noopener noreferrer"
                           className="text-white text-md font-medium flex items-center justify-center"
                         >
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
+                          <div className="rounded-t-xl absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             Visit Website
                           </div>
                         </a>

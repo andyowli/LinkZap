@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 type PriceState = {
     price: number;
     setPrice: (price:number) => void;
+    clearPrice: () => void;
 };
 
 const usePrice = create<PriceState>()(
@@ -11,6 +12,7 @@ const usePrice = create<PriceState>()(
         (set) => ({
             price:0,
             setPrice: (price) => set({ price }),
+            clearPrice: () => set({ price:0 }),
         }),
         {
             name: 'price-storage', // localStorage key

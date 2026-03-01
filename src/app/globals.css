@@ -128,3 +128,16 @@
     @apply mb-4;
   }
 }
+
+.animate-scroll-left {
+  animation: scroll-left 15s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.paused {
+  animation-play-state: paused; /* 暂停动画 */
+}

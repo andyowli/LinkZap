@@ -6,7 +6,7 @@ import Image from "next/image";
 import { LogOut } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { signOutAction } from "@/app/actions/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Popover,
     PopoverContent,
@@ -24,10 +24,32 @@ interface User {
 interface NavbarClientProps {
     isLoggedIn: boolean;
     user?: User | null;
+    isFixed?: boolean;
+    topClass?: string;
 }
 
-export function NavbarClient({ isLoggedIn, user }: NavbarClientProps) {
+export function NavbarClient({ isLoggedIn, user, isFixed = true, topClass = "top-0" }: NavbarClientProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [hasBanner, setHasBanner] = useState(false);
+
+    useEffect(() => {
+        const handleBannerVisibility = (event: Event) => {
+            const customEvent = event as CustomEvent<{ visible: boolean }>;
+            setHasBanner(!!customEvent.detail?.visible);
+        };
+
+        if (typeof window !== "undefined") {
+            window.addEventListener("banner:visibility", handleBannerVisibility);
+        }
+
+        return () => {
+            if (typeof window !== "undefined") {
+                window.removeEventListener("banner:visibility", handleBannerVisibility);
+            }
+        };
+    }, []);
+
+    const effectiveTopClass = hasBanner ? topClass : "top-0";
 
     const handleSignOut = async () => {
         await signOutAction();
@@ -35,7 +57,11 @@ export function NavbarClient({ isLoggedIn, user }: NavbarClientProps) {
     };
 
     return (
-        <header className="fixed top-0 left-0 right-0 h-16 bg-background border-b z-10">
+        <header
+            className={`${
+                isFixed ? `fixed ${effectiveTopClass} left-0 right-0` : "relative"
+            } h-16 bg-background border-b z-10`}
+        >
             <div className="w-full h-16 px-4 flex justify-center items-center">
                 <div className="flex items-center justify-between container max-w-full md:max-w-7xl h-full">
                     <div className="flex items-center space-x-12">

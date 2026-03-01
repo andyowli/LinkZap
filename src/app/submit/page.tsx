@@ -195,8 +195,11 @@ const Submit = () => {
             });
 
             const getPrice = localStorage.getItem('price-storage');
-            
-            if(!getPrice){
+
+            console.log(getPrice);
+
+            // localStorage always returns strings, so compare to string '0'
+            if (!getPrice) {
                 router.push('/price');
             } else {
                 const priceId = localStorage.getItem('selected-price-id');

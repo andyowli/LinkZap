@@ -6,7 +6,8 @@ const POSTS_QUERY = `*[ _type == "post" && !(_id in path("drafts.**"))]{
     "imgurl":image.asset->url,
     "webUrl":website,
     "content":body[].children[].text,
-    featured
+    featured,
+    banner
 }`;
 
 const POST_SIDEBAR = `*[_type == "sidebar"]{

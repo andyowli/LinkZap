@@ -69,6 +69,16 @@ export function Footer() {
                 </div>
 
                 <div className="h-[0.2] bg-gray-400 mb-6"></div>
+                
+                <div className="flex flex-wrap justify-center gap-4">
+                    <a href="https://frogdr.com/linkzap.link?utm_source=linkzap.link" target="_blank">
+                        <img 
+                            src="https://frogdr.com/linkzap.link/badge-white.svg" 
+                            alt="Monitor&#0032;your&#0032;Domain&#0032;Rating&#0032;with&#0032;FrogDR" 
+                            className="w-full max-w-[250px] h-auto max-md:w-[180px] md:h-[54px] mb-2"
+                        />
+                    </a>
+                </div>
 
                 <div className="flex justify-between">
                     <span>© 2025 LinkPage All Rights Reserved.</span>

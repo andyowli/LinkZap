@@ -167,10 +167,12 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                 {page.iconurl && (
                     <div className="rounded-lg dark:bg-white p-1 backdrop-blur-sm">
                         <Image 
-                        src={page.iconurl} 
-                        alt="" 
-                        width={60}
-                        height={60}
+                            src={page.iconurl} 
+                            alt="" 
+                            width={60}
+                            height={60}
+                            sizes="60px"
+                            unoptimized={process.env.NODE_ENV === "development"}
                         />
                     </div>
                 )}
@@ -201,14 +203,18 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                 
                 <div className="space-y-6 md:space-y-10 w-full md:w-2/6 lg:w-1/3">
                     <Card className="w-full md:w-3/4 py-0">
-                        <Image
-                            src={page.imgurl} 
-                            alt={page.title || 'Product image'} 
-                            width={600}
-                            height={400}
-                            className="w-full h-60 rounded-sm object-cover rounded-t-xl"
-                            priority
-                        />
+                        {page.imgurl && (
+                            <Image
+                                src={page.imgurl} 
+                                alt={page.title || 'Product image'} 
+                                width={600}
+                                height={400}
+                                sizes="(max-width: 768px) 100vw, 600px"
+                                className="w-full h-60 rounded-sm object-cover rounded-t-xl"
+                                priority
+                                unoptimized={process.env.NODE_ENV === "development"}
+                            />
+                        )}
                     </Card>
 
                     <Card className="w-full md:w-3/4">

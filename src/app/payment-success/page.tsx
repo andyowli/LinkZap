@@ -1,6 +1,6 @@
 "use client"
 import { Footer } from "../../components/footer";
-import { Navbar } from "../../components/navbar-wrapper";
+import { NavbarClient } from "../../components/navbar-client";
 import { Button } from "../../components/ui/button";
 import { Card } from "../../components/ui/card";
 import { Check } from "lucide-react";
@@ -92,6 +92,9 @@ export default function SuccessPage() {
 
             if (price === 9.9) {
                 formDataUpload.append('featured', 'true');
+            } else if (price === 19.9) {
+                formDataUpload.append('featured', 'true');
+                formDataUpload.append('banner','true');
             }
             
             try {
@@ -103,6 +106,7 @@ export default function SuccessPage() {
             
                 // Clear store data after successful upload
                 useFormData.getState().clearFormData?.();
+                localStorage.removeItem('price-storage');
             } catch (error) {
                 console.error("Error uploading data:", error);
             }
@@ -117,7 +121,7 @@ export default function SuccessPage() {
     
     return (
         <div className="min-h-screen flex flex-col">
-            <Navbar />
+            <NavbarClient topClass="top-10" isLoggedIn />
 
 
 
