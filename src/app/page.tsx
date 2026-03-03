@@ -57,16 +57,6 @@ export default async function Home() {
   // Remove Featured articles from raw data to avoid duplicate grouping
   const nonFeaturedPosts = PSOT_CARD.filter(post => !post.featured);
 
-
-  // group by category
-  // const groupedPosts = PSOT_CARD.reduce((acc: Record<string, Post[]>, post) => {
-  //   post.category.forEach((category: string | number) => {
-  //     if (!acc[category]) acc[category] = [];
-  //     acc[category].push(post);
-  //   });
-  //   return acc;
-  // }, {} as Record<string, Post[]>);
-
   const groupedPosts = nonFeaturedPosts.reduce((acc: Record<string, Post[]>, post) => {
     post.category.forEach((category: string | number) => {
       if (!acc[category]) acc[category] = [];
@@ -82,13 +72,27 @@ export default async function Home() {
   // Add Featured Categories
   limitedGroupedPosts["Featured"] = limitedFeaturedPosts;
 
-  const categories = Object.keys(groupedPosts).slice(0, 2);
-  console.log(categories); // only select the first 4 groups
-  const allCategories = ["Featured", ...categories];
+  // 取所有分类（不再只截取前 2 个），并在渲染时强制顺序：Featured -> Ai -> Travel -> 其他
+  const categories = Object.keys(groupedPosts).slice(0,2);
+  console.log(categories);
+
+  const priorityOrder = ["Ai", "Travel"];
+  const normalized = (s: string) => s.trim().toLowerCase();
+
+  const sortedCategories = [...categories].sort((a, b) => {
+    const ia = priorityOrder.findIndex((p) => normalized(p) === normalized(a));
+    const ib = priorityOrder.findIndex((p) => normalized(p) === normalized(b));
+    const pa = ia === -1 ? Number.POSITIVE_INFINITY : ia;
+    const pb = ib === -1 ? Number.POSITIVE_INFINITY : ib;
+    if (pa !== pb) return pa - pb;
+    return a.localeCompare(b);
+  });
+
+  const allCategories = ["Featured", ...sortedCategories];
 
   allCategories.forEach(category => {
     if (category === "Featured") {
-      // 直接赋值 Featured 文章
+      // Directly assign Featured articles
       limitedGroupedPosts[category] = limitedFeaturedPosts;
     } else {
       // Security Handling Other Categories
@@ -119,11 +123,12 @@ export default async function Home() {
       <section className="pt-32 pb-16 px-4">
         <div className="container mx-auto text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-balance leading-tight">
-            <span className="block sm:inline">Discover Resources</span>{' '}
-            <span className="block sm:inline">That Elevate Creativity</span>
+            {/* <span className="block sm:inline">Discover Resources</span>{' '}
+            <span className="block sm:inline">That Elevate Creativity</span> */}
+            <span>Resources to Skyrocket Your Creative Edge</span>
           </h1>
           <p className="sm:text-xl text-muted-foreground text-balance max-w-4xl mx-auto">
-            Discover and connect high-quality tools and resources to help independent creators achieve a leap in creativity and productivity
+            Handpicked, proven tools and intelligent resources designed to help independent creators achieve exponential gains in creativity, efficiency, and real-world output.
           </p>
         </div>
       </section>
@@ -148,7 +153,7 @@ export default async function Home() {
 
       {/* Featured Resources */}
       {Object.entries(limitedGroupedPosts).map(([category, posts]) => (
-        <section className="py-6 px-4">
+        <section key={category} className="py-6 px-4">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl max-sm:text-md font-bold capitalize">{category}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -189,9 +194,13 @@ export default async function Home() {
                         </div>
                         <div className="relative mt-12">
                           <div className="absolute bottom-4 right-0">
-                            {post.category.map((category,index) => (
+                            {Array.from(
+                              new Map(
+                                post.category.map((c) => [c.trim().toLowerCase(), c] as const)
+                              ).values()
+                            ).map((category) => (
                               <Badge 
-                                key={index} 
+                                key={`${post._id}-${category.trim().toLowerCase()}`}
                                 variant="secondary"
                                 className="bg-blue-500 text-white ml-2 first:ml-0"
                               >

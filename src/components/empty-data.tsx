@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "../components/ui/button";
 import {
     Empty,
@@ -19,8 +20,12 @@ export function EmptyData() {
                     <EmptyTitle>No data available</EmptyTitle>
                 </EmptyHeader>
                 <EmptyContent className="flex-row justify-center gap-2">
-                    <Button>Back Home</Button>
-                    <Button variant="outline">View project</Button>
+                    <Button>
+                        <Link href="/">Back Home</Link>
+                    </Button>
+                    <Button variant="outline">
+                        <Link href="/product">View project</Link>
+                    </Button>
                 </EmptyContent>
                 <Button
                     variant="link"
@@ -28,9 +33,9 @@ export function EmptyData() {
                     className="text-muted-foreground"
                     size="sm"
                 >
-                    <a href="#">
-                        There are currently no blogs available <ArrowUpRightIcon />
-                    </a>
+                    <Link href="#">
+                        There is no available content at the moment <ArrowUpRightIcon />
+                    </Link>
                 </Button>
             </Empty>
         </div>

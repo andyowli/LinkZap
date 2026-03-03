@@ -121,8 +121,8 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
                                                 key={post._id}
                                                 className={`py-0 h-72 overflow-hidden cursor-pointer hover:shadow-md max-xl:w-full max-xl:h-64 relative transition-all duration-500 hover:scale-105 ${
                                                     post.featured ? post.banner 
-                                                        ? 'border-2 border-blue-500/70'
-                                                        :  'border-2 border-orange-500/70'
+                                                        ? 'border-2 border-orange-500/70'
+                                                        : 'border-2 border-blue-500/70'
                                                         : ''
                                                 }`} 
                                             >
@@ -153,18 +153,12 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
                                                     <Link href={`/${post.slug}`}>
                                                         <div className="flex items-center justify-between max-sm:mt-2.5">
                                                             <h3 className="font-bold text-lg md:text-md line-clamp-2 m-0">{post.title}</h3>
-                                                            {/* {post.featured && (
-                                                                <span className="flex items-center bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded-full ml-2 mt-1 whitespace-nowrap">
-                                                                    Featured
-                                                                </span>
-                                                            )} */}
-
                                                             {post.featured && (
                                                                 <span 
                                                                     className={`flex items-center text-xs font-bold px-2 py-1 rounded-full ml-2 mt-1 whitespace-nowrap ${
                                                                         post.banner 
-                                                                            ? 'bg-blue-100 text-blue-800'  // 蓝色样式
-                                                                            : 'bg-orange-100 text-orange-800'  // 橘黄色样式
+                                                                            ? 'bg-orange-100 text-orange-800'
+                                                                            : 'bg-blue-100 text-blue-800'
                                                                     }`}
                                                                 >
                                                                     {post.banner ? 'Sponsor' : 'Featured'}

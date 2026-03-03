@@ -63,7 +63,7 @@ export function NavbarClient({ isLoggedIn, user, isFixed = true, topClass = "top
             } h-16 bg-background border-b z-10`}
         >
             <div className="w-full h-16 px-4 flex justify-center items-center">
-                <div className="flex items-center justify-between container max-w-full md:max-w-7xl h-full">
+                <div className="flex items-center justify-between container max-w-full md:max-w-[80rem] h-full">
                     <div className="flex items-center space-x-12">
                         <Link href="/" className="flex items-center gap-2">
                             {/* Logo */}

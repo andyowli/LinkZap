@@ -17,7 +17,7 @@ export function ClientComponent({ affiliate, website }: ClientComponentProps) {
     };
 
     return (
-        <Card className="w-full md:w-3/4 gap-1 mb-4"> 
+        <Card className="w-full md:w-11/12 gap-1 mb-4"> 
             <CardHeader>
                 <CardTitle>website</CardTitle>
             </CardHeader>
@@ -25,7 +25,7 @@ export function ClientComponent({ affiliate, website }: ClientComponentProps) {
             <CardContent> 
                 <Button 
                     variant="link" 
-                    className="justify-start px-0"
+                    className="justify-start px-0 cursor-pointer"
                     onClick={handleClick} 
                 >
                     {website}

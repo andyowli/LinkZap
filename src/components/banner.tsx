@@ -36,7 +36,7 @@ const Banner: React.FC = () => {
                 "webUrl": website,
                 "iconurl":icon.asset->url,
                 banner
-            }`; // 查询语句
+            }`;
             const options = { next: { revalidate: 10 } };
 
             try {

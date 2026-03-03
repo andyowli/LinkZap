@@ -3,6 +3,7 @@ import { SanityDocument } from "next-sanity";
 import ProductClient from "../../components/ProductClient";
 import { POSTS_QUERY,POST_SIDEBAR, options } from "../../lib/sanityDB";
 import { Navbar } from "../../components/navbar-wrapper";
+import Banner from "../../components/banner";
 
 // Add SEO metadata to the product list page
 export async function generateMetadata({ searchParams }: { searchParams: { category?: string } }) {
@@ -106,7 +107,10 @@ const ProductPage = async ({ searchParams } : { searchParams : { category?: stri
 
   return (
     <>
-      <Navbar />
+      <Banner />
+
+      <Navbar topClass="top-10"/>
+      
       <ProductClient 
         posts={posts} 
         sidebar={sidebarData} 

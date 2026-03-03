@@ -20,6 +20,7 @@ import useFormData from "../../store/formData";
 import { createAuthClient } from "better-auth/client";
 import { NavbarClient } from "../../components/navbar-client";
 import { toast } from "sonner";
+import Banner from "../../components/banner";
 
 const frameworks = [
     {
@@ -53,6 +54,15 @@ const frameworks = [
     {
         value: "business",
         label: "Business",  
+    },{
+        value: "community",
+        label: "Community",  
+    },{
+        value: "ui",
+        label: "Ui",  
+    },{
+        value: "digital nomad",
+        label: "Digital nomad",  
     }
 ]
 
@@ -385,7 +395,10 @@ const Submit = () => {
 
     return (
         <div>
-            <NavbarClient isLoggedIn={isAuthenticated} user={user}/>
+            <Banner />
+
+            <NavbarClient isLoggedIn={isAuthenticated} user={user} topClass="top-10"/>
+
             <Card className="mt-28 mb-6 container mx-auto py-0 relative">
                 <div className="p-7">
                     <Form {...form}>
@@ -399,8 +412,12 @@ const Submit = () => {
                                             <FormLabel>Title</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="Enter title"
+                                                    placeholder="Enter your title, like Reddit"
                                                     {...field}
+                                                    onChange={(e) => {
+                                                        field.onChange(e);
+                                                        form.setValue('slug', e.target.value.toLowerCase());
+                                                    }}
                                                 />
                                             </FormControl>
                                             <FormMessage className="absolute left-0 bottom-[-2rem]"/>
@@ -417,6 +434,7 @@ const Submit = () => {
                                             <FormControl>
                                                 <Input
                                                     placeholder="slug"
+                                                    disabled
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -466,7 +484,7 @@ const Submit = () => {
                                                                     .filter(fw => selectedValues.includes(fw.value))
                                                                     .map(fw => fw.label)
                                                                     .join(", ")
-                                                                : "Select framework..."
+                                                                : "Select category, multiple choices are allowed"
                                                             }
                                                             <ChevronsUpDown className="opacity-50" />
                                                         </Button>
