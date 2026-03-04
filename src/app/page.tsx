@@ -72,9 +72,7 @@ export default async function Home() {
   // Add Featured Categories
   limitedGroupedPosts["Featured"] = limitedFeaturedPosts;
 
-  // 取所有分类（不再只截取前 2 个），并在渲染时强制顺序：Featured -> Ai -> Travel -> 其他
   const categories = Object.keys(groupedPosts).slice(0,2);
-  console.log(categories);
 
   const priorityOrder = ["Ai", "Travel"];
   const normalized = (s: string) => s.trim().toLowerCase();

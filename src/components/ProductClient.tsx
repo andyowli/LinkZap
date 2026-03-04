@@ -131,8 +131,7 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
                                                         <Image
                                                             src={post.imgurl}
                                                             alt={post.title || 'Product image'}
-                                                            fill
-                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                            fill                                  
                                                             className="object-cover"
                                                             unoptimized={process.env.NODE_ENV === "development"}
                                                         />

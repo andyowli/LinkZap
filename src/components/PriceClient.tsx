@@ -117,7 +117,7 @@ export default function PriceClient() {
                             <Card
                                 key={index}
                                 className={`flex flex-col h-full ${
-                                    plan.popular ? "border-blue-400 shadow-lg scale-105 relative z-10" : ""
+                                    plan.popular ? "border-blue-400 shadow-lg scale-105 relative z-1" : ""
                                 }`}
                             >
                                 {plan.popular && (
@@ -133,7 +133,7 @@ export default function PriceClient() {
                                         <span className="text-3xl  text-[#409eff] font-bold">${plan.price}</span>
                                         {plan.period && <span className="text-muted-foreground ml-1">{plan.period}</span>}
                                     </div>
-                                    <CardDescription className="mt-2]">{plan.description}</CardDescription>
+                                    <CardDescription className="mt-2">{plan.description}</CardDescription>
                                 </CardHeader>
                                 <CardContent className="flex-grow">
                                     <ul className="space-y-3">
@@ -148,10 +148,10 @@ export default function PriceClient() {
                                 <CardFooter>
                                     <Button
                                         onClick={() => handlePaymentClick(plan)}
-                                        className={`w-full rounded-full ${
+                                        className={`w-full rounded-full cursor-pointer ${
                                             index === 1
                                             ? "bg-[#409eff] hover:bg-[#409eff]/90 text-white"
-                                            : "bg-white text-black border border-gray-200 hover:bg-[#409eff]/90 hover:text-white"
+                                            : "bg-white text-black border-gray-200 hover:bg-[#409eff]/90 hover:text-white"
                                         }`}>
                                         {plan.buttonText}
                                     </Button>
@@ -166,34 +166,34 @@ export default function PriceClient() {
             <section className="py-16 px-4">
                 <div className="container mx-auto max-w-4xl">
                     <h1 className="text-2xl font-bold mb-8 text-center">frequently asked questions</h1>
-                    <div className="space-y-6">
-                        <div className="bg-background p-6 rounded-lg shadow-sm">
-                        <h3 className="text-lg font-medium mb-2">What are the benefits of the Basic plan?</h3>
-                            <ul className="text-muted-foreground text-sm list-disc px-4">
-                                <li>There are 3 dofollow links on our website to improve your SEO</li>
-                                <li>No need to wait, list your products immediately</li>
-                                <li>Update directory information at any time</li>
-                            </ul>
-                        </div>
-                        <div className="bg-background p-6 rounded-lg shadow-sm">
-                            <h3 className="text-lg font-medium mb-2">The differences between Basic and Pro plans?</h3>
-                            <p className="text-muted-foreground text-sm">
-                                Display at featured locations,and Customer support
-                            </p>
-                        </div>
-                        <div className="bg-background p-6 rounded-lg shadow-sm">
-                            <h3 className="text-lg font-medium mb-2">What additional options do I offer to sponsors?</h3>
-                            <p className="text-muted-foreground">
-                                In addition to all the content in the professional plan, we also offer the following:
-                            </p>
-                            <ul className="text-muted-foreground text-sm list-disc px-4">
-                                <li>Share your products on social media</li>
-                                <li>Promote your product on almost every page</li>
-                                <li>High quality customer support</li>
-                            </ul>
+                        <div className="space-y-8">
+                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-[42rem] mx-auto gap-0">
+                                <h3 className="text-lg font-medium mb-2 ml-20">What are the benefits of the Basic plan?</h3>
+                                <ul className="text-muted-foreground text-sm list-disc list-inside space-y-1 ml-12">
+                                    <li>There are 3 dofollow links on our website to improve your SEO</li>
+                                    <li>No need to wait, list your products immediately</li>
+                                    <li>Update directory information at any time</li>
+                                </ul>
+                            </Card>
+                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-[42rem] mx-auto gap-0">
+                                <h3 className="text-lg font-medium mb-2 ml-20">The differences between Basic and Pro plans?</h3>
+                                <ul className="text-muted-foreground text-sm list-inside5 space-y-1 ml-12">
+                                    <li>Display at featured locations,and Customer support</li>
+                                </ul>
+                            </Card>
+                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-[42rem] mx-auto gap-0">
+                                <h3 className="text-lg font-medium mb-2 ml-20">What additional options do I offer to sponsors?</h3>
+                                <p className="text-muted-foreground ml-20">
+                                    In addition to all the content in the professional plan, we also offer the following:
+                                </p>
+                                <ul className="text-muted-foreground text-sm list-disc list-inside space-y-1 ml-12">
+                                    <li>Share your products on social media</li>
+                                    <li>Promote your product on almost every page</li>
+                                    <li>High quality customer support</li>
+                                </ul>
+                            </Card>
                         </div>
                     </div>
-                </div>
             </section>
 
             {/* Footer */}

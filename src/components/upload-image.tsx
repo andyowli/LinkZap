@@ -18,7 +18,6 @@ export default function UploadImage({ onUpload }: { onUpload?: (file: File) => v
             "image/webp": [".webp"]
         },
         onDrop: async(acceptFiles) => {
-            console.log("Dropped files:", acceptFiles); 
             if (acceptFiles && acceptFiles.length > 0) {
                 const file = acceptFiles[0];
 

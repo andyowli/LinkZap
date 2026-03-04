@@ -11,6 +11,7 @@ import { Footer } from "../../components/footer";
 import { ClientComponent } from "../../components/affiliate";
 import { MoreCarousel } from "../../components/more-carousel";
 import { LayoutDashboard } from "lucide-react";
+import Banner from "../../components/banner";
 
 const getPage = `*[ _type == "post" && slug.current == $slug][0]{
     _id,
@@ -106,7 +107,6 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
         categories: page.category || []
     }, options);
 
-    console.log(relatedProducts);
     const extractPlainText = (content: any): string => {
         if (!content || !Array.isArray(content)) return '';
             return content
@@ -122,7 +122,9 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
     if (!page) {
         return (
             <div className="flex flex-col min-h-screen">
-                <Navbar />
+                <Banner />
+
+                <Navbar topClass="top-10" />
 
                 <main className="flex-1 pt-40">
                     <EmptyData />
@@ -171,7 +173,6 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                             alt="" 
                             width={60}
                             height={60}
-                            sizes="60px"
                             unoptimized={process.env.NODE_ENV === "development"}
                         />
                     </div>
