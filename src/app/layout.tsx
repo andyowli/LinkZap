@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   // Basic Information
   title: {
     template: '%s | LinkZap',
-    default: 'Selected product collection - High-quality tools and resources for enhancing creativity and productivity.',
+    default: 'Resources to Skyrocket Your Creative Edge.',
   },
-  description: 'Discover and connect high-quality tools and resources to help independent creators achieve a leap in creativity and productivity. We have carefully selected high-quality products from multiple fields such as AI, UI, design, travel, and community.',
+  description: 'Handpicked, proven tools and intelligent resources designed to help independent creators achieve exponential gains in creativity, efficiency, and real-world output.',
   keywords: ['Product Catalog', 'Tool Collection', 'AI tools', 'Design resources', 'Productivity tools', 'Independent Creator'],
   creator: 'LinkZap Team',
   publisher: 'LinkZap',
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
   // share
   openGraph: {
     type: 'website',
-    title: 'Selected product collection - High-quality tools and resources for enhancing creativity and productivity.',
-    description: 'Discover and connect high-quality tools and resources to help independent creators achieve a leap in creativity and productivity. We have carefully selected high-quality products from multiple fields such as AI, UI, design, travel, and community.',
+    title: 'Resources to Skyrocket Your Creative Edge.',
+    description: 'Handpicked, proven tools and intelligent resources designed to help independent creators achieve exponential gains in creativity, efficiency, and real-world output.',
     url: 'https://www.linkzap.link',
     siteName: 'LinkZap',
     images: [
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
   // Twitter 
   twitter: {
     card: 'summary_large_image',
-    title: 'Selected product collection - High-quality tools and resources for enhancing creativity and productivity.',
-    description: 'Discover and connect high-quality tools and resources to help independent creators achieve a leap in creativity and productivity. We have carefully selected high-quality products from multiple fields such as AI, UI, design, travel, and community.',
+    title: 'Resources to Skyrocket Your Creative Edge.',
+    description: 'Handpicked, proven tools and intelligent resources designed to help independent creators achieve exponential gains in creativity, efficiency, and real-world output.',
     images: ['/logo.svg'],
     site: '@LinkZap',
     creator: '@LinkZapTeam',

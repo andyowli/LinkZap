@@ -13,7 +13,7 @@ export const metadata: Metadata = {
         },
     },
     // Set null value to avoid warnings
-    title: '',
+    title: 'Dofollow links',
     description: '',
 };
 

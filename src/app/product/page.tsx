@@ -11,8 +11,8 @@ export async function generateMetadata({ searchParams }: { searchParams: { categ
     const category = (await searchParams)?.category;
     const categoryName = sidebar.find(item => item.title.toLowerCase() === category)?.title;
   
-    const baseTitle = 'Selected product collection - High-quality tools and resources for enhancing creativity and productivity.';
-    const baseDescription = 'Discover and connect high-quality tools and resources to help independent creators achieve a leap in creativity and productivity. We have carefully selected high-quality products from multiple fields such as AI, UI, design, travel, and community.';
+    const baseTitle = 'Resources to Skyrocket Your Creative Edge.';
+    const baseDescription = 'Handpicked, proven tools and intelligent resources designed to help independent creators achieve exponential gains in creativity, efficiency, and real-world output.';
   
     let title = baseTitle;
     let description = baseDescription;

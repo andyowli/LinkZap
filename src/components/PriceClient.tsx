@@ -151,7 +151,7 @@ export default function PriceClient() {
                                         className={`w-full rounded-full cursor-pointer ${
                                             index === 1
                                             ? "bg-[#409eff] hover:bg-[#409eff]/90 text-white"
-                                            : "bg-white text-black border-gray-200 hover:bg-[#409eff]/90 hover:text-white"
+                                            : "border dark:border-0 bg-white text-black border-gray-200 hover:bg-[#409eff]/90 hover:text-white"
                                         }`}>
                                         {plan.buttonText}
                                     </Button>

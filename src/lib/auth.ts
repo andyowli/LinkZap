@@ -5,6 +5,7 @@ import { Resend } from "resend";
 
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
+const db = new Database("./sqlite.db");
 
 // Generate password reset email HTML
 function generateResetPasswordEmail(firstName: string, resetUrl: string): string {
@@ -47,12 +48,29 @@ function generateResetPasswordEmail(firstName: string, resetUrl: string): string
 }
 
 export const auth = betterAuth({
-    database: new Database("./sqlite.db"),
+    database: db,
     baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     emailAndPassword: {
         enabled: true, 
         sendResetPassword: async ({user, url, token}, request) => {
             try {
+                // Check if the user has any associated social media accounts (Google accounts)
+                const accounts = db
+                    .prepare('SELECT providerId FROM account WHERE userId = ?')
+                    .all(user.id) as { providerId: string }[];
+
+                const hasGoogleAccount = accounts?.some((acc) =>
+                    (acc.providerId || "").toLowerCase().includes("google")
+                );
+
+                // The Google login account does not have an 'internal password' and should not send password reset emails
+                if (hasGoogleAccount) {
+                    console.log(
+                        `[Password Reset] Skip sending reset email for Google-linked account: ${user.email}`
+                    );
+                    return;
+                }
+                
                 const result = await resend.emails.send({
                     from: "LinkZap <noreply@linkzap.link>",
                     to: user.email,
@@ -73,7 +91,7 @@ export const auth = betterAuth({
             }
         },
         onPasswordReset: async ({ user }, request) => {
-            console.log(`用户 ${user.email} 的密码已重置。`);
+            console.log(`The password for User ${user. email} has been reset.`);
         },
     }, 
     emailVerification: {

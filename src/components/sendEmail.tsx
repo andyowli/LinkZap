@@ -36,8 +36,33 @@ export default function ForgotPasswordEmail() {
             return;
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError("Please enter a valid email address");
+            return;
+        }
+
         setIsLoading(true);
         try {
+            // First, check if the email is a Google login associated account; If so, do not send a reset email
+            const eligibilityRes = await fetch("/api/auth/check-reset-password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+
+            if (eligibilityRes.ok) {
+                const eligibility = (await eligibilityRes.json()) as {
+                    canResetViaEmail?: boolean;
+                    reason?: string;
+                };
+
+                if (eligibility.canResetViaEmail === false && eligibility.reason === "GOOGLE_ACCOUNT") {
+                    setError("This account was created using Google login. Please go to the Google account settings to change your password.");
+                    return;
+                }
+            }
+
             const { data, error: apiError } = await authClient.requestPasswordReset({
                 email: email,
                 redirectTo: "/forgot-password",
@@ -48,11 +73,11 @@ export default function ForgotPasswordEmail() {
                 setIsLoading(false);
                 return;
             }
-
+            
             setSuccess(true);
             setEmail("");
         } catch (err) {
-            setError("An unexpected error occurred");
+            setError("发生未知错误，请稍后重试");
         } finally {
             setIsLoading(false);
         }

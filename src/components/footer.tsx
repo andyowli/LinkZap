@@ -81,7 +81,7 @@ export function Footer() {
                 </div>
 
                 <div className="flex justify-between">
-                    <span>© 2025 LinkPage All Rights Reserved.</span>
+                    <span>© {new Date().getFullYear()} LinkPage All Rights Reserved.</span>
                     <MoonStar />
                 </div>
             </div>
