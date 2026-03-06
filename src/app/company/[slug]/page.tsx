@@ -3,6 +3,7 @@ import { Footer } from "../../../components/footer";
 import { Navbar } from "../../../components/navbar-wrapper";
 import { client } from "../../../sanity/client";
 import { PortableText, SanityDocument } from "next-sanity";
+import Banner from "../../../components/banner";
 
 const getPage = `*[_type == "company" && slug.current == $slug][0]{
     title,
@@ -24,7 +25,9 @@ export default async function Company ({ params }: PageProps) {
     if (!page) {
         return (
             <div className="flex flex-col min-h-screen">
-                <Navbar />
+                <Banner />
+
+                <Navbar topClass="top-10"/>
 
                 <main className="flex-1 pt-40">
                     <EmptyData />
@@ -37,7 +40,9 @@ export default async function Company ({ params }: PageProps) {
 
     return (
         <div>
-            <Navbar />
+            <Banner />
+
+            <Navbar topClass="top-10"/>
 
             <div className="container mx-auto max-w-7xl mt-24">
                 <div className="text-center mb-8">
@@ -45,7 +50,7 @@ export default async function Company ({ params }: PageProps) {
                     <span className="text-xl text-gray-500">{page.subtitle}</span>
                 </div>
                 <div className="h-[0.2] bg-gray-400 mb-6"></div>
-                <div className="text-lg">
+                <div className="text-lg p-8">
                     <PortableText value={page.body} />
                 </div>
             </div>

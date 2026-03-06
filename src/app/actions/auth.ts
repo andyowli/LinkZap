@@ -21,7 +21,7 @@ export async function signUpAction(formData: FormData): Promise<{ error: string 
 
         return { success: true };
     } catch (error: any) {
-        return { error: error.message || '注册失败，请重试' };
+        return { error: error.message || 'Registration failed, please try again' };
     }
 }
 

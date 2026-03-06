@@ -86,6 +86,7 @@ export default  function ForgotPasswordForm({
                                 <Button 
                                     type="submit"
                                     disabled={!token || password.length === 0}
+                                    className="dark:text-white bg-[#409eff] hover:bg-[#409eff]/90 cursor-pointer"
                                 >
                                     Submit
                                 </Button>

@@ -44,15 +44,18 @@ export function Footer() {
     return (
         <footer className="py-10 container mx-auto max-w-7xl max-sm:px-4 px-6">
             <div>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-x-8">
-                    <div className="flex items-start gap-2">
-                        <Image src="/logo.svg" alt="Logo" width={40} height={40} />
-                        <span className="text-xl font-bold mt-1.5">LinkZap</span>
+                <div className="grid grid-cols-2 md:grid-cols-6 gap-2">
+                    <div className="flex flex-col items-start gap-2 col-span-full md:col-span-2 mb-8">
+                        <div className="flex items-center gap-2 mb-3">
+                            <Image src="/logo.svg" alt="Logo" width={40} height={40} />
+                            <span className="text-lg font-bold">LinkZap</span>
+                        </div>
+                        <p className="text-muted-foreground text-sm m-0">LinkZap - High Quality Tool Catalog</p>
                     </div>
                     {sections.map((section, index) => (
                         <div key={index} className="space-y-4">
                             <h3 className="text-lg font-semibold mb-4">{section.title}</h3>
-                            <ul className="list-none p-0">
+                            <ul className="list-none p-0 space-y-2">
                                 {section.links.map((link, linkIndex) => (
                                     <li key={linkIndex} className="mb-4 flex items-center">
                                         {link.icon && (

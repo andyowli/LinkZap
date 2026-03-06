@@ -158,7 +158,9 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
 
     return (
         <div className="min-h-screen">
-            <Navbar />
+            <Banner />
+
+            <Navbar topClass="top-10"/>
             {/* JSON-LD structured data */}
             <script
                 type="application/ld+json"

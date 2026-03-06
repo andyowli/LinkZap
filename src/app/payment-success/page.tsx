@@ -9,6 +9,7 @@ import JSConfetti from 'js-confetti';
 import Link from "next/link";
 import useFormData from "../../store/formData";
 import usePrice from "../../store/priceCount";
+import Banner from "../../components/banner";
 
 export default function SuccessPage() {
     const {data:formData} = useFormData();
@@ -121,6 +122,8 @@ export default function SuccessPage() {
     
     return (
         <div className="min-h-screen flex flex-col">
+            <Banner />
+
             <NavbarClient topClass="top-10" isLoggedIn />
 
 

@@ -77,7 +77,7 @@ export default function ForgotPasswordEmail() {
             setSuccess(true);
             setEmail("");
         } catch (err) {
-            setError("发生未知错误，请稍后重试");
+            setError("An unknown error has occurred, please try again later");
         } finally {
             setIsLoading(false);
         }
@@ -117,7 +117,11 @@ export default function ForgotPasswordEmail() {
                                 )}
                             </Field>
                             <Field>
-                                <Button type="submit" disabled={isLoading}>
+                                <Button 
+                                    type="submit" 
+                                    disabled={isLoading}
+                                    className="dark:text-white bg-[#409eff] hover:bg-[#409eff]/90 cursor-pointer"
+                                >
                                     {isLoading ? "Sending..." : "Send Reset Link"}
                                 </Button>
                             </Field>

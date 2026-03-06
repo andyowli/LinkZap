@@ -37,7 +37,7 @@ export function LoginForm({
                 callbackURL: callbackUrl,
             });
         } catch (error) {
-            console.error("Google 登录错误:", error);
+            console.error("Google Login error:", error);
         }
     };
 
@@ -45,7 +45,7 @@ export function LoginForm({
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle  className="text-xl">Welcome back</CardTitle>
+                    <CardTitle  className="text-xl text-gray-600 dark:text-white">Welcome back</CardTitle>
                     <CardDescription>
                         Login with your Apple or Google account
                     </CardDescription>
@@ -84,13 +84,13 @@ export function LoginForm({
                             </Field>
                             <Field>
                                 <div className="flex items-center">
-                                <FieldLabel htmlFor="password">Password</FieldLabel>
-                                <Link
-                                    href="/send-email"
-                                    className="ml-auto text-sm underline-offset-4 hover:underline"
-                                >
-                                    Forgot your password?
-                                </Link>
+                                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                                    <Link
+                                        href="/send-email"
+                                        className="ml-auto text-sm underline-offset-4 hover:underline"
+                                    >
+                                        Forgot your password?
+                                    </Link>
                                 </div>
                                 <Input 
                                     type="password"
@@ -101,7 +101,12 @@ export function LoginForm({
                                 />
                             </Field>
                             <Field>
-                                <Button type="submit">Login</Button>
+                                <Button 
+                                    type="submit"
+                                    className="dark:text-white bg-[#409eff] hover:bg-[#409eff]/90 cursor-pointer"
+                                >
+                                    Login
+                                </Button>
                                 <FieldDescription className="text-center">
                                     Don&apos;t have an account? <Link href="/sign-up">Sign up</Link>
                                 </FieldDescription>

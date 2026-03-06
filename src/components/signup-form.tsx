@@ -31,7 +31,7 @@ export function SignupForm({
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault(); // 清除之前的错误
+        e.preventDefault();
 
         if (password !== confirmPassword) {
             toast.error("The passwords entered twice do not match.");
@@ -75,7 +75,7 @@ export function SignupForm({
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Create your account</CardTitle>
+                    <CardTitle className="text-xl text-gray-600 dark:text-white">Create your account</CardTitle>
                     <CardDescription>
                         Enter your email below to create your account
                     </CardDescription>
@@ -138,7 +138,12 @@ export function SignupForm({
                                 </FieldDescription>
                             </Field>
                             <Field>
-                                <Button type="submit">Create Account</Button>
+                                <Button 
+                                    type="submit"
+                                    className="bg-[#409eff] hover:bg-[#409eff]/90 dark:text-white cursor-pointer"
+                                >
+                                    Create Account
+                                </Button>
                                 <FieldDescription className="text-center">
                                     Already have an account? <Link href="/sign-in">Sign in</Link>
                                 </FieldDescription>

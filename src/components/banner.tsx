@@ -68,7 +68,7 @@ const Banner: React.FC = () => {
     return (
         <div className="fixed top-0 left-0 right-0 overflow-hidden whitespace-nowrap w-full h-10 text-center bg-gradient-to-r from-blue-50 via-green-50 to-orange-50 z-20">
             {/* Determine whether to add scrolling animation based on should Scroll*/}
-            <div className={`inline-block min-w-[100%] ${shouldScroll ? 'animate-scroll-left' : ''} ${
+            <div className={`flex items-center justify-center w-full h-full ${shouldScroll ? 'animate-scroll-left' : ''} ${
                     isPaused ? 'paused' : ''
                 }`}
                 onMouseEnter={() => setIsPaused(true)} // Move the mouse in to pause the animation
@@ -88,8 +88,8 @@ const Banner: React.FC = () => {
                                     width={30} 
                                     height={30}
                                 />
-                                <span>sponsored by {item.title}</span>
-                                <MoveRight />
+                                <span className='dark:text-black'>sponsored by {item.title}</span>
+                                <MoveRight className='dark:text-black'/>
                             </Link>
                         </div>
                     ))}

@@ -9,6 +9,7 @@ const db = new Database("./sqlite.db");
 
 // Generate password reset email HTML
 function generateResetPasswordEmail(firstName: string, resetUrl: string): string {
+    console.log(resetUrl);
     return `
 <!DOCTYPE html>
 <html>
@@ -49,7 +50,7 @@ function generateResetPasswordEmail(firstName: string, resetUrl: string): string
 
 export const auth = betterAuth({
     database: db,
-    baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    baseURL: process.env.BETTER_AUTH_URL || "https://linkzap.link",
     emailAndPassword: {
         enabled: true, 
         sendResetPassword: async ({user, url, token}, request) => {
