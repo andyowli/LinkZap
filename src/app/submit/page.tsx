@@ -201,7 +201,6 @@ const Submit = () => {
                 useFormData.getState().setImageBase64(base64Image, base64Icon);
             }).catch((error) => {
                 console.error('Error converting file to base64:', error);
-                // 不阻止流程继续，因为文件引用已保存
             });
 
             const getPrice = localStorage.getItem('price-storage');

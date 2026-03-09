@@ -7,9 +7,9 @@ type FormData = {
     website: string;
     tag: string;
     image: File | null;
-    imageBase64?: string; // 用于持久化的base64字符串
+    imageBase64?: string;
     icon: File | null;
-    iconBase64?: string; // 用于持久化的base64字符串
+    iconBase64?: string;
     description: string;
 };
 
@@ -23,40 +23,39 @@ interface FormDataStore {
 const useFormData = create<FormDataStore>()(
     persist(
         (set) => ({
-        data: {
-            title: '',
-            slug: '',
-            website: '',
-            tag: '',
-            image: null,
-            imageBase64: undefined,
-            icon: null,
-            description: ''
-        },
-        setFormData: (data) => {
-            console.log('Setting form data:', data);
-            set({ data });
-        },
-        setImageBase64: (imageBase64,iconBase64) => {
-            set((state) => ({
-                data: {
-                    ...state.data,
-                    imageBase64: imageBase64,
-                    iconBase64: iconBase64
-                }
-            }));
-        },
-        clearFormData: () => set({ data: {} as FormData })
+            data: {
+                title: '',
+                slug: '',
+                website: '',
+                tag: '',
+                image: null,
+                imageBase64: undefined,
+                icon: null,
+                description: ''
+            },
+            setFormData: (data) => {
+                set({ data });
+            },
+            setImageBase64: (imageBase64,iconBase64) => {
+                set((state) => ({
+                    data: {
+                        ...state.data,
+                        imageBase64: imageBase64,
+                        iconBase64: iconBase64
+                    }
+                }));
+            },
+            clearFormData: () => set({ data: {} as FormData })
         }),
         {
-        name: 'form-data-storage', // Locally stored key names
-        partialize: (state) => ({ 
-            data: { 
-                ...state.data, 
-                image: null, // Non persistent file object
-                icon: null
-            } 
-        }),
+            name: 'form-data-storage', // Locally stored key names
+            partialize: (state) => ({ 
+                data: { 
+                    ...state.data, 
+                    image: null, // Non persistent file object
+                    icon: null
+                } 
+            }),
         }
     )
 );

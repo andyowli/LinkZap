@@ -30,15 +30,28 @@ export async function signInAction(formData: FormData) {
     const password = formData.get('password') as string;
     const callbackUrl = formData.get('callbackUrl') as string;
 
-    await auth.api.signInEmail({
-        body:{
-            email,
-            password,
-        }
-    });
+    // await auth.api.signInEmail({
+    //     body:{
+    //         email,
+    //         password,
+    //     }
+    // });
+
+    try {
+        await auth.api.signInEmail({
+            body:{
+                email,
+                password,
+            }
+        });
+
+        return { success: true, redirectUrl: callbackUrl || '/' };
+    } catch (error: any) {
+        return { error: error.message || 'Registration failed, please try again' };
+    }
 
     // If there is a callbackURL, redirect to that URL, otherwise redirect to the homepage
-    redirect(callbackUrl || '/');
+    // redirect(callbackUrl || '/');
 }
 
 export async function signOutAction() {

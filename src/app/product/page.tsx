@@ -106,7 +106,7 @@ const ProductPage = async ({ searchParams } : { searchParams : { category?: stri
   }
 
   return (
-    <>
+    <div>
       <Banner />
 
       <Navbar topClass="top-10"/>
@@ -116,7 +116,7 @@ const ProductPage = async ({ searchParams } : { searchParams : { category?: stri
         sidebar={sidebarData} 
         selectedCategory={selectedCategory} 
       />
-    </>
+    </div>
   );
 }
 

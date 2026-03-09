@@ -5,6 +5,7 @@ import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { cn } from "../lib/utils";
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 export default function UploadImage({ onUpload }: { onUpload?: (file: File) => void }) {
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,7 +24,7 @@ export default function UploadImage({ onUpload }: { onUpload?: (file: File) => v
 
                 const maxSize = 1 * 1024 * 1024; // 1MB Convert to bytes
                 if (file.size > maxSize) {
-                    alert("文件大小超过 1MB,请上传更小的文件。");
+                    toast.error("The file size exceeds 1MB, please upload a smaller file.");
                     return;
                 }
                 

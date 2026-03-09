@@ -23,6 +23,7 @@ const Banner: React.FC = () => {
     useEffect(() => {
         const notifyVisibility = (visible: boolean) => {
             if (typeof window === 'undefined') return;
+        
             window.dispatchEvent(
                 new CustomEvent<{ visible: boolean }>(BANNER_VISIBILITY_EVENT, {
                     detail: { visible },
@@ -66,7 +67,7 @@ const Banner: React.FC = () => {
     console.log('Items:', bannerItems);
 
     return (
-        <div className="fixed top-0 left-0 right-0 overflow-hidden whitespace-nowrap w-full h-10 text-center bg-gradient-to-r from-blue-50 via-green-50 to-orange-50 z-20">
+        <div className="sticky top-0 whitespace-nowrap w-full h-10  text-center bg-gradient-to-r from-blue-50 via-green-50 to-orange-50 z-20">
             {/* Determine whether to add scrolling animation based on should Scroll*/}
             <div className={`flex items-center justify-center w-full h-full ${shouldScroll ? 'animate-scroll-left' : ''} ${
                     isPaused ? 'paused' : ''

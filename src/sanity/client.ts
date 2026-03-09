@@ -23,5 +23,5 @@ export interface ImageBlock {
     _ref: string;
     _type: 'reference';
   };
-  alt?: string; // 图片的替代文本
+  alt?: string;
 }

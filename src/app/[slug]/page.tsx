@@ -109,16 +109,15 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
 
     const extractPlainText = (content: any): string => {
         if (!content || !Array.isArray(content)) return '';
-            return content
-            .map((block: any) =>
-                block.children
-                ?.map((child: any) => child.text || '')
-                .join(' ')
-            )
-            .join(' ');
-        };
+        return content
+        .map((block: any) =>
+            block.children
+            ?.map((child: any) => child.text || '')
+            .join(' ')
+        )
+        .join(' ');
+    };
 
-    // 先检查页面是否存在
     if (!page) {
         return (
             <div className="flex flex-col min-h-screen">
@@ -126,9 +125,9 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
 
                 <Navbar topClass="top-10" />
 
-                <main className="flex-1 pt-40">
+                <div className="flex-1 flex items-center justify-center">
                     <EmptyData />
-                </main>
+                </div>
 
                 <Footer />
             </div>
@@ -157,110 +156,116 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
 
 
     return (
-        <div className="min-h-screen">
-            <Banner />
+        <div className="flex flex-col min-h-screen">
+            {/* <div> */}
+                <Banner />
 
-            <Navbar topClass="top-10"/>
+                <Navbar topClass="top-10"/>
+            {/* </div> */}
+            
+
             {/* JSON-LD structured data */}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
 
-            <div className="mt-24 container mx-auto max-w-[80rem] flex items-center gap-3 px-4">
-                {page.iconurl && (
-                    <div className="rounded-lg dark:bg-white p-1 backdrop-blur-sm">
-                        <Image 
-                            src={page.iconurl} 
-                            alt="" 
-                            width={60}
-                            height={60}
-                            unoptimized={process.env.NODE_ENV === "development"}
+            <div className="flex-1 pt-10">
+                <div className="container mx-auto max-w-[80rem] flex items-center gap-3 px-4">
+                    {page.iconurl && (
+                        <div className="rounded-lg dark:bg-white p-1 backdrop-blur-sm">
+                            <Image 
+                                src={page.iconurl} 
+                                alt="" 
+                                width={60}
+                                height={60}
+                                unoptimized={process.env.NODE_ENV === "development"}
+                            />
+                        </div>
+                    )}
+
+                    <span className="text-2xl font-bold">{page.title}</span>
+                </div>
+
+                <div className="container mx-auto max-w-[80rem] mt-10 px-4">
+                    <Button 
+                        className="bg-[#409eff] hover:bg-[#409eff]/90 dark:text-white"
+                    >
+                        <Link 
+                            href={page.affiliate ? page.affiliate : page.website} 
+                            target="_blank"
+                        >
+                            Visit Website
+                        </Link>
+                    </Button>
+                </div>
+
+                <div className="container mx-auto max-w-[80rem] flex flex-col md:flex-row items-start justify-between mt-12 max-2xl:p-4">
+                    <Card className="p-5 w-full md:w-3/5 self-start bg-gray-300/10 max-sm:mb-6">
+                        <div className="text-lg">
+                            <PortableText value={page.content} />
+                        </div>
+                    </Card>
+                    
+                    <div className="space-y-6 md:space-y-10 w-full md:w-2/6 lg:w-1/3">
+                        <Card className="w-full md:w-11/12 py-0">
+                            {page.imgurl && (
+                                <Image
+                                    src={page.imgurl} 
+                                    alt={page.title || 'Product image'} 
+                                    width={600}
+                                    height={300}
+                                    className="w-full h-60 rounded-xl object-cover"
+                                    priority
+                                    unoptimized={process.env.NODE_ENV === "development"}
+                                />
+                            )}
+                        </Card>
+
+                        <Card className="w-full md:w-11/12">
+                            <CardHeader>
+                                <CardTitle>Category</CardTitle>
+                            </CardHeader>
+
+                            <CardContent className="space-x-4">
+                                {page.category?.map((category:string) => (
+                                    <Button 
+                                        key={category}
+                                        className="bg-[#409eff] hover:bg-[#409eff]/90 dark:text-white cursor-pointer"
+                                    >{category}</Button>
+                                ))}
+                            </CardContent>
+                        </Card>
+
+                        <ClientComponent 
+                            affiliate={page.affiliate ? page.affiliate : page.website} 
+                            website={page.website} 
+                        />
+                    </div>
+                </div>
+                {/* more */}
+                {relatedProducts && relatedProducts.length > 0 && (
+                    <div className="container mx-auto max-w-[82rem] mt-12 p-4">
+                        <div className="flex items-center gap-2 mb-6">
+                            <LayoutDashboard className="text-blue-500" />
+                            <h3 className="text-lg font-semibold leading-none m-0">
+                                More product
+                            </h3>
+                        </div>
+                        <MoreCarousel
+                            products={relatedProducts.map((product: any) => ({
+                                id: product._id,
+                                title: product.title,
+                                slug: product.slug,
+                                category: Array.isArray(product.category) ? product.category : [product.category].filter(Boolean),
+                                imgurl: product.imgurl,
+                                content: extractPlainText(product.content),
+                                webUrl: product.website || undefined,
+                            }))}
                         />
                     </div>
                 )}
-
-                <span className="text-2xl font-bold">{page.title}</span>
             </div>
-
-            <div className="container mx-auto max-w-[80rem] mt-10 px-4">
-                <Button 
-                    className="bg-[#409eff] hover:bg-[#409eff]/90 dark:text-white"
-                >
-                    <Link 
-                        href={page.affiliate ? page.affiliate : page.website} 
-                        target="_blank"
-                    >
-                        Visit Website
-                    </Link>
-                </Button>
-            </div>
-
-            <div className="container mx-auto max-w-[80rem] flex flex-col md:flex-row items-start justify-between mt-12 max-2xl:p-4">
-                <Card className="p-5 w-full md:w-3/5 self-start bg-gray-300/10 max-sm:mb-6">
-                    <div className="text-lg">
-                        <PortableText value={page.content} />
-                    </div>
-                </Card>
-                
-                <div className="space-y-6 md:space-y-10 w-full md:w-2/6 lg:w-1/3">
-                    <Card className="w-full md:w-11/12 py-0">
-                        {page.imgurl && (
-                            <Image
-                                src={page.imgurl} 
-                                alt={page.title || 'Product image'} 
-                                width={600}
-                                height={300}
-                                className="w-full h-60 rounded-xl object-cover"
-                                priority
-                                unoptimized={process.env.NODE_ENV === "development"}
-                            />
-                        )}
-                    </Card>
-
-                    <Card className="w-full md:w-11/12">
-                        <CardHeader>
-                            <CardTitle>Category</CardTitle>
-                        </CardHeader>
-
-                        <CardContent className="space-x-4">
-                            {page.category?.map((category:string) => (
-                                <Button 
-                                    key={category}
-                                    className="bg-[#409eff] hover:bg-[#409eff]/90 dark:text-white cursor-pointer"
-                                >{category}</Button>
-                            ))}
-                        </CardContent>
-                    </Card>
-
-                    <ClientComponent 
-                        affiliate={page.affiliate ? page.affiliate : page.website} 
-                        website={page.website} 
-                    />
-                </div>
-            </div>
-            {/* more */}
-            {relatedProducts && relatedProducts.length > 0 && (
-                <div className="container mx-auto max-w-[82rem] mt-12 p-4">
-                    <div className="flex items-center gap-2 mb-6">
-                        <LayoutDashboard className="text-blue-500" />
-                        <h3 className="text-lg font-semibold leading-none m-0">
-                            More product
-                        </h3>
-                    </div>
-                    <MoreCarousel
-                        products={relatedProducts.map((product: any) => ({
-                            id: product._id,
-                            title: product.title,
-                            slug: product.slug,
-                            category: Array.isArray(product.category) ? product.category : [product.category].filter(Boolean),
-                            imgurl: product.imgurl,
-                            content: extractPlainText(product.content),
-                            webUrl: product.website || undefined,
-                        }))}
-                    />
-                </div>
-            )}
 
             <Footer />
         </div>

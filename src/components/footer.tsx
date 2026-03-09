@@ -1,5 +1,6 @@
 import { Github, Mail, MoonStar, Twitter } from "lucide-react";
 import Image from "next/image";
+import { ThemeToggle } from "./ThemeToggle";
 
 type FooterLink = {
     name: string;
@@ -85,7 +86,7 @@ export function Footer() {
 
                 <div className="flex justify-between">
                     <span>© {new Date().getFullYear()} LinkPage All Rights Reserved.</span>
-                    <MoonStar />
+                    <ThemeToggle />
                 </div>
             </div>
         </footer>

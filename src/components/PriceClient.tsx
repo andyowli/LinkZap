@@ -90,7 +90,6 @@ export default function PriceClient() {
             }
         })
         .catch(error => {
-            console.error('支付过程中发生错误:', error);
             toast.error('An error occurred during the payment process',error);
         });
     };
@@ -98,7 +97,7 @@ export default function PriceClient() {
     return (
         <>
             {/* Hero Section */}
-            <section className="pt-32 pb-16 px-4">
+            <section className="pt-10 pb-16 px-4">
                 <div className="container mx-auto text-center">
                     <h1 className="h-11 text-2xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
                         Choose the solution that suits you

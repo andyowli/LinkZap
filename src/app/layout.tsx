@@ -15,6 +15,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const metadataBase = new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+
 export const metadata: Metadata = {
   // Basic Information
   title: {
@@ -32,6 +34,8 @@ export const metadata: Metadata = {
     shortcut: '/logo.svg',
   },
   
+  metadataBase,
+
   // share
   openGraph: {
     type: 'website',

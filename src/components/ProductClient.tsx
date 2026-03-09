@@ -78,7 +78,7 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
 
 
     return (
-        <main className="min-h-screen flex flex-col bg-gray-50 dark:bg-black">
+        <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-black">
             <div className="pt-24 container mx-auto max-w-7xl">
                 <div className="flex items-center justify-center flex-col mb-8 text-center">
                     <h1 className="font-bold text-balance text-2xl sm:text-3xl md:text-4xl">
@@ -112,71 +112,72 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
                                 </div>
                             </div>
                         
-                        {/* Main Content */}
-                        <div className="flex-1">
-                            {currentPosts.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {currentPosts.map((post) => (
-                                            <Card 
-                                                key={post._id}
-                                                className={`py-0 h-72 overflow-hidden cursor-pointer hover:shadow-md max-xl:w-full max-xl:h-64 relative transition-all duration-500 hover:scale-105 ${
-                                                    post.featured ? post.banner 
-                                                        ? 'border-2 border-orange-500/70'
-                                                        : 'border-2 border-blue-500/70'
-                                                        : ''
-                                                }`} 
-                                            >
-                                                <CardHeader className="p-0">
-                                                    <div className="relative aspect-[16/9] overflow-hidden max-sm:aspect-[14/9] group">
-                                                        <Image
-                                                            src={post.imgurl}
-                                                            alt={post.title || 'Product image'}
-                                                            fill                                  
-                                                            className="object-cover"
-                                                            unoptimized={process.env.NODE_ENV === "development"}
-                                                        />
-                                                        {/* Mask Overlay */}
-                                                        <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-xl max-sm:rounded-xl">
-                                                            <a 
-                                                                href={post.webUrl}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="text-white text-sm font-medium flex items-center justify-center"
-                                                            >
-                                                                Visit Website
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </CardHeader>
-                                                <CardContent className="px-4 mt-[-10px] max-sm:absolute max-sm:bottom-0 max-sm:bg-gray-900/70 max-sm:text-white">
-                                                    <Link href={`/${post.slug}`}>
-                                                        <div className="flex items-center justify-between max-sm:mt-2.5">
-                                                            <h3 className="font-bold text-lg md:text-md line-clamp-2 m-0">{post.title}</h3>
-                                                            {post.featured && (
-                                                                <span 
-                                                                    className={`flex items-center text-xs font-bold px-2 py-1 rounded-full ml-2 mt-1 whitespace-nowrap ${
-                                                                        post.banner 
-                                                                            ? 'bg-orange-100 text-orange-800'
-                                                                            : 'bg-blue-100 text-blue-800'
-                                                                    }`}
+                            {/* Content */}
+                            <div className="flex-1">
+                                {currentPosts.length > 0 ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {currentPosts.map((post) => (
+                                                <Card 
+                                                    key={post._id}
+                                                    className={`py-0 h-72 overflow-hidden cursor-pointer hover:shadow-md max-xl:w-full max-xl:h-64 relative transition-all duration-500 hover:scale-105 ${
+                                                        post.featured ? post.banner 
+                                                            ? 'border-2 border-orange-500/70'
+                                                            : 'border-2 border-blue-500/70'
+                                                            : ''
+                                                    }`} 
+                                                >
+                                                    <CardHeader className="p-0">
+                                                        <div className="relative aspect-[16/9] overflow-hidden max-sm:aspect-[14/9] group">
+                                                            <Image
+                                                                src={post.imgurl}
+                                                                alt={post.title || 'Product image'}
+                                                                fill                                  
+                                                                className="object-cover"
+                                                                loading="eager"
+                                                                unoptimized={process.env.NODE_ENV === "development"}
+                                                            />
+                                                            {/* Mask Overlay */}
+                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-t-xl max-sm:rounded-xl">
+                                                                <a 
+                                                                    href={post.webUrl}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-white text-sm font-medium flex items-center justify-center"
                                                                 >
-                                                                    {post.banner ? 'Sponsor' : 'Featured'}
-                                                                </span>
-                                                            )}
+                                                                    Visit Website
+                                                                </a>
+                                                            </div>
                                                         </div>
-                                                        <p className="text-muted-foreground text-sm line-clamp-2 mt-2 mb-2 max-md:text-white/80">
-                                                            {post.content}
-                                                        </p>
-                                                    </Link>
-                                                </CardContent>
-                                            </Card>
+                                                    </CardHeader>
+                                                    <CardContent className="px-4 mt-[-10px] max-sm:absolute max-sm:bottom-0 max-sm:bg-gray-900/70 max-sm:text-white">
+                                                        <Link href={`/${post.slug}`}>
+                                                            <div className="flex items-center justify-between max-sm:mt-2.5">
+                                                                <h3 className="font-bold text-lg md:text-md line-clamp-2 m-0">{post.title}</h3>
+                                                                {post.featured && (
+                                                                    <span 
+                                                                        className={`flex items-center text-xs font-bold px-2 py-1 rounded-full ml-2 mt-1 whitespace-nowrap ${
+                                                                            post.banner 
+                                                                                ? 'bg-orange-100 text-orange-800'
+                                                                                : 'bg-blue-100 text-blue-800'
+                                                                        }`}
+                                                                    >
+                                                                        {post.banner ? 'Sponsor' : 'Featured'}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <p className="text-muted-foreground text-sm line-clamp-2 mt-2 mb-2 max-md:text-white/80">
+                                                                {post.content}
+                                                            </p>
+                                                        </Link>
+                                                    </CardContent>
+                                                </Card>
 
-                                    ))}
-                                </div>
-                            ) : (
-                                <EmptyData />
-                            )}
-                        </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <EmptyData />
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -247,7 +248,7 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
 
             {/* Footer */}
             <Footer />
-        </main>
+        </div>
     )
 }
 

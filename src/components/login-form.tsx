@@ -21,6 +21,9 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 import { createAuthClient } from "better-auth/client";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function LoginForm({
     className,
@@ -30,6 +33,11 @@ export function LoginForm({
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || '/';
 
+    const router = useRouter();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
     const handleLoginWithGoogle = async() => {
         try {
             await authClient.signIn.social({
@@ -38,6 +46,27 @@ export function LoginForm({
             });
         } catch (error) {
             console.error("Google Login error:", error);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+
+        try {
+            const result = await signInAction(formData);
+
+            if ('error' in result) {
+                toast.error(result.error);
+            } else if ('success' in result) {
+                router.push('/');
+            }
+        } catch (err: any) {
+            toast.error(err?.message || "An unexpected error occurred.");
         }
     };
 
@@ -51,7 +80,7 @@ export function LoginForm({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form action={signInAction}>
+                    <form onSubmit={handleSubmit}>
                         <Input type="hidden" name="callbackUrl" value={callbackUrl}/>
                         <FieldGroup>
                             <Field>
@@ -80,6 +109,7 @@ export function LoginForm({
                                     placeholder="Email"
                                     required
                                     className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]"
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </Field>
                             <Field>
@@ -98,6 +128,7 @@ export function LoginForm({
                                     placeholder="Password"
                                     required
                                     className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]"
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Field>
                             <Field>

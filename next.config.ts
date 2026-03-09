@@ -24,10 +24,6 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
-  
-  // eslint: {
-  //   ignoreDuringBuilds: true, // 禁用构建时的 ESLint 检查
-  // }
 };
 
 export default nextConfig;

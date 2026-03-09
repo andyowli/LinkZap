@@ -59,8 +59,8 @@ export function NavbarClient({ isLoggedIn, user, isFixed = true, topClass = "top
     return (
         <header
             className={`${
-                isFixed ? `fixed ${effectiveTopClass} left-0 right-0` : "relative"
-            } h-16 bg-background border-b z-10`}
+                isFixed ? `sticky ${effectiveTopClass}` : "relative"
+            } h-16 bg-background border-b z-20`}
         >
             <div className="w-full h-16 px-4 flex justify-center items-center">
                 <div className="flex items-center justify-between container max-w-full md:max-w-[80rem] h-full">

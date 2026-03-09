@@ -10,9 +10,9 @@ const Blog = () => {
 
             <Navbar topClass="top-10" />
 
-            <main className="flex-1 pt-40">
+            <div className="flex-1 flex items-center justify-center">
                 <EmptyData />
-            </main>
+            </div>
 
             <Footer />
         </div>

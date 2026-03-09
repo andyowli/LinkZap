@@ -54,7 +54,7 @@ export function MobileNav({user} : MobileNavProps) {
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2">
                 <Image src="/logo.svg" alt="Logo" width={40} height={40} />
-                <span className="ml-[-26]">LinkZap</span>
+                <span className="text-white">LinkZap</span>
               </Link>
           </SheetTitle>
         </SheetHeader>
@@ -62,7 +62,7 @@ export function MobileNav({user} : MobileNavProps) {
         <nav className="flex flex-col space-y-4 px-4 -mt-2">
           <Link
             href="/product"
-            className="flex gap-2 px-2 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
+            className="flex gap-2 px-2 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-white rounded-md transition-colors"
             onClick={() => setOpen(false)}
           >
             <LayoutList className="h-5 w-5"/>
@@ -70,7 +70,7 @@ export function MobileNav({user} : MobileNavProps) {
           </Link>
           <Link
             href="/recommended"
-            className="flex gap-2 px-2 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
+            className="flex gap-2 px-2 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-white rounded-md transition-colors"
             onClick={() => setOpen(false)}
           >
             <FileText className="h-5 w-5"/>
@@ -78,7 +78,7 @@ export function MobileNav({user} : MobileNavProps) {
           </Link>
           <Link
             href="/price"
-            className="flex gap-2 px-2 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
+            className="flex gap-2 px-2 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-white rounded-md transition-colors"
             onClick={() => setOpen(false)}
           >
             <CreditCard className="h-5 w-5"/>
@@ -86,7 +86,7 @@ export function MobileNav({user} : MobileNavProps) {
           </Link>
           <Link 
             href="/submit" 
-            className="flex gap-2 px-2 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
+            className="flex gap-2 px-2 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-white rounded-md transition-colors"
             onClick={() => setOpen(false)}
           >
             <ClipboardType className="h-5 w-5"/>
@@ -119,7 +119,7 @@ export function MobileNav({user} : MobileNavProps) {
                                       onClick={handleSignOut}
                                   >
                                       <LogOut className="w-4 h-4 mr-2" />
-                                      退出登录
+                                      Log out
                                   </div>
                               </div>
                           </PopoverContent>
