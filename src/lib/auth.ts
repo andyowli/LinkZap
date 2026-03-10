@@ -4,8 +4,21 @@ import { nextCookies } from "better-auth/next-js";
 import { Resend } from "resend";
 
 
-const resend = new Resend(process.env.RESEND_API_KEY as string);
+// const resend = new Resend(process.env.RESEND_API_KEY as string);
 const db = new Database("./sqlite.db");
+
+let resend: Resend | null = null;
+
+const getResend = () => {
+    if (!resend) {
+        const apiKey = process.env.RESEND_API_KEY;
+        if (!apiKey) {
+        throw new Error("RESEND_API_KEY 未设置");
+        }
+        resend = new Resend(apiKey);
+    }
+    return resend;
+};
 
 // Generate password reset email HTML
 function generateResetPasswordEmail(firstName: string, resetUrl: string): string {
@@ -72,6 +85,7 @@ export const auth = betterAuth({
                     return;
                 }
                 
+                const resend = getResend();
                 const result = await resend.emails.send({
                     from: "LinkZap <noreply@linkzap.link>",
                     to: user.email,
