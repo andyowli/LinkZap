@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 
 import { stripe } from '../../../lib/stripe';
 
-export async function POST(request: Request,res: Response) {
+export async function POST(request: Request) {
     try {
         const headersList = await headers()
         const origin = headersList.get('origin')
