@@ -419,7 +419,7 @@ const Submit = () => {
                                                     }}
                                                 />
                                             </FormControl>
-                                            <FormMessage className="absolute left-0 bottom-[-2rem]"/>
+                                            <FormMessage className="absolute left-0 -bottom-8"/>
                                         </FormItem>
                                     )}
                                 />
@@ -437,7 +437,7 @@ const Submit = () => {
                                                     {...field}
                                                 />
                                             </FormControl>
-                                            <FormMessage className="absolute left-0 bottom-[-2rem]"/>
+                                            <FormMessage className="absolute left-0 -bottom-8"/>
                                         </FormItem>
                                     )}
                                 />
@@ -458,7 +458,7 @@ const Submit = () => {
                                                     }}
                                                 />
                                             </FormControl>
-                                            <FormMessage className="absolute left-0 bottom-[-2rem]"/>
+                                            <FormMessage className="absolute left-0 -bottom-8"/>
                                         </FormItem>
                                     )}
                                 />
@@ -488,7 +488,7 @@ const Submit = () => {
                                                             <ChevronsUpDown className="opacity-50" />
                                                         </Button>
                                                     </PopoverTrigger>
-                                                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                                                    <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
                                                         <Command>
                                                             <CommandInput placeholder="Search framework..." className="h-9" />
                                                             <CommandList>
@@ -515,7 +515,7 @@ const Submit = () => {
                                                     </PopoverContent>
                                                 </Popover>
                                             </FormControl>
-                                            <FormMessage className="absolute left-0 bottom-[-2rem]"/>
+                                            <FormMessage className="absolute left-0 -bottom-8"/>
                                         </FormItem>
                                     )}
                                 />

@@ -7,9 +7,8 @@ import Banner from "../../components/banner";
 
 // Add SEO metadata to the product list page
 export async function generateMetadata({ searchParams }: { searchParams: { category?: string } }) {
-    const sidebar = await client.fetch<SanityDocument[]>(POST_SIDEBAR, {}, options);
-    const category = (await searchParams)?.category;
-    const categoryName = sidebar.find(item => item.title.toLowerCase() === category)?.title;
+  const category = (await searchParams)?.category;
+  const categoryName = category ? category.charAt(0).toUpperCase() + category.slice(1) : undefined;
   
     const baseTitle = 'Resources to Skyrocket Your Creative Edge.';
     const baseDescription = 'Handpicked, proven tools and intelligent resources designed to help independent creators achieve exponential gains in creativity, efficiency, and real-world output.';

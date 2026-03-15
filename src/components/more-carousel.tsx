@@ -17,7 +17,7 @@ type Props = {
 
 export function MoreCarousel({ products }: Props) {
     return (
-        <div className="w-full max-w-[80rem] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {products.map((product) => (
                 <div
                     key={product.id}
@@ -25,7 +25,7 @@ export function MoreCarousel({ products }: Props) {
                 >
                     <Card className="py-0">
                         <CardHeader className="p-0">
-                            <div className="w-full relative overflow-hidden h-[150px] group">
+                            <div className="w-full relative overflow-hidden h-37.5 group">
                                 <Image 
                                     src={product.imgurl}
                                     alt={product.title}
@@ -44,7 +44,7 @@ export function MoreCarousel({ products }: Props) {
                                 </a>
                             </div>
                         </CardHeader>
-                        <CardContent className="w-full px-4 mt-[-1rem]">
+                        <CardContent className="w-full px-4 -mt-4">
                             <Link href={`/${product.slug}`}>
                                 <h3 className="m-0 font-semibold text-lg mt-2 mb-2 text-blue-400">{product.title}</h3>
                                 <p className="text-sm text-muted-foreground line-clamp-2 mb-4">{product.content}</p>

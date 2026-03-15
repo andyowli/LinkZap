@@ -91,7 +91,7 @@ export function SignupForm({
                                     placeholder="John Doe" 
                                     onChange={(e) => setName(e.target.value)}
                                     required
-                                    className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]" 
+                                    className="focus-visible:ring-[#409eff] focus-visible:ring-2" 
                                 />
                             </Field>
 
@@ -103,7 +103,7 @@ export function SignupForm({
                                     placeholder="m@example.com"
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]"
+                                    className="focus-visible:ring-[#409eff] focus-visible:ring-2"
                                 />
                             </Field>
 
@@ -115,7 +115,7 @@ export function SignupForm({
                                             id="password" 
                                             type="password" 
                                             required 
-                                            className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]"
+                                            className="focus-visible:ring-[#409eff] focus-visible:ring-2"
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
                                     </Field>
@@ -128,7 +128,7 @@ export function SignupForm({
                                             id="confirm-password" 
                                             type="password" 
                                             required
-                                            className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]" 
+                                            className="focus-visible:ring-[#409eff] focus-visible:ring-2" 
                                             onChange={(e) => setConfirmPassword(e.target.value)}
                                         />
                                     </Field>

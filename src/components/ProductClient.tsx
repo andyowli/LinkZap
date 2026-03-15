@@ -92,7 +92,7 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
                     <div className="container mx-auto">
                         <div className="flex flex-col md:flex-row gap-8">
                             {/* Sidebar */}
-                            <div className="w-full md:w-64 flex-shrink-0">
+                            <div className="w-full md:w-64 shrink-0">
                                 <div className="bg-white dark:bg-black/20 rounded-xl shadow-sm dark:shadow-gray-700 p-5 sticky top-24">
                                     <h2 className="text-lg font-bold mb-4">Categories</h2>
                                     <div className="space-y-1">
@@ -127,7 +127,7 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
                                                     }`} 
                                                 >
                                                     <CardHeader className="p-0">
-                                                        <div className="relative aspect-[16/9] overflow-hidden max-sm:aspect-[14/9] group">
+                                                        <div className="relative aspect-video overflow-hidden max-sm:aspect-14/9 group">
                                                             <Image
                                                                 src={post.imgurl}
                                                                 alt={post.title || 'Product image'}
@@ -149,7 +149,7 @@ const ProductClient  = ({ posts, sidebar }: ProductClientProps) => {
                                                             </div>
                                                         </div>
                                                     </CardHeader>
-                                                    <CardContent className="px-4 mt-[-10px] max-sm:absolute max-sm:bottom-0 max-sm:bg-gray-900/70 max-sm:text-white">
+                                                    <CardContent className="px-4 -mt-2.5 max-sm:absolute max-sm:bottom-0 max-sm:bg-gray-900/70 max-sm:text-white">
                                                         <Link href={`/${post.slug}`}>
                                                             <div className="flex items-center justify-between max-sm:mt-2.5">
                                                                 <h3 className="font-bold text-lg md:text-md line-clamp-2 m-0">{post.title}</h3>

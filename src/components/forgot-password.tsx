@@ -78,7 +78,7 @@ export default  function ForgotPasswordForm({
                                     placeholder="Password"
                                     required
                                     value={password}
-                                    className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]"
+                                    className="focus-visible:ring-[#409eff] focus-visible:ring-2"
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Field>

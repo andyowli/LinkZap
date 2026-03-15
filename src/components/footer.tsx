@@ -79,7 +79,7 @@ export function Footer() {
                         <img 
                             src="https://frogdr.com/linkzap.link/badge-white.svg" 
                             alt="Monitor&#0032;your&#0032;Domain&#0032;Rating&#0032;with&#0032;FrogDR" 
-                            className="w-full max-w-[250px] h-auto max-md:w-[180px] md:h-[54px] mb-2"
+                            className="w-full max-w-62.5 h-auto max-md:w-45 md:h-13.5 mb-2"
                         />
                     </a>
                 </div>

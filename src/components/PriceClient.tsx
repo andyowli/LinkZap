@@ -99,7 +99,7 @@ export default function PriceClient() {
             {/* Hero Section */}
             <section className="pt-10 pb-16 px-4">
                 <div className="container mx-auto text-center">
-                    <h1 className="h-11 text-2xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                    <h1 className="h-11 text-2xl md:text-4xl font-bold mb-2 bg-linear-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
                         Choose the solution that suits you
                     </h1>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -134,11 +134,11 @@ export default function PriceClient() {
                                     </div>
                                     <CardDescription className="mt-2">{plan.description}</CardDescription>
                                 </CardHeader>
-                                <CardContent className="flex-grow">
+                                <CardContent className="grow">
                                     <ul className="space-y-3">
                                         {plan.features.map((feature, i) => (
                                             <li key={i} className="flex items-start">
-                                                <Check className="h-5 w-5 text-[#409eff] flex-shrink-0 mr-2" />
+                                                <Check className="h-5 w-5 text-[#409eff] shrink-0 mr-2" />
                                                 <span className="text-sm">{feature}</span>
                                             </li>
                                         ))}
@@ -166,7 +166,7 @@ export default function PriceClient() {
                 <div className="container mx-auto max-w-4xl">
                     <h1 className="text-2xl font-bold mb-8 text-center">frequently asked questions</h1>
                         <div className="space-y-8">
-                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-[42rem] mx-auto gap-0">
+                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-2xl mx-auto gap-0">
                                 <h3 className="text-lg font-medium mb-2 ml-20">What are the benefits of the Basic plan?</h3>
                                 <ul className="text-muted-foreground text-sm list-disc list-inside space-y-1 ml-12">
                                     <li>There are 3 dofollow links on our website to improve your SEO</li>
@@ -174,13 +174,13 @@ export default function PriceClient() {
                                     <li>Update directory information at any time</li>
                                 </ul>
                             </Card>
-                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-[42rem] mx-auto gap-0">
+                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-2xl mx-auto gap-0">
                                 <h3 className="text-lg font-medium mb-2 ml-20">The differences between Basic and Pro plans?</h3>
                                 <ul className="text-muted-foreground text-sm list-inside5 space-y-1 ml-12">
                                     <li>Display at featured locations,and Customer support</li>
                                 </ul>
                             </Card>
-                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-[42rem] mx-auto gap-0">
+                            <Card className="bg-background p-6 rounded-lg shadow-sm max-w-2xl mx-auto gap-0">
                                 <h3 className="text-lg font-medium mb-2 ml-20">What additional options do I offer to sponsors?</h3>
                                 <p className="text-muted-foreground ml-20">
                                     In addition to all the content in the professional plan, we also offer the following:

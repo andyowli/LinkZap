@@ -171,7 +171,7 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
             />
 
             <div className="flex-1 pt-10">
-                <div className="container mx-auto max-w-[80rem] flex items-center gap-3 px-4">
+                <div className="container mx-auto max-w-7xl flex items-center gap-3 px-4">
                     {page.iconurl && (
                         <div className="rounded-lg dark:bg-white p-1 backdrop-blur-sm">
                             <Image 
@@ -187,7 +187,7 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                     <span className="text-2xl font-bold">{page.title}</span>
                 </div>
 
-                <div className="container mx-auto max-w-[80rem] mt-10 px-4">
+                <div className="container mx-auto max-w-7xl mt-10 px-4">
                     <Button 
                         className="bg-[#409eff] hover:bg-[#409eff]/90 dark:text-white"
                     >
@@ -200,7 +200,7 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                     </Button>
                 </div>
 
-                <div className="container mx-auto max-w-[80rem] flex flex-col md:flex-row items-start justify-between mt-12 max-2xl:p-4">
+                <div className="container mx-auto max-w-7xl flex flex-col md:flex-row items-start justify-between mt-12 max-2xl:p-4">
                     <Card className="p-5 w-full md:w-3/5 self-start bg-gray-300/10 max-sm:mb-6">
                         <div className="text-lg">
                             <PortableText value={page.content} />
@@ -245,7 +245,7 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
                 </div>
                 {/* more */}
                 {relatedProducts && relatedProducts.length > 0 && (
-                    <div className="container mx-auto max-w-[82rem] mt-12 p-4">
+                    <div className="container mx-auto max-w-328 mt-12 p-4">
                         <div className="flex items-center gap-2 mb-6">
                             <LayoutDashboard className="text-blue-500" />
                             <h3 className="text-lg font-semibold leading-none m-0">

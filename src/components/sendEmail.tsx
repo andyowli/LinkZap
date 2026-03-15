@@ -105,7 +105,7 @@ export default function ForgotPasswordEmail() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     disabled={isLoading}
-                                    className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]"
+                                    className="focus-visible:ring-[#409eff] focus-visible:ring-2"
                                 />
                                 {error && (
                                     <p className="text-sm text-red-500 mt-1">{error}</p>

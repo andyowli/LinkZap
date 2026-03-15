@@ -52,10 +52,10 @@ export function LoginForm({
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-
         const formData = new FormData();
         formData.append("email", email);
         formData.append("password", password);
+        formData.append("callbackUrl", callbackUrl);
 
         try {
             const result = await signInAction(formData);
@@ -63,7 +63,7 @@ export function LoginForm({
             if ('error' in result) {
                 toast.error(result.error);
             } else if ('success' in result) {
-                router.push('/');
+                router.push(result.redirectUrl || '/');
             }
         } catch (err: any) {
             toast.error(err?.message || "An unexpected error occurred.");
@@ -108,7 +108,7 @@ export function LoginForm({
                                     name="email"
                                     placeholder="Email"
                                     required
-                                    className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]"
+                                    className="focus-visible:ring-[#409eff] focus-visible:ring-2"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </Field>
@@ -127,7 +127,7 @@ export function LoginForm({
                                     name="password"
                                     placeholder="Password"
                                     required
-                                    className="focus-visible:ring-[#409eff] focus-visible:ring-[2px]"
+                                    className="focus-visible:ring-[#409eff] focus-visible:ring-2"
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Field>

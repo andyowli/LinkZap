@@ -16,6 +16,11 @@ interface BannerItem  {
 
 const BANNER_VISIBILITY_EVENT = 'banner:visibility';
 
+// Cache banner data to avoid duplicate requests
+let cachedBannerData: BannerItem[] | null = null;
+let cacheTimestamp: number = 0;
+const CACHE_DURATION = 10 * 1000; // 10 second cache
+
 const Banner: React.FC = () => {
     const [bannerItems, setBannerItems] = useState<BannerItem[]>([]); // Store multiple banner items
     const [isPaused, setIsPaused] = useState(false); // Control whether the animation pauses or not
@@ -32,6 +37,14 @@ const Banner: React.FC = () => {
         };
 
         const fetchData = async () => {
+            // Check if the cache is valid
+            const now = Date.now();
+            if (cachedBannerData && (now - cacheTimestamp) < CACHE_DURATION) {
+                setBannerItems(cachedBannerData);
+                notifyVisibility(Array.isArray(cachedBannerData) && cachedBannerData.length > 0);
+                return;
+            }
+
             const query = `*[_type == "post" && banner == true]{
                 title,
                 "webUrl": website,
@@ -42,6 +55,9 @@ const Banner: React.FC = () => {
 
             try {
                 const data = await client.fetch(query,{}, options);
+                // Update cache
+                cachedBannerData = data;
+                cacheTimestamp = now;
                 setBannerItems(data); 
                 notifyVisibility(Array.isArray(data) && data.length > 0);
             } catch (error) {
@@ -67,7 +83,7 @@ const Banner: React.FC = () => {
     console.log('Items:', bannerItems);
 
     return (
-        <div className="sticky top-0 whitespace-nowrap w-full h-10  text-center bg-gradient-to-r from-blue-50 via-green-50 to-orange-50 z-20">
+        <div className="sticky top-0 whitespace-nowrap w-full h-10  text-center bg-linear-to-r from-blue-50 via-green-50 to-orange-50 z-20">
             {/* Determine whether to add scrolling animation based on should Scroll*/}
             <div className={`flex items-center justify-center w-full h-full ${shouldScroll ? 'animate-scroll-left' : ''} ${
                     isPaused ? 'paused' : ''

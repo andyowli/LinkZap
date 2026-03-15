@@ -1,12 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ClipboardType, CreditCard, FileText, LayoutList, LogOut, Menu } from "lucide-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 import Image from "next/image";
-import { getIsLoggedIn } from "@/action/session";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { signOutAction } from "../app/actions/auth";
 
@@ -18,28 +17,18 @@ interface User {
 }
 
 interface MobileNavProps {
-  // isLoggedIn: boolean;
+  isLoggedIn: boolean;
   user?: User | null;
 }
 
-export function MobileNav({user} : MobileNavProps) {
+export function MobileNav({ isLoggedIn, user }: MobileNavProps) {
   const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
-
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOutAction();
     setIsOpen(false);
 };
-
-  useEffect(() => {
-    async function checkLoginStatus() {
-      const session = await getIsLoggedIn();
-      setIsLoggedIn(!!session);
-    }
-    checkLoginStatus();
-  }, []);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -48,9 +37,9 @@ export function MobileNav({user} : MobileNavProps) {
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[300px] sm:w-[350px]">
+      <SheetContent side="right" className="w-75 sm:w-87.5">
         <SheetHeader>
-          <SheetTitle className="text-left text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+          <SheetTitle className="text-left text-xl font-bold bg-linear-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2">
                 <Image src="/logo.svg" alt="Logo" width={40} height={40} />

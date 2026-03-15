@@ -128,7 +128,7 @@ export default function SuccessPage() {
 
 
 
-            <div className="flex-grow flex items-center justify-center">
+            <div className="grow flex items-center justify-center">
                 <Card className="max-w-3xl w-full mx-4 p-6 text-center flex items-center">
                     <div className="rounded-full w-17 h-17 bg-[#e7edff] flex items-center justify-center">
                         <div className="rounded-full w-14 h-14 bg-[#409eff] flex items-center justify-center">
