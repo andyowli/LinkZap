@@ -2,7 +2,7 @@
 
 import { Card } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/popover";
 import { Button } from "../../components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -86,12 +86,19 @@ const Submit = () => {
     const authClient = createAuthClient();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState<{ id: string; name?: string | null; email?: string | null; image?: string | null } | null>(null);
+    // Prevent duplicate requests caused by executing useEffect twice in React strict mode (development environment)
+    const hasCheckedSessionRef = useRef(false);
 
     const [open, setOpen] = React.useState(false)
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);
 
     // Check if the user has logged in
     useEffect(() => {
+        // The development environment React. 
+        // StrictMode will cause the effect to run twice, while manually limiting it to only execute once
+        if (hasCheckedSessionRef.current) return;
+        hasCheckedSessionRef.current = true;
+
         const checkAuth = async () => {
             try {
                 const session = await authClient.getSession();
@@ -118,7 +125,7 @@ const Submit = () => {
         };
 
         checkAuth();
-    }, [router]);
+    }, [router, authClient]);
 
     const formSchema = z.object({
         title: z
