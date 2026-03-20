@@ -1,11 +1,13 @@
 import { betterAuth } from "better-auth";
-import Database from "better-sqlite3";
 import { nextCookies } from "better-auth/next-js";
 import { Resend } from "resend";
+import { Pool } from "pg";
 
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
-const db = new Database("./sqlite.db");
+const db = new Pool({
+    connectionString: process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING,
+})
 
 // Generate password reset email HTML
 function generateResetPasswordEmail(firstName: string, resetUrl: string): string {
@@ -50,26 +52,32 @@ function generateResetPasswordEmail(firstName: string, resetUrl: string): string
 
 export const auth = betterAuth({
     database: db,
-    baseURL: process.env.BETTER_AUTH_URL || "https://linkzap.link",
+    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
     emailAndPassword: {
         enabled: true, 
-        sendResetPassword: async ({user, url, token}, request) => {
+        sendResetPassword: async ({ user, url, token }, request) => {
             try {
-                // Check if the user has any associated social media accounts (Google accounts)
-                const accounts = db
-                    .prepare('SELECT providerId FROM account WHERE userId = ?')
-                    .all(user.id) as { providerId: string }[];
+                // 使用 PostgreSQL 查询当前用户是否绑定了社交账号（例如 Google）
+                const { rows } = await db.query<{
+                    providerId: string | null;
+                }>(
+                    'SELECT "providerId" FROM "account" WHERE "userId" = $1',
+                    [user.id]
+                );
 
-                const hasGoogleAccount = accounts?.some((acc) =>
+                const hasGoogleAccount = rows?.some((acc) =>
                     (acc.providerId || "").toLowerCase().includes("google")
                 );
 
-                // The Google login account does not have an 'internal password' and should not send password reset emails
+                // Google 登录账号本身没有站内密码，不应该发送重置密码邮件
                 if (hasGoogleAccount) {
                     console.log(
-                        `[Password Reset] Skip sending reset email for Google-linked account: ${user.email}`
+                        `[Password Reset] Block sending reset email for Google-linked account: ${user.email}`
                     );
-                    return;
+                    // 抛出错误，让前端拿到明确提示
+                    throw new Error(
+                        "This account was created using Google login. Please change your password in your Google account settings."
+                    );
                 }
                 
                 const result = await resend.emails.send({
@@ -92,7 +100,7 @@ export const auth = betterAuth({
             }
         },
         onPasswordReset: async ({ user }, request) => {
-            console.log(`The password for User ${user. email} has been reset.`);
+            console.log(`The password for User ${user.email} has been reset.`);
         },
     }, 
     emailVerification: {
