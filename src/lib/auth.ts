@@ -52,7 +52,7 @@ function generateResetPasswordEmail(firstName: string, resetUrl: string): string
 
 export const auth = betterAuth({
     database: db,
-    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+    baseURL: process.env.BETTER_AUTH_URL || "https://linkzap.link",
     emailAndPassword: {
         enabled: true, 
         sendResetPassword: async ({ user, url, token }, request) => {
