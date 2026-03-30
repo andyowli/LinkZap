@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Pool } from "pg";
 
+interface CheckResetPasswordRequest {
+  email?: string; 
+}
+
 const pool = new Pool({
   connectionString: process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING,
 });
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const body = await req.json() as CheckResetPasswordRequest;
     const email = body?.email;
 
     if (!email || typeof email !== "string" || !email.trim()) {
