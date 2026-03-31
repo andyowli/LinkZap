@@ -2,12 +2,20 @@ import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { Resend } from "resend";
 import { Pool } from "pg";
-
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { cache } from "react";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
-const db = new Pool({
-    connectionString: process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING,
-})
+
+const db = cache(() => {
+    const { env } = getCloudflareContext();
+
+    return new Pool({
+        connectionString: env.HYPERDRIVE.connectionString,
+        maxUses: 1,           // Very important! Prevent errors caused by cross request reuse
+      // connectionTimeoutMillis: 5000,   // Optional: timeout setting
+    });
+});
 
 // Generate password reset email HTML
 function generateResetPasswordEmail(firstName: string, resetUrl: string): string {
@@ -58,7 +66,8 @@ export const auth = betterAuth({
         sendResetPassword: async ({ user, url, token }, request) => {
             try {
                 // Use PostgreSQL to check if the current user has bound a social account (such as Google)
-                const { rows } = await db.query<{
+                const pool = db();
+                const { rows } = await pool.query<{
                     providerId: string | null;
                 }>(
                     'SELECT "providerId" FROM "account" WHERE "userId" = $1',
