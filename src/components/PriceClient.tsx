@@ -8,6 +8,11 @@ import { useRouter } from "next/navigation";
 import usePrice from "../store/priceCount";
 import useFormData from "../store/formData";
 import { toast } from "sonner";
+
+interface CheckoutResponse {
+    url?: string;
+    error?: string;
+}
 export default function PriceClient() {
     const router = useRouter();
 
@@ -62,7 +67,7 @@ export default function PriceClient() {
         },
     ]
 
-    const handlePaymentClick = (plan: typeof pricingPlans[0]) => {
+    const handlePaymentClick = async(plan: typeof pricingPlans[0]) => {
         const formData = useFormData.getState().data;
 
         if (!formData.title || !formData.slug || !formData.website || !formData.tag || !formData.imageBase64) {
@@ -74,24 +79,43 @@ export default function PriceClient() {
 
         localStorage.setItem('selected-price-id', plan.priceId);
 
-        fetch('/api/checkout_sessions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ priceId: plan.priceId }), 
-        })
-        .then(response => response.json())
-        .then(data => {
+        try {
+            const response = await fetch('/api/checkout_sessions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ priceId: plan.priceId }),
+            });
+            const data = await response.json() as CheckoutResponse;
+
             if (data.url) {
                 window.location.href = data.url;
             } else {
-                toast.error('Failed to create checkout session',data.error);
+                toast.error('Failed to create checkout session');
             }
-        })
-        .catch(error => {
-            toast.error('An error occurred during the payment process',error);
-        });
+        } catch (error) {
+            toast.error('An error occurred during the payment process');
+        }
+
+        // fetch('/api/checkout_sessions', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ priceId: plan.priceId }), 
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     if (data.url) {
+        //         window.location.href = data.url;
+        //     } else {
+        //         toast.error('Failed to create checkout session',data.error);
+        //     }
+        // })
+        // .catch(error => {
+        //     toast.error('An error occurred during the payment process',error);
+        // });
     };
 
     return (

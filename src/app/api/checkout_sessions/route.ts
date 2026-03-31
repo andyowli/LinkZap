@@ -3,6 +3,10 @@ import { headers } from 'next/headers';
 
 import { stripe } from '../../../lib/stripe';
 
+interface CheckoutRequestBody {
+    priceId: string;
+}
+
 export async function POST(request: Request) {
     try {
         const headersList = await headers()
@@ -15,7 +19,14 @@ export async function POST(request: Request) {
             );
         }
 
-        const { priceId } = await request.json();
+        const { priceId } = await request.json() as CheckoutRequestBody;
+        
+        if (!priceId || typeof priceId !== 'string') {
+            return NextResponse.json(
+                { error: 'Price ID is required' },
+                { status: 400 }
+            );
+        }
 
 
         // Create Checkout Sessions from body params.

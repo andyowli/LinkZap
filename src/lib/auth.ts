@@ -57,7 +57,7 @@ export const auth = betterAuth({
         enabled: true, 
         sendResetPassword: async ({ user, url, token }, request) => {
             try {
-                // 使用 PostgreSQL 查询当前用户是否绑定了社交账号（例如 Google）
+                // Use PostgreSQL to check if the current user has bound a social account (such as Google)
                 const { rows } = await db.query<{
                     providerId: string | null;
                 }>(
@@ -69,12 +69,12 @@ export const auth = betterAuth({
                     (acc.providerId || "").toLowerCase().includes("google")
                 );
 
-                // Google 登录账号本身没有站内密码，不应该发送重置密码邮件
+                // The Google login account itself does not have an internal password, so password reset emails should not be sent
                 if (hasGoogleAccount) {
                     console.log(
                         `[Password Reset] Block sending reset email for Google-linked account: ${user.email}`
                     );
-                    // 抛出错误，让前端拿到明确提示
+                    // Throwing an error to give the frontend a clear prompt
                     throw new Error(
                         "This account was created using Google login. Please change your password in your Google account settings."
                     );

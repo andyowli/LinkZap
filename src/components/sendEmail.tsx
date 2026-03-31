@@ -69,7 +69,6 @@ export default function ForgotPasswordEmail() {
             });
 
             if (apiError) {
-                // 如果是 Google 登录账号，在后端会抛出明确的错误信息，这里直接展示给用户
                 setError(
                     apiError.message ||
                     "Failed to send reset link"

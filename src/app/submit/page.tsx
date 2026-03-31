@@ -22,6 +22,10 @@ import { NavbarClient } from "../../components/navbar-client";
 import { toast } from "sonner";
 import Banner from "../../components/banner";
 
+interface CheckoutSessionResponse {
+    url?: string;
+}
+
 const frameworks = [
     {
         value: "ai",
@@ -236,7 +240,7 @@ const Submit = () => {
                     return;
                 }
 
-                const result = await response.json();
+                const result = await response.json() as CheckoutSessionResponse;
 
                 if (result.url) {
                     // Jump to Stripe payment page

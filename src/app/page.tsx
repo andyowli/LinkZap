@@ -142,7 +142,7 @@ export default async function Home() {
                 type="search"
                 autoComplete="off"
                 placeholder="Please enter product title or category"
-                className="w-full pl-12 pr-4 py-6 rounded-full text-base sm:text-md md:text-lg shadow-sm border-muted focus-visible:ring-[2px] focus-visible:ring-blue-500"
+                className="w-full pl-12 pr-4 py-6 rounded-full text-base sm:text-md md:text-lg shadow-sm border-muted focus-visible:ring-2 focus-visible:ring-blue-500"
               />
             </form>
           </div>
@@ -162,8 +162,8 @@ export default async function Home() {
                   >
 
                     {/* Content below the image */}
-                    <CardHeader className="p-0 max-h-[500px]">
-                      <div className="w-full relative overflow-hidden h-[238px] group">
+                    <CardHeader className="p-0 max-h-125">
+                      <div className="w-full relative overflow-hidden h-59.5 group">
                         <Image 
                           src={post.imgurl}
                           alt={post.title}
@@ -187,7 +187,7 @@ export default async function Home() {
                     <CardContent className="w-full px-4 mt-[-4] max-sm:absolute max-sm:bottom-0 max-sm:bg-gray-900/70 max-sm:text-white">
                       <Link href={`/${post.slug}`}>
                         <h3 className="m-0 font-semibold text-lg mt-2 mb-2 text-blue-400">{post.title}</h3>
-                        <div className="mt-[-.5rem]">
+                        <div className="-mt-2">
                           <p className="text-sm text-muted-foreground line-clamp-2 max-sm:text-white/80 mb-4">{post.content}</p>
                         </div>
                         <div className="relative mt-12">
