@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Pool } from "pg";
+import { neon } from "@neondatabase/serverless";
 
 interface CheckResetPasswordRequest {
   email?: string; 
 }
 
-const pool = new Pool({
-  connectionString: process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING,
-});
+const connectionString = process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING;
+
+if (!connectionString) {
+  throw new Error("Missing NEXT_PUBLIC_NEON_CONNECTION_STRING environment variable");
+}
+
+const sql = neon(connectionString);
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,26 +24,17 @@ export async function POST(req: NextRequest) {
 
     const normalizedEmail = email.trim();
 
-    // better-auth (PostgreSQL) uses quoted, case-sensitive identifiers:
-    // table: "user", columns: "id","email"; table: "account", columns: "userId","providerId"
-    const userRes = await pool.query<{ id: string }>(
-      'SELECT "id" FROM "user" WHERE "email" = $1',
-      [normalizedEmail]
-    );
+    const userRes = await sql`SELECT "id" FROM "user" WHERE "email" = ${normalizedEmail}`;
 
-    // If user doesn't exist, let better-auth client flow handle it gracefully.
-    if (userRes.rowCount === 0) {
+    if (userRes.length === 0) {
       return NextResponse.json({ canResetViaEmail: true });
     }
 
-    const userId = userRes.rows[0].id;
+    const userId = userRes[0].id;
 
-    const accountsRes = await pool.query<{ providerId: string | null }>(
-      'SELECT "providerId" FROM "account" WHERE "userId" = $1',
-      [userId]
-    );
+    const accountsRes = await sql`SELECT "providerId" FROM "account" WHERE "userId" = ${userId}`;
 
-    const hasGoogleAccount = accountsRes.rows.some((acc) =>
+    const hasGoogleAccount = accountsRes.some((acc) =>
       (acc.providerId || "").toLowerCase().includes("google")
     );
 
@@ -56,4 +51,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
-
