@@ -1,20 +1,28 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { Resend } from "resend";
-import { Pool } from "pg";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { cache } from "react";
+import { neon } from '@neondatabase/serverless';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
+import { cache } from 'react';
+
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
+// const db = new Pool({
+//     connectionString: process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING,
+// })
 
-const db = cache(() => {
-    const { env } = getCloudflareContext();
-
-    return new Pool({
-        connectionString: env.HYPERDRIVE.connectionString,
-        maxUses: 1,           // Very important! Prevent errors caused by cross request reuse
-      // connectionTimeoutMillis: 5000,   // Optional: timeout setting
-    });
+const getDb = cache(() => {
+        const { env } = getCloudflareContext();
+    
+        // 优先使用 Worker 的环境变量（推荐）
+        const connectionString = (env as any).NEXT_PUBLIC_NEON_CONNECTION_STRING  
+        || process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING ;
+    
+        if (!connectionString) {
+        throw new Error('NEON_CONNECTION_STRING environment variable is missing');
+        }
+    
+        return neon(connectionString);
 });
 
 // Generate password reset email HTML
@@ -59,20 +67,20 @@ function generateResetPasswordEmail(firstName: string, resetUrl: string): string
 }
 
 export const auth = betterAuth({
-    database: db,
+    database: getDb(),
     baseURL: process.env.BETTER_AUTH_URL || "https://linkzap.link",
     emailAndPassword: {
         enabled: true, 
         sendResetPassword: async ({ user, url, token }, request) => {
             try {
                 // Use PostgreSQL to check if the current user has bound a social account (such as Google)
-                const pool = db();
-                const { rows } = await pool.query<{
-                    providerId: string | null;
-                }>(
+                const db = getDb();
+                const emailResult = await db.query(
                     'SELECT "providerId" FROM "account" WHERE "userId" = $1',
                     [user.id]
                 );
+
+                const rows = emailResult as Array<{ providerId: string | null }>;
 
                 const hasGoogleAccount = rows?.some((acc) =>
                     (acc.providerId || "").toLowerCase().includes("google")
