@@ -147,7 +147,7 @@ const Submit = () => {
         .string()
         .nonempty({ message: "Website cannot be empty" })
         .url({ message: "Please enter a valid URL" })
-        .max(50, { message: "Website is too long" }),
+        .max(100, { message: "Website is too long" }),
 
         tag: z
         .string()

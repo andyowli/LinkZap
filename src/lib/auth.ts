@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { Resend } from "resend";
-import { getDb } from "../lib/db"; 
-
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { eq } from "drizzle-orm";
+import { db } from "../../db";
+import { account } from "../../db/schema";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
 // const db = new Pool({
@@ -51,29 +53,25 @@ function generateResetPasswordEmail(firstName: string, resetUrl: string): string
 }
 
 export const auth = betterAuth({
-    database: async () => {
-        const sql = await getDb();
-        return sql;
-    },
-    baseURL: process.env.BETTER_AUTH_URL || "https://linkzap.link",
+    database: drizzleAdapter(db, {
+        provider: "pg", // 或 "pg" 或 "mysql"
+    }), 
+    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
     emailAndPassword: {
         enabled: true, 
         sendResetPassword: async ({ user, url, token }, request) => {
             try {
-                // Use PostgreSQL to check if the current user has bound a social account (such as Google)
-                const db = await getDb();
-                const emailResult = await db.query(
-                    'SELECT "providerId" FROM "account" WHERE "userId" = $1',
-                    [user.id]
-                );
+                // Use Drizzle to check whether this user has an account linked to Google.
+                const accounts = await db
+                    .select({ providerId: account.providerId })
+                    .from(account)
+                    .where(eq(account.userId, user.id));
 
-                const rows = emailResult as Array<{ providerId: string | null }>;
-
-                const hasGoogleAccount = rows?.some((acc) =>
+                const hasGoogleAccount = accounts.some((acc) =>
                     (acc.providerId || "").toLowerCase().includes("google")
                 );
 
-                // The Google login account itself does not have an internal password, so password reset emails should not be sent
+                // The Google login account itself does not have an internal password, so password reset emails should not be sent.
                 if (hasGoogleAccount) {
                     console.log(
                         `[Password Reset] Block sending reset email for Google-linked account: ${user.email}`

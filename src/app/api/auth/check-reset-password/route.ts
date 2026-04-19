@@ -5,10 +5,12 @@ interface CheckResetPasswordRequest {
   email?: string; 
 }
 
-const connectionString = process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING;
+const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
-  throw new Error("Missing NEXT_PUBLIC_NEON_CONNECTION_STRING environment variable");
+  throw new Error(
+    "Missing DATABASE_URL environment variable"
+  );
 }
 
 const sql = neon(connectionString);
