@@ -4,12 +4,9 @@ import { Resend } from "resend";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { eq } from "drizzle-orm";
 import { db } from "../../db";
-import { account } from "../../db/schema";
+import { account, user } from "../../db/schema";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string);
-// const db = new Pool({
-//     connectionString: process.env.NEXT_PUBLIC_NEON_CONNECTION_STRING,
-// })
 
 // Generate password reset email HTML
 function generateResetPasswordEmail(firstName: string, resetUrl: string): string {

@@ -61,12 +61,29 @@ export function LoginForm({
             const result = await signInAction(formData);
 
             if ('error' in result) {
-                toast.error(result.error);
+                // toast.error(result.error);
+                // 检查是否是 Google 账户相关的错误
+                if (result.error.includes("Google login") || result.error.includes("Google account")) {
+                    toast.error(result.error, {
+                        duration: 5000, // 显示时间稍长一点
+                    });
+                } else {
+                    toast.error(result.error);
+                }
             } else if ('success' in result) {
                 router.push(result.redirectUrl || '/');
             }
         } catch (err: any) {
-            toast.error(err?.message || "An unexpected error occurred.");
+            // toast.error(err?.message || "An unexpected error occurred.");
+            // 检查错误消息是否与 Google 登录相关
+            const errorMessage = err?.message || "An unexpected error occurred.";
+            if (errorMessage.includes("Google login") || errorMessage.includes("Google account")) {
+                toast.error(errorMessage, {
+                    duration: 5000,
+                });
+            } else {
+                toast.error(errorMessage);
+            }
         }
     };
 

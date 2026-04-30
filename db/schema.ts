@@ -1,5 +1,4 @@
 import { pgTable,text,timestamp,boolean } from "drizzle-orm/pg-core";
-import { id } from "zod/v4/locales";
 
 export const user = pgTable("user", {
     id: text("id").primaryKey(),
