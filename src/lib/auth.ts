@@ -51,7 +51,7 @@ function generateResetPasswordEmail(firstName: string, resetUrl: string): string
 
 export const auth = betterAuth({
     database: drizzleAdapter(db, {
-        provider: "pg", // 或 "pg" 或 "mysql"
+        provider: "pg",
     }), 
     baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
     emailAndPassword: {

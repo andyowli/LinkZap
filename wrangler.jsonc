@@ -2,7 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
 	"name": "linkzap",
-	"compatibility_date": "2026-04-29",
+	"compatibility_date": "2026-05-01",
 	"compatibility_flags": [
 		"nodejs_compat",
 		"global_fetch_strictly_public"
@@ -27,7 +27,7 @@
 	"hyperdrive": [
 		{
 			"binding": "HYPERDRIVE",
-			"id": "301db8c5c9b54e49a9bd70ef7cffeeb5"
+			"id": "6f41a9975c7540aa949f806aad98f5ee"
 		}
 	]
 }

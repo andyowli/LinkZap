@@ -169,7 +169,8 @@ export default async function Home() {
                           alt={post.title}
                           fill
                           unoptimized
-                          className="rounded-t-xl max-sm:rounded-xl object-cover"
+                          loading="eager"
+                          className="rounded-t-xl max-sm:rounded-xl object-cover w-full h-full"
                         />
                         {/* Mask Overlay */}
                         <a 

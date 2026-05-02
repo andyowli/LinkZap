@@ -8,6 +8,7 @@ export const client = createClient({
   token: process.env.NEXT_PUBLIC_SANITY_USER_ADDER_TOKEN,
   apiVersion: "2024-01-01",
   useCdn: true,
+  ignoreBrowserTokenWarning: true
 });
 
 // Create Image URL Generator

@@ -82,12 +82,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <ClientOnly>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            <ThemeProvider 
+              attribute="class" 
+              defaultTheme="light" 
+              enableSystem 
+              scriptProps={{ type: "application/json" }}
+            >
               <main>{children}</main>
               <Toaster />
             </ThemeProvider>

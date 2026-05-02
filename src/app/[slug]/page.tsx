@@ -62,6 +62,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     } else if (typeof page.content === 'string') {
         description = page.content.slice(0, 160);
     }
+
+    // Generate JSON-LD structured data
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": page.title,
+        "description": description,
+        "image": page.imgurl,
+        "url": `https://www.linkzap.link/${resolvedParams.slug}`,
+        "category": Array.isArray(page.category) ? page.category[0] : page.category,
+        "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+        }
+    };
     
     return {
         title: page.title,
@@ -93,6 +108,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         // Add canonical link
         alternates: {
             canonical: `https://www.linkzap.link/${resolvedParams.slug}`,
+        },
+        // Add JSON-LD structured data
+        other: {
+            'application/ld+json': JSON.stringify(jsonLd),
         },
     };
 }
@@ -138,23 +157,6 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
         window.location.href = page.affiliate;
     };
 
-    
-    // Generate JSON-LD structured data only when the page exists
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": page.title,
-        "description": page.content?.[0]?.children?.[0]?.text || 'Discover this amazing product',
-        "image": page.imgurl,
-        "url": `https://www.linkzap.link/${slug}`,
-        "category": Array.isArray(page.category) ? page.category[0] : page.category,
-        "offers": {
-            "@type": "Offer",
-            "availability": "https://schema.org/InStock",
-        }
-    };
-
-
     return (
         <div className="flex flex-col min-h-screen">
             {/* <div> */}
@@ -162,13 +164,6 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
 
                 <Navbar topClass="top-10"/>
             {/* </div> */}
-            
-
-            {/* JSON-LD structured data */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
 
             <div className="flex-1 pt-10">
                 <div className="container mx-auto max-w-7xl flex items-center gap-3 px-4">
