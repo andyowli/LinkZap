@@ -63,21 +63,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         description = page.content.slice(0, 160);
     }
 
-    // Generate JSON-LD structured data
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": page.title,
-        "description": description,
-        "image": page.imgurl,
-        "url": `https://www.linkzap.link/${resolvedParams.slug}`,
-        "category": Array.isArray(page.category) ? page.category[0] : page.category,
-        "offers": {
-            "@type": "Offer",
-            "availability": "https://schema.org/InStock",
-        }
-    };
-    
     return {
         title: page.title,
         description,
@@ -105,13 +90,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             description,
             images: page.imgurl ? [page.imgurl] : [],
         },
-        // Add canonical link
         alternates: {
             canonical: `https://www.linkzap.link/${resolvedParams.slug}`,
-        },
-        // Add JSON-LD structured data
-        other: {
-            'application/ld+json': JSON.stringify(jsonLd),
         },
     };
 }
@@ -155,6 +135,30 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
 
     const handleClick = () => {
         window.location.href = page.affiliate;
+    };
+
+    const jsonLdDescription = (() => {
+        if (page.content?.[0]?.children?.[0]?.text) {
+            return page.content[0].children[0].text.slice(0, 160);
+        }
+        if (typeof page.content === 'string') {
+            return page.content.slice(0, 160);
+        }
+        return 'Discover this amazing product.';
+    })();
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: page.title,
+        description: jsonLdDescription,
+        image: page.imgurl,
+        url: `https://www.linkzap.link/${slug}`,
+        category: Array.isArray(page.category) ? page.category[0] : page.category,
+        offers: {
+            "@type": "Offer",
+            availability: "https://schema.org/InStock",
+        },
     };
 
     return (
@@ -263,6 +267,10 @@ export default async function Page({params}: {params: Promise<{ slug: string }>}
             </div>
 
             <Footer />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
         </div>
     )
 }

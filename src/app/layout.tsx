@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadataBase = new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+const DEFAULT_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.linkzap.link'
+export const metadataBase = new URL(DEFAULT_SITE_URL)
 
 export const metadata: Metadata = {
   // Basic Information
@@ -41,11 +42,11 @@ export const metadata: Metadata = {
     type: 'website',
     title: 'Resources to Skyrocket Your Creative Edge.',
     description: 'Handpicked, proven tools and intelligent resources designed to help independent creators achieve exponential gains in creativity, efficiency, and real-world output.',
-    url: 'https://www.linkzap.link',
+    url: `${DEFAULT_SITE_URL}`,
     siteName: 'LinkZap',
     images: [
       {
-        url: '/logo.svg',
+        url: `${DEFAULT_SITE_URL}/logo.svg`,
         alt: 'LinkZap - Logo',
         width: 1200,
         height: 630,
@@ -58,7 +59,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Resources to Skyrocket Your Creative Edge.',
     description: 'Handpicked, proven tools and intelligent resources designed to help independent creators achieve exponential gains in creativity, efficiency, and real-world output.',
-    images: ['/logo.svg'],
+    images: [`${DEFAULT_SITE_URL}/logo.svg`],
     site: '@LinkZap',
     creator: '@LinkZapTeam',
   },

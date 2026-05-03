@@ -53,7 +53,7 @@ export const auth = betterAuth({
     database: drizzleAdapter(db, {
         provider: "pg",
     }), 
-    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+    baseURL: process.env.BETTER_AUTH_URL || "https://www.linkzap.link",
     emailAndPassword: {
         enabled: true, 
         sendResetPassword: async ({ user, url, token }, request) => {

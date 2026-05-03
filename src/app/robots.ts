@@ -5,9 +5,9 @@ export default function robots(): MetadataRoute.Robots {
         rules: [
             {
                 userAgent: '*',
-                allow: ['/', '/dl'],  // allow
+                allow: ['/'],
             },
         ],
-        sitemap: 'https://linkzap.link/sitemap.xml'
+        sitemap: 'https://www.linkzap.link/sitemap.xml'
     };
 }

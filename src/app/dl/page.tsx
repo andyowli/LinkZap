@@ -12,9 +12,8 @@ export const metadata: Metadata = {
             follow: true,
         },
     },
-    // Set null value to avoid warnings
     title: 'Dofollow links',
-    description: '',
+    description: 'A hidden list of dofollow links for LinkZap.',
 };
 
 export default async function HiddenLinksPage() {
